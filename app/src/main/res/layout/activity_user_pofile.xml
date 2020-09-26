@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -27,141 +27,246 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:gravity="center_vertical"
                 app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
                 app:layout_constraintEnd_toEndOf="@+id/topAppBar"
                 app:layout_constraintStart_toStartOf="@+id/topAppBar"
                 app:layout_constraintTop_toTopOf="@+id/topAppBar">
 
-                <!--Page icon-->
                 <ImageView
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:padding="6dp"
-                    android:src="@drawable/ic_circle_account"
-                    tools:layout_editor_absoluteX="114dp"
-                    tools:layout_editor_absoluteY="13dp" />
+                    android:id="@+id/back_button"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:contentDescription="@string/back_button_content_desc"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_arrow_back_24"
+                    android:layout_alignParentStart="true"/>
 
-                <!--Page title-->
-                <com.google.android.material.textview.MaterialTextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Profile"
-                    android:textSize="18sp"
-                    tools:layout_editor_absoluteX="152dp"
-                    tools:layout_editor_absoluteY="16dp" />
-            </LinearLayout>
+                    android:layout_centerHorizontal="true">
 
-            <!--Back button-->
-            <ImageView
-                android:id="@+id/back_button"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:contentDescription="@string/back_button_content_desc"
-                android:padding="16dp"
-                android:src="@drawable/ic_arrow_back_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                    <!--Page icon-->
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_circle_account" />
 
-            <!--Settings button-->
+                    <!--Page title-->
+                    <com.google.android.material.textview.MaterialTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Profile"
+                        android:textSize="18sp"/>
+
+                </LinearLayout>
+
+            </RelativeLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-
-    <!--Profile image-->
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profileImage"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBar" />
-
-    <!--User name-->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/userName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:maxLines="1"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/profileImage" />
-
-    <!--Count of hearts won-->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/userHearts"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userName" />
-
-    <!--About user-->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/userBioHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="About"
-        android:visibility="gone"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@id/userBio"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userHearts" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/userBio"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:visibility="gone"
-        android:maxLines="6"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="10dp"
-        android:textAlignment="center"
-        android:textSize="13sp"
-        app:layout_constraintTop_toBottomOf="@id/userBioHeader" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/appBar">
 
-    <!--Link in bio-->
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/linkHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="Link"
-        android:textColor="@color/colorPrimary"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/linkInBio"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/userBio" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/linkInBio"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:textColorLink="@color/colorAccent"
-        android:visibility="gone"
-        android:minLines="1"
-        android:padding="10dp"
-        android:textAlignment="center"
-        android:textSize="13sp"
-        app:layout_constraintTop_toBottomOf="@id/linkHeader" />
+            <!--Profile image-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <!--User name-->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="5dp"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:maxLines="1"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/profileImage"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--About user-->
+            <ImageView
+                android:id="@+id/userBioIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_baseline_about_24"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/userBio"
+                app:layout_constraintStart_toStartOf="@id/userBio"
+                app:layout_constraintTop_toTopOf="@id/userBio"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/userBio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="5dp"
+                android:maxLines="6"
+                android:paddingVertical="10dp"
+                android:paddingStart="45dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="center"
+                android:textSize="13sp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/profileImage"
+                app:layout_constraintTop_toBottomOf="@+id/userName" />
+
+            <!--Link in bio-->
+            <ImageView
+                android:id="@+id/linkInBioIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/ic_baseline_insert_link_24"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/linkInBio"
+                app:layout_constraintStart_toStartOf="@id/linkInBio"
+                app:layout_constraintTop_toTopOf="@id/linkInBio"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/linkInBio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="5dp"
+                android:minLines="1"
+                android:paddingVertical="10dp"
+                android:paddingStart="45dp"
+                android:paddingEnd="10dp"
+                android:textAlignment="center"
+                android:textColorLink="@color/colorAccent"
+                android:textSize="13sp"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/profileImage"
+                app:layout_constraintTop_toBottomOf="@id/userBio" />
+
+            <!--headline numbers-->
+            <LinearLayout
+                android:id="@+id/headlineNumbers"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:isScrollContainer="false"
+                android:weightSum="2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linkInBio">
+
+                <!--Hearts count-->
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/profile_selected_tab"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="5dp">
+
+                    <TextView
+                        android:id="@+id/userHearts"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="25"
+                        android:textSize="30dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hearts won" />
+
+                </LinearLayout>
+
+                <!--divider-->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginVertical="5dp"
+                    android:background="@android:color/darker_gray" />
+
+                <!--Habits count-->
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingVertical="5dp">
+
+                    <TextView
+                        android:id="@+id/userHabits"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:text="2"
+                        android:textSize="30dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Habits" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--recycler view-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#25DCDCDC"
+                android:minHeight="20dp"
+                app:layout_constraintBottom_toTopOf="@id/endOfListText"
+                app:layout_constraintTop_toBottomOf="@id/headlineNumbers" />
+
+            <TextView
+                android:id="@+id/endOfListText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingVertical="5dp"
+                android:text="That's All Folks!"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/recyclerView" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
