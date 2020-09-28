@@ -92,6 +92,7 @@
                 android:id="@+id/addHabitCardView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:backgroundTint="#50DCDCDC"
                 android:layout_margin="8dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"
@@ -187,6 +188,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:scrollbars="none"
+                                android:overScrollMode="never"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/frequencyTitle"
@@ -194,10 +196,10 @@
 
                                 <com.google.android.material.chip.ChipGroup
                                     android:id="@+id/frequencyChipGroup"
-                                    android:layout_width="0dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:layout_constraintStart_toEndOf="@id/frequencyTitle"
-                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:overScrollMode="never"
+                                    app:singleLine="true"
                                     app:singleSelection="true">
 
                                     <com.google.android.material.chip.Chip
@@ -255,6 +257,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:scrollbars="none"
+                                android:overScrollMode="never"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/weekSelectionTitle"
@@ -262,12 +265,9 @@
 
                                 <com.google.android.material.chip.ChipGroup
                                     android:id="@+id/weekSelectionChipGroup"
-                                    android:layout_width="0dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
-                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:overScrollMode="never"
                                     app:singleLine="true"
                                     app:singleSelection="true">
 
@@ -326,6 +326,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:scrollbars="none"
+                                android:overScrollMode="never"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
@@ -333,12 +334,9 @@
 
                                 <com.google.android.material.chip.ChipGroup
                                     android:id="@+id/daySelectionChipGroup"
-                                    android:layout_width="0dp"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
-                                    app:layout_constraintTop_toTopOf="parent"
+                                    android:overScrollMode="never"
                                     app:singleLine="true"
                                     app:singleSelection="true">
 
@@ -415,6 +413,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:scrollbars="none"
+                                android:overScrollMode="never"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toEndOf="@id/timeSlotTitle"
@@ -422,9 +421,9 @@
 
                                 <com.google.android.material.chip.ChipGroup
                                     android:id="@+id/timeSlotChipGroup"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:nestedScrollingEnabled="true"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:overScrollMode="never"
                                     app:singleLine="true"
                                     app:singleSelection="true">
 

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -31,7 +32,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
     private ImageView profilePicture;
-    private MaterialTextView nameTextView, userHeartsTextView, userLinkTextView, linkHeaderTextView,bioHeaderTextView,bioTextView;
+    private TextView nameTextView, userHeartsTextView, userLinkTextView, linkHeaderTextView,bioHeaderTextView,bioTextView;
     private FirebaseFirestore db;
 
     private String userName;
@@ -61,9 +62,7 @@ public class UserProfileActivity extends AppCompatActivity {
         profilePicture = findViewById(R.id.profileImage);
         userHeartsTextView = findViewById(R.id.userHearts);
         userLinkTextView = findViewById(R.id.linkInBio);
-        linkHeaderTextView = findViewById(R.id.linkHeader);
         bioTextView=findViewById(R.id.userBio);
-        bioHeaderTextView=findViewById(R.id.userBioHeader);
         getUserDetails(userUID);
         getPicture(userUID);
     }
@@ -142,12 +141,10 @@ public class UserProfileActivity extends AppCompatActivity {
                             String link = (String) change.getDocument().get("userBioLink");
                             String bio = (String) change.getDocument().get("userBio");
                             if (bio!=null&& !bio.equals("")){
-                                userPofileBinding.userBioHeader.setVisibility(View.VISIBLE);
                                 userPofileBinding.userBio.setVisibility(View.VISIBLE);
                                 userPofileBinding.userBio.setText(bio);
                             }
                             if (link!=null&& !link.equals("")){
-                                userPofileBinding.linkHeader.setVisibility(View.VISIBLE);
                                 userPofileBinding.linkInBio.setVisibility(View.VISIBLE);
                                 userPofileBinding.linkInBio.setText(link);
                             }

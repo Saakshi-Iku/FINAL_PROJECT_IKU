@@ -94,7 +94,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!--User name-->
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -201,7 +201,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:text="25"
-                        android:textSize="30dp" />
+                        android:textSize="24dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -233,7 +233,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:text="2"
-                        android:textSize="30dp" />
+                        android:textSize="24dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -251,9 +251,11 @@
                 android:layout_height="wrap_content"
                 android:background="#25DCDCDC"
                 android:minHeight="20dp"
+                android:paddingHorizontal="8dp"
                 app:layout_constraintBottom_toTopOf="@id/endOfListText"
                 app:layout_constraintTop_toBottomOf="@id/headlineNumbers" />
 
+            <!--End of list textview-->
             <TextView
                 android:id="@+id/endOfListText"
                 android:layout_width="match_parent"
