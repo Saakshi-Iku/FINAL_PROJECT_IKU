@@ -8,6 +8,8 @@ public class CommentModel {
     private String comment;
     @PropertyName("uid")
     private String uid;
+    @PropertyName("commenterName")
+    private String commenterName;
     @PropertyName("timestamp")
     private long timestamp;
 
@@ -40,5 +42,10 @@ public class CommentModel {
     public long getTimestamp() {
         return timestamp;
     }
+
+    public String getCommenterName() {
+        return commenterName;
+    }
+
 }
 

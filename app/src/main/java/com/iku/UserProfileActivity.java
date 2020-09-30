@@ -123,10 +123,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
                                     profilePicture.setImageDrawable(drawable);
                                 }
-                            } else {
-
                             }
-                        } else {
                         }
                     }
                 });

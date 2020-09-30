@@ -1,15 +1,15 @@
 package com.iku;
 
+import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -54,7 +54,6 @@ public class ViewPostActivity extends AppCompatActivity {
 
     private String messageId;
 
-
     private FirebaseFirestore db;
 
     @Override
@@ -79,7 +78,6 @@ public class ViewPostActivity extends AppCompatActivity {
                 .setInitialLoadSizeHint(12)
                 .setPageSize(15)
                 .build();
-        Log.i(TAG, "onCreate: " + messageId);
         Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("timestamp", Query.Direction.DESCENDING);
         FirestorePagingOptions<CommentModel> options = new FirestorePagingOptions.Builder<CommentModel>()
                 .setQuery(query, config, CommentModel.class)
@@ -100,33 +98,32 @@ public class ViewPostActivity extends AppCompatActivity {
 
     private void initButtons() {
         viewPostBinding.backButton.setOnClickListener(view -> onBackPressed());
-        viewPostBinding.sendMessageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Date d = new Date();
-                long timestamp = d.getTime();
-                Map<String, Object> data = new HashMap<>();
-                data.put("comment", viewPostBinding.messageTextField.getText().toString());
-                data.put("uid", user.getUid());
-                data.put("timestamp", timestamp);
-
-                db.collection("iku_earth_messages").document(messageId)
-                        .collection("comments").add(data)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                adapter.notifyDataSetChanged();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.i("feature", "Error adding document", e);
-                            }
-                        });
-
+        viewPostBinding.sendMessageButton.setOnClickListener(view -> {
+            final String message = viewPostBinding.messageTextField.getText().toString().trim();
+            if (!message.isEmpty()) {
+                sendComment(message);
+                viewPostBinding.messageTextField.setText("");
+                viewPostBinding.messageTextField.clearFocus();
             }
         });
+    }
+
+    private void sendComment(String comment) {
+        Date d = new Date();
+        long timestamp = d.getTime();
+        Map<String, Object> data = new HashMap<>();
+        data.put("comment", comment);
+        data.put("uid", user.getUid());
+        data.put("commenterName", user.getDisplayName());
+        data.put("timestamp", timestamp);
+        data.put("readableTimestamp", FieldValue.serverTimestamp());
+
+        db.collection("iku_earth_messages").document(messageId)
+                .collection("comments").add(data)
+                .addOnSuccessListener(documentReference -> {
+                })
+                .addOnFailureListener(e -> {
+                });
     }
 
     private void setDetails() {
@@ -140,10 +137,7 @@ public class ViewPostActivity extends AppCompatActivity {
     }
 
     private void setImage() {
-
-
         String imageUrl = extras.getString("EXTRA_IMAGE_URL");
-
         if (imageUrl != null) {
             Picasso.get()
                     .load(imageUrl)
@@ -165,6 +159,60 @@ public class ViewPostActivity extends AppCompatActivity {
                     });
         } else {
             finish();
+        }
+
+        String userId = extras.getString("EXTRA_USER_ID");
+        String name = extras.getString("EXTRA_PERSON_NAME");
+
+        if (userId != null && name != null) {
+
+            db.collection("users").document(userId).get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    String firstLetter, secondLetter;
+                                    String url = (String) document.get("imageUrl");
+
+                                    if (url != null) {
+                                        Picasso.get()
+                                                .load(url)
+                                                .noFade()
+                                                .networkPolicy(NetworkPolicy.OFFLINE)
+                                                .into(viewPostBinding.profileImage, new Callback() {
+
+                                                    @Override
+                                                    public void onSuccess() {
+                                                    }
+
+                                                    @Override
+                                                    public void onError(Exception e) {
+                                                        Picasso.get()
+                                                                .load(url)
+                                                                .noFade()
+                                                                .into(viewPostBinding.profileImage);
+                                                    }
+                                                });
+                                    } else {
+
+                                        firstLetter = String.valueOf(name.charAt(0));
+                                        secondLetter = name.substring(name.indexOf(' ') + 1, name.indexOf(' ') + 2).trim();
+
+                                        TextDrawable drawable = TextDrawable.builder()
+                                                .beginConfig()
+                                                .width(200)
+                                                .height(200)
+                                                .endConfig()
+                                                .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+
+                                        viewPostBinding.profileImage.setImageDrawable(drawable);
+                                    }
+                                }
+                            }
+                        }
+                    });
         }
     }
 
