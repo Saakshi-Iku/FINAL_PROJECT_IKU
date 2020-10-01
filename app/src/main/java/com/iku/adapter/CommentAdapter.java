@@ -67,7 +67,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
             commentTextView = itemView.findViewById(R.id.comment);
-            commenterNameTextView = itemView.findViewById(R.id.commenterName);
+            commenterNameTextView = itemView.findViewById(R.id.commentorName);
             profileImageView = itemView.findViewById(R.id.profileImage);
             timestampTextView = itemView.findViewById(R.id.timestamp);
 
