@@ -1,7 +1,6 @@
 package com.iku.adapter;
 
 import android.graphics.Color;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,10 +23,21 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.concurrent.TimeUnit;
+
 public class CommentAdapter extends FirestorePagingAdapter<CommentModel, CommentAdapter.CommentViewHolder> {
 
-    private FirebaseFirestore db;
     private static final String TAG = CommentAdapter.class.getSimpleName();
+
+    private CommentAdapter.OnItemClickListener mListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(String name, String uid);
+    }
+
+    public void setOnItemClickListener(CommentAdapter.OnItemClickListener listener) {
+        mListener = listener;
+    }
 
     public CommentAdapter(@NonNull FirestorePagingOptions<CommentModel> options) {
         super(options);
@@ -35,8 +45,10 @@ public class CommentAdapter extends FirestorePagingAdapter<CommentModel, Comment
 
     @Override
     protected void onBindViewHolder(@NonNull CommentViewHolder commentViewHolder, int position, @NonNull CommentModel commentModel) {
+        long timeStamp = commentModel.getTimestamp();
         commentViewHolder.commentTextView.setText(commentModel.getComment());
         commentViewHolder.commenterNameTextView.setText(commentModel.getCommenterName());
+        commentViewHolder.timestampTextView.setText(getTimeAgo(timeStamp));
         commentViewHolder.setImage(commentModel);
     }
 
@@ -49,7 +61,7 @@ public class CommentAdapter extends FirestorePagingAdapter<CommentModel, Comment
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView commentTextView,commenterNameTextView;
+        private TextView commentTextView, commenterNameTextView, timestampTextView;
         private ImageView profileImageView;
 
         public CommentViewHolder(@NonNull View itemView) {
@@ -57,10 +69,26 @@ public class CommentAdapter extends FirestorePagingAdapter<CommentModel, Comment
             commentTextView = itemView.findViewById(R.id.comment);
             commenterNameTextView = itemView.findViewById(R.id.commenterName);
             profileImageView = itemView.findViewById(R.id.profileImage);
+            timestampTextView = itemView.findViewById(R.id.timestamp);
+
+            commenterNameTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CommentModel commentModel = getItem(getAdapterPosition()).toObject(CommentModel.class);
+                    mListener.onItemClick(commentModel.getCommenterName(), commentModel.getUid());
+                }
+            });
+            profileImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    CommentModel commentModel = getItem(getAdapterPosition()).toObject(CommentModel.class);
+                    mListener.onItemClick(commentModel.getCommenterName(), commentModel.getUid());
+                }
+            });
         }
 
-        public void setImage(final CommentModel commentModel){
-            db = FirebaseFirestore.getInstance();
+        public void setImage(final CommentModel commentModel) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("users").document(commentModel.getUid()).get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
@@ -108,6 +136,51 @@ public class CommentAdapter extends FirestorePagingAdapter<CommentModel, Comment
                             }
                         }
                     });
+        }
+    }
+
+    private static final int SECOND_MILLIS = 1000;
+    private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+    private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
+
+    public static String getTimeAgo(long time) {
+        if (time < 1000000000000L) {
+            // if timestamp given in seconds, convert to millis
+            time *= 1000;
+        }
+
+        long now = System.currentTimeMillis();
+        if (time > now || time <= 0) {
+            return null;
+        }
+
+        // TODO: localize
+        final long diff = now - time;
+        long day = TimeUnit.MILLISECONDS.toDays(diff);
+        if (diff < MINUTE_MILLIS) {
+            return "Just now";
+        } else if (diff < 2 * MINUTE_MILLIS) {
+            return "moments ago";
+        } else if (diff < 50 * MINUTE_MILLIS) {
+            return diff / MINUTE_MILLIS + " mins";
+        } else if (diff < 90 * MINUTE_MILLIS) {
+            return "1h";
+        } else if (diff < 24 * HOUR_MILLIS) {
+            return diff / HOUR_MILLIS + "h";
+        } else if (diff < 48 * HOUR_MILLIS) {
+            return "yesterday";
+        } else if (day >= 7) {
+            if (day > 360) {
+                return (day / 360) + "y";
+            } else if (day > 30) {
+                return (day / 30) + "m";
+            } else {
+                return diff / DAY_MILLIS + "d";
+            }
+        } else {
+            return diff / DAY_MILLIS + "d";
         }
     }
 }

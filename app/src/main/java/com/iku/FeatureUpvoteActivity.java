@@ -84,14 +84,11 @@ public class FeatureUpvoteActivity extends AppCompatActivity {
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
-                                Log.i("feature", "DocumentSnapshot written with ID: " + documentReference.getId());
-                                //Toast.makeText(activity_feature_upvote.this, "Upvoted!", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.i("feature", "Error adding document", e);
                             }
                         });
 

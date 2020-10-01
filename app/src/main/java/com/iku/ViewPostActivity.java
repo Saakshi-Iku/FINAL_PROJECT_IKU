@@ -1,6 +1,6 @@
 package com.iku;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -8,8 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.firestore.paging.FirestorePagingOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -78,7 +78,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 .setInitialLoadSizeHint(12)
                 .setPageSize(15)
                 .build();
-        Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("timestamp", Query.Direction.DESCENDING);
+        Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("timestamp", Query.Direction.ASCENDING);
         FirestorePagingOptions<CommentModel> options = new FirestorePagingOptions.Builder<CommentModel>()
                 .setQuery(query, config, CommentModel.class)
                 .build();
@@ -88,6 +88,28 @@ public class ViewPostActivity extends AppCompatActivity {
         viewPostBinding.commentsView.setLayoutManager(linearLayoutManager);
         viewPostBinding.commentsView.setAdapter(adapter);
 
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                int friendlyMessageCount = adapter.getItemCount();
+                int lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
+                // If the recycler view is initially being loaded or the
+                // user is at the bottom of the list, scroll to the bottom
+                // of the list to show the newly added message.
+                if (lastVisiblePosition == -1 ||
+                        (positionStart >= (friendlyMessageCount - 1) &&
+                                lastVisiblePosition == (positionStart - 1))) {
+                    viewPostBinding.commentsView.scrollToPosition(positionStart);
+                }
+            }
+        });
+
+        adapter.setOnItemClickListener((String name, String uid) -> {
+            Intent userProfileIntent = new Intent(ViewPostActivity.this, UserProfileActivity.class);
+            userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
+            userProfileIntent.putExtra("EXTRA_PERSON_UID", uid);
+            startActivity(userProfileIntent);
+        });
         initItems();
     }
 
@@ -132,7 +154,6 @@ public class ViewPostActivity extends AppCompatActivity {
         long timestamp = extras.getLong("EXTRA_POST_TIMESTAMP");
 
         viewPostBinding.userName.setText(userName);
-        viewPostBinding.originalPoster.setText(userName);
         viewPostBinding.postTime.setText(sfdMainDate.format(timestamp));
     }
 
@@ -159,60 +180,7 @@ public class ViewPostActivity extends AppCompatActivity {
                     });
         } else {
             finish();
-        }
 
-        String userId = extras.getString("EXTRA_USER_ID");
-        String name = extras.getString("EXTRA_PERSON_NAME");
-
-        if (userId != null && name != null) {
-
-            db.collection("users").document(userId).get()
-                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()) {
-                                DocumentSnapshot document = task.getResult();
-                                if (document.exists()) {
-                                    String firstLetter, secondLetter;
-                                    String url = (String) document.get("imageUrl");
-
-                                    if (url != null) {
-                                        Picasso.get()
-                                                .load(url)
-                                                .noFade()
-                                                .networkPolicy(NetworkPolicy.OFFLINE)
-                                                .into(viewPostBinding.profileImage, new Callback() {
-
-                                                    @Override
-                                                    public void onSuccess() {
-                                                    }
-
-                                                    @Override
-                                                    public void onError(Exception e) {
-                                                        Picasso.get()
-                                                                .load(url)
-                                                                .noFade()
-                                                                .into(viewPostBinding.profileImage);
-                                                    }
-                                                });
-                                    } else {
-
-                                        firstLetter = String.valueOf(name.charAt(0));
-                                        secondLetter = name.substring(name.indexOf(' ') + 1, name.indexOf(' ') + 2).trim();
-
-                                        TextDrawable drawable = TextDrawable.builder()
-                                                .beginConfig()
-                                                .width(200)
-                                                .height(200)
-                                                .endConfig()
-                                                .buildRect(firstLetter + secondLetter, Color.DKGRAY);
-
-                                        viewPostBinding.profileImage.setImageDrawable(drawable);
-                                    }
-                                }
-                            }
-                        }
-                    });
         }
     }
 
