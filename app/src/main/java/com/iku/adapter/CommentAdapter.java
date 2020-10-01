@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.firebase.ui.firestore.paging.FirestorePagingAdapter;
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,21 +25,21 @@ import com.squareup.picasso.Picasso;
 
 import java.util.concurrent.TimeUnit;
 
-public class CommentAdapter extends FirestorePagingAdapter<CommentModel, CommentAdapter.CommentViewHolder> {
+public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, CommentAdapter.CommentViewHolder> {
 
     private static final String TAG = CommentAdapter.class.getSimpleName();
 
     private CommentAdapter.OnItemClickListener mListener;
 
     public interface OnItemClickListener {
-        void onItemClick(String name, String uid);
+        void onItemClick(int pos, DocumentSnapshot snapshot);
     }
 
     public void setOnItemClickListener(CommentAdapter.OnItemClickListener listener) {
         mListener = listener;
     }
 
-    public CommentAdapter(@NonNull FirestorePagingOptions<CommentModel> options) {
+    public CommentAdapter(@NonNull FirestoreRecyclerOptions<CommentModel> options) {
         super(options);
     }
 
@@ -71,18 +71,20 @@ public class CommentAdapter extends FirestorePagingAdapter<CommentModel, Comment
             profileImageView = itemView.findViewById(R.id.profileImage);
             timestampTextView = itemView.findViewById(R.id.timestamp);
 
-            commenterNameTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CommentModel commentModel = getItem(getAdapterPosition()).toObject(CommentModel.class);
-                    mListener.onItemClick(commentModel.getCommenterName(), commentModel.getUid());
+            commenterNameTextView.setOnClickListener(view -> {
+                if (mListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        mListener.onItemClick(position, getSnapshots().getSnapshot(position));
+                    }
                 }
             });
-            profileImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    CommentModel commentModel = getItem(getAdapterPosition()).toObject(CommentModel.class);
-                    mListener.onItemClick(commentModel.getCommenterName(), commentModel.getUid());
+            profileImageView.setOnClickListener(view -> {
+                if (mListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        mListener.onItemClick(position, getSnapshots().getSnapshot(position));
+                    }
                 }
             });
         }

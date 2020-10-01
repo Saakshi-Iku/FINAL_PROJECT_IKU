@@ -6,11 +6,10 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.firebase.ui.firestore.paging.FirestorePagingOptions;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,15 +37,13 @@ import java.util.Map;
 
 public class ViewPostActivity extends AppCompatActivity {
 
-    private static final String TAG = "ViewPost";
+    private static final String TAG = ViewPostActivity.class.getSimpleName();
 
     private SimpleDateFormat sfdMainDate = new SimpleDateFormat("hh:mm a, MMMM dd, yyyy");
 
     private Bundle extras;
 
     private ActivityViewPostBinding viewPostBinding;
-
-    private FirebaseAuth mAuth;
 
     private FirebaseUser user;
 
@@ -62,55 +59,51 @@ public class ViewPostActivity extends AppCompatActivity {
         viewPostBinding = ActivityViewPostBinding.inflate(getLayoutInflater());
         setContentView(viewPostBinding.getRoot());
 
-        mAuth = FirebaseAuth.getInstance();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
         extras = this.getIntent().getExtras();
+        if (extras != null)
+            messageId = extras.getString("EXTRA_MESSAGE_ID");
 
         setImage();
         setDetails();
         initButtons();
-        messageId = extras.getString("EXTRA_MESSAGE_ID");
         initalEmojis(messageId);
         reactions(messageId);
+        initCommentsView();
+        initItems();
+    }
 
-        PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(12)
-                .setPageSize(15)
-                .build();
+    private void initCommentsView() {
         Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("timestamp", Query.Direction.ASCENDING);
-        FirestorePagingOptions<CommentModel> options = new FirestorePagingOptions.Builder<CommentModel>()
-                .setQuery(query, config, CommentModel.class)
+        FirestoreRecyclerOptions<CommentModel> options = new FirestoreRecyclerOptions.Builder<CommentModel>()
+                .setQuery(query, CommentModel.class)
                 .build();
         adapter = new CommentAdapter(options);
-        viewPostBinding.commentsView.setHasFixedSize(true);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        viewPostBinding.commentsView.setLayoutManager(linearLayoutManager);
-        viewPostBinding.commentsView.setAdapter(adapter);
-
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                int friendlyMessageCount = adapter.getItemCount();
-                int lastVisiblePosition = linearLayoutManager.findLastCompletelyVisibleItemPosition();
-                // If the recycler view is initially being loaded or the
-                // user is at the bottom of the list, scroll to the bottom
-                // of the list to show the newly added message.
-                if (lastVisiblePosition == -1 ||
-                        (positionStart >= (friendlyMessageCount - 1) &&
-                                lastVisiblePosition == (positionStart - 1))) {
-                    viewPostBinding.commentsView.scrollToPosition(positionStart);
-                }
+                viewPostBinding.scrollView.smoothScrollTo(0, viewPostBinding.commentsView.getTop());
             }
         });
 
-        adapter.setOnItemClickListener((String name, String uid) -> {
-            Intent userProfileIntent = new Intent(ViewPostActivity.this, UserProfileActivity.class);
-            userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
-            userProfileIntent.putExtra("EXTRA_PERSON_UID", uid);
-            startActivity(userProfileIntent);
+        adapter.setOnItemClickListener((int position, DocumentSnapshot snapshot) -> {
+            CommentModel commentModel = snapshot.toObject(CommentModel.class);
+            if (commentModel != null) {
+                String name = commentModel.getCommenterName();
+                String uid = commentModel.getUid();
+                Intent userProfileIntent = new Intent(ViewPostActivity.this, UserProfileActivity.class);
+                userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
+                userProfileIntent.putExtra("EXTRA_PERSON_UID", uid);
+                startActivity(userProfileIntent);
+            }
         });
-        initItems();
+
+        viewPostBinding.commentsView.setHasFixedSize(true);
+        viewPostBinding.commentsView.setLayoutManager(linearLayoutManager);
+        viewPostBinding.commentsView.setAdapter(adapter);
     }
 
     private void initItems() {
@@ -137,6 +130,9 @@ public class ViewPostActivity extends AppCompatActivity {
         data.put("comment", comment);
         data.put("uid", user.getUid());
         data.put("commenterName", user.getDisplayName());
+        data.put("hearts", 0);
+        ArrayList<Object> heartsUidArray = new ArrayList<>();
+        data.put("upvoters", heartsUidArray);
         data.put("timestamp", timestamp);
         data.put("readableTimestamp", FieldValue.serverTimestamp());
 
@@ -243,9 +239,7 @@ public class ViewPostActivity extends AppCompatActivity {
                             }
                         }
 
-                    } else {
                     }
-                } else {
                 }
             }
         });
@@ -705,11 +699,5 @@ public class ViewPostActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
     }
 }
