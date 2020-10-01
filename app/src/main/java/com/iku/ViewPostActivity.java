@@ -1,6 +1,8 @@
 package com.iku;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
@@ -36,6 +38,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import static android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD;
 
 public class ViewPostActivity extends AppCompatActivity {
 
@@ -235,6 +239,11 @@ public class ViewPostActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         String message = extras.getString("EXTRA_MESSAGE");
         viewPostBinding.postDescription.setText(message);
+        viewPostBinding.topCommentsFilter.setChipStrokeColor(ColorStateList.valueOf(getColor(R.color.white)));
+        viewPostBinding.topCommentsFilter.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            viewPostBinding.postDescription.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
+        }
     }
 
     private void initButtons() {

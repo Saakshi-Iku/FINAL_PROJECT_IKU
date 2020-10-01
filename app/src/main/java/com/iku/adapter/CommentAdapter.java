@@ -56,9 +56,10 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
         commentViewHolder.commentTextView.setText(commentModel.getComment());
         commentViewHolder.commenterNameTextView.setText(commentModel.getCommenterName());
         commentViewHolder.timestampTextView.setText(getTimeAgo(timeStamp));
+        commentViewHolder.commentHeartCountTextView.setText(String.valueOf(commentModel.getHeartsCount()));
         commentViewHolder.setImage(commentModel);
         ArrayList<String> heartsList = commentModel.getHeartsArray();
-        if (commentModel.getHeartsCount()>0){
+        if (commentModel.getHeartsCount() > 0) {
             for (String element : heartsList) {
                 if (element.contains(user.getUid())) {
                     commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart);
@@ -77,7 +78,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView commentTextView, commenterNameTextView, timestampTextView;
+        private TextView commentTextView, commenterNameTextView, timestampTextView, commentHeartCountTextView;
         private ImageView profileImageView, heartImage;
 
         public CommentViewHolder(@NonNull View itemView) {
@@ -87,6 +88,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
             profileImageView = itemView.findViewById(R.id.profileImage);
             timestampTextView = itemView.findViewById(R.id.timestamp);
             heartImage = itemView.findViewById(R.id.heartUpButton);
+            commentHeartCountTextView = itemView.findViewById(R.id.commentHeartCount);
 
             commenterNameTextView.setOnClickListener(view -> {
                 if (mListener != null) {

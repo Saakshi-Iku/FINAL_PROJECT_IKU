@@ -302,6 +302,7 @@
                     app:singleSelection="true">
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/top_comments_filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#15ffffff"
@@ -313,6 +314,7 @@
                         app:chipStrokeWidth="1dp" />
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/new_comments_filter"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="#15ffffff"

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/black"
     android:paddingHorizontal="10dp"
-    android:paddingTop="5dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:paddingTop="5dp">
 
     <!--Divider-->
     <View
@@ -14,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#20ffffff"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--Profile image-->
     <de.hdodenhof.circleimageview.CircleImageView
@@ -22,35 +21,41 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@id/div"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/div" />
 
-    <!--Name-->
-    <TextView
-        android:id="@+id/commentorName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/commentorDetails"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        app:layout_constraintTop_toBottomOf="@id/div"
         android:layout_marginTop="5dp"
-        app:layout_constraintStart_toEndOf="@id/profileImage"
-        android:textSize="14sp"
         android:layout_marginHorizontal="5dp"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"/>
+        app:layout_constraintEnd_toStartOf="@id/commentsHearts"
+        app:layout_constraintStart_toEndOf="@id/profileImage"
+        app:layout_constraintTop_toBottomOf="@id/div">
 
-    <!--Timestamp-->
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:textSize="12sp"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintStart_toEndOf="@id/commentorName"
-        app:layout_constraintBottom_toBottomOf="@id/commentorName"/>
+        <!--Name-->
+        <TextView
+            android:id="@+id/commentorName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:textColor="@color/colorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <!--Timestamp-->
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="12sp" />
+
+    </LinearLayout>
 
     <!--Comment-->
     <TextView
@@ -60,21 +65,41 @@
         android:layout_marginHorizontal="5dp"
         android:textColor="@color/white"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@id/heartUpButton"
+        app:layout_constraintEnd_toStartOf="@id/commentsHearts"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/profileImage"
-        app:layout_constraintTop_toBottomOf="@id/commentorName" />
+        app:layout_constraintTop_toBottomOf="@id/commentorDetails" />
 
-    <!--Heart button-->
-    <ImageView
-        android:id="@+id/heartUpButton"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:padding="11dp"
+
+    <LinearLayout
+        android:id="@+id/commentsHearts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        app:layout_constraintTop_toBottomOf="@id/div"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:src="@drawable/ic_heart_unfilled" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/div">
+
+        <!--Heart button-->
+        <ImageView
+            android:id="@+id/heartUpButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_heart_unfilled" />
+
+        <!--Comment hearts count-->
+        <TextView
+            android:id="@+id/commentHeartCount"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="10sp"
+            android:visibility="visible" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -17,7 +17,7 @@ android {
 
     defaultConfig {
         applicationId "com.iku.test"
-        minSdkVersion 22
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 5
         versionName "0.1.4"
@@ -57,14 +57,14 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:18.1.0'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-crashlytics:17.2.1'
-    implementation 'com.google.firebase:firebase-firestore:21.6.0'
+    implementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+    implementation 'com.google.firebase:firebase-firestore:21.7.0'
     implementation 'com.google.firebase:firebase-storage:19.2.0'
     implementation 'com.google.firebase:firebase-auth:19.4.0'
     implementation 'com.google.firebase:firebase-analytics:17.5.0'
     implementation 'com.google.firebase:firebase-functions:19.1.0'
-    implementation 'com.google.firebase:firebase-messaging:20.2.4'
-    implementation 'com.google.firebase:firebase-perf:19.0.8'
+    implementation 'com.google.firebase:firebase-messaging:20.3.0'
+    implementation 'com.google.firebase:firebase-perf:19.0.9'
     implementation 'com.google.firebase:firebase-analytics-ktx:17.5.0'
     implementation 'com.google.firebase:firebase-auth-ktx:19.4.0'
     implementation 'com.firebaseui:firebase-ui:4.3.2'

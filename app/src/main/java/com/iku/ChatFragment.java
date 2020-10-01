@@ -453,7 +453,7 @@ public class ChatFragment extends Fragment {
             String messageId = documentSnapshot.getId();
             if (name != null && url != null) {
                 viewChatImageIntent.putExtra("EXTRA_PERSON_NAME", name);
-                viewChatImageIntent.putExtra("EXTRA_MESSAGE",message);
+                viewChatImageIntent.putExtra("EXTRA_MESSAGE", message);
                 viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
                 viewChatImageIntent.putExtra("EXTRA_POST_TIMESTAMP", timestamp);
                 viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", messageId);
@@ -579,45 +579,50 @@ public class ChatFragment extends Fragment {
                 if (UID.equals(user.getUid())) {
                     profileView.setVisibility(View.GONE);
                     reportView.setVisibility(View.GONE);
-                    updateMessageView.setVisibility(View.VISIBLE);
-                    updateMessageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            binding.editWarning.setVisibility(View.VISIBLE);
-                            binding.cancelEdit.setOnClickListener(view1 -> {
-                                editTextStatus = 0;
-                                initSendButton();
-                                binding.editWarning.setVisibility(View.GONE);
-                            });
-                            if (chatModel.getType().equals("text")) {
-                                binding.messageTextField.setText(chatModel.getMessage());
-                                binding.messageTextField.setSelection(binding.messageTextField.getText().length());
-                                bottomSheetDialog.dismiss();
-                                editTextStatus = 1;
-                                if (editTextStatus == 1) {
-                                    binding.sendMessageButton.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            Date d = new Date();
-                                            long timestamp = d.getTime();
-                                            Log.i(TAG, "onClick: " + timestamp);
-                                            editTextStatus = 0;
-                                            updateMessage(documentSnapshot.getId(), position, binding.messageTextField.getText().toString().trim());
-                                            binding.messageTextField.setText("");
-                                            binding.messageTextField.requestFocus();
-                                        }
-                                    });
+                    Log.i(TAG, "MESSAGE :" + chatModel.getTimestamp() + "\nSystem -1Hr" + (System.currentTimeMillis() - (60 * 60 * 1000)));
+                    if (!(chatModel.getTimestamp() < System.currentTimeMillis() - (60 * 60 * 1000))) {
+                        updateMessageView.setVisibility(View.VISIBLE);
+                        updateMessageView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                binding.editWarning.setVisibility(View.VISIBLE);
+                                binding.cancelEdit.setOnClickListener(view1 -> {
+                                    editTextStatus = 0;
+                                    initSendButton();
+                                    binding.editWarning.setVisibility(View.GONE);
+                                    binding.messageTextField.setText("");
+                                    binding.messageTextField.clearFocus();
+                                });
+                                if (chatModel.getType().equals("text")) {
+                                    binding.messageTextField.setText(chatModel.getMessage());
+                                    binding.messageTextField.setSelection(binding.messageTextField.getText().length());
+                                    bottomSheetDialog.dismiss();
+                                    editTextStatus = 1;
+                                    if (editTextStatus == 1) {
+                                        binding.sendMessageButton.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                binding.editWarning.setVisibility(View.GONE);
+                                                editTextStatus = 0;
+                                                updateMessage(documentSnapshot.getId(), position, binding.messageTextField.getText().toString().trim());
+                                                binding.messageTextField.setText("");
+                                                binding.messageTextField.requestFocus();
+                                            }
+                                        });
+                                    }
+                                } else if (chatModel.getType().equals("image")) {
+                                    binding.editWarning.setVisibility(View.GONE);
+                                    Intent goToImageSend = new Intent(getActivity(), ChatImageActivity.class);
+                                    goToImageSend.putExtra("documentId", documentSnapshot.getId());
+                                    goToImageSend.putExtra("message", chatModel.getMessage());
+                                    goToImageSend.putExtra("imageUrl", chatModel.getimageUrl());
+                                    bottomSheetDialog.dismiss();
+                                    startActivity(goToImageSend);
                                 }
-                            } else if (chatModel.getType().equals("image")) {
-                                Intent goToImageSend = new Intent(getActivity(), ChatImageActivity.class);
-                                goToImageSend.putExtra("documentId", documentSnapshot.getId());
-                                goToImageSend.putExtra("message", chatModel.getMessage());
-                                goToImageSend.putExtra("imageUrl", chatModel.getimageUrl());
-                                bottomSheetDialog.dismiss();
-                                startActivity(goToImageSend);
+
                             }
-                        }
-                    });
+                        });
+                    }
                     deleteMessageView.setVisibility(View.VISIBLE);
                     deleteMessageView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -700,7 +705,7 @@ public class ChatFragment extends Fragment {
         map.put("message", message);
         map.put("edited", true);
         map.put("messageUpdateTime", timestamp);
-        map.put("readableMessageUpdateTime",FieldValue.serverTimestamp());
+        map.put("readableMessageUpdateTime", FieldValue.serverTimestamp());
         db.collection("iku_earth_messages").document(messageDocumentID)
                 .update(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
