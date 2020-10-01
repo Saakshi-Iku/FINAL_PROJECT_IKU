@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -597,6 +598,9 @@ public class ChatFragment extends Fragment {
                                     binding.sendMessageButton.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View view) {
+                                            Date d = new Date();
+                                            long timestamp = d.getTime();
+                                            Log.i(TAG, "onClick: " + timestamp);
                                             editTextStatus = 0;
                                             updateMessage(documentSnapshot.getId(), position, binding.messageTextField.getText().toString().trim());
                                             binding.messageTextField.setText("");
@@ -690,10 +694,13 @@ public class ChatFragment extends Fragment {
     }
 
     private void updateMessage(String messageDocumentID, int position, String message) {
-
+        Date d = new Date();
+        long timestamp = d.getTime();
         Map<String, Object> map = new HashMap<>();
         map.put("message", message);
         map.put("edited", true);
+        map.put("messageUpdateTime", timestamp);
+        map.put("readableMessageUpdateTime",FieldValue.serverTimestamp());
         db.collection("iku_earth_messages").document(messageDocumentID)
                 .update(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

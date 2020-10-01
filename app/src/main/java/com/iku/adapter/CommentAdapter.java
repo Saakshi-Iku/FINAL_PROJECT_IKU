@@ -15,6 +15,8 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iku.R;
@@ -23,6 +25,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, CommentAdapter.CommentViewHolder> {
@@ -31,8 +34,12 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
 
     private CommentAdapter.OnItemClickListener mListener;
 
+    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
     public interface OnItemClickListener {
         void onItemClick(int pos, DocumentSnapshot snapshot);
+
+        void onHeartClick(int pos, DocumentSnapshot snapshot);
     }
 
     public void setOnItemClickListener(CommentAdapter.OnItemClickListener listener) {
@@ -50,6 +57,15 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
         commentViewHolder.commenterNameTextView.setText(commentModel.getCommenterName());
         commentViewHolder.timestampTextView.setText(getTimeAgo(timeStamp));
         commentViewHolder.setImage(commentModel);
+        ArrayList<String> heartsList = commentModel.getHeartsArray();
+        if (commentModel.getHeartsCount()>0){
+            for (String element : heartsList) {
+                if (element.contains(user.getUid())) {
+                    commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart);
+                    break;
+                }
+            }
+        }
     }
 
     @NonNull
@@ -62,7 +78,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
     public class CommentViewHolder extends RecyclerView.ViewHolder {
 
         private TextView commentTextView, commenterNameTextView, timestampTextView;
-        private ImageView profileImageView;
+        private ImageView profileImageView, heartImage;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,6 +86,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
             commenterNameTextView = itemView.findViewById(R.id.commentorName);
             profileImageView = itemView.findViewById(R.id.profileImage);
             timestampTextView = itemView.findViewById(R.id.timestamp);
+            heartImage = itemView.findViewById(R.id.heartUpButton);
 
             commenterNameTextView.setOnClickListener(view -> {
                 if (mListener != null) {
@@ -84,6 +101,14 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         mListener.onItemClick(position, getSnapshots().getSnapshot(position));
+                    }
+                }
+            });
+            heartImage.setOnClickListener(view -> {
+                if (mListener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        mListener.onHeartClick(position, getSnapshots().getSnapshot(position));
                     }
                 }
             });
@@ -172,7 +197,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
         } else if (diff < 24 * HOUR_MILLIS) {
             return diff / HOUR_MILLIS + "h";
         } else if (diff < 48 * HOUR_MILLIS) {
-            return "yesterday";
+            return "Yesterday";
         } else if (day >= 7) {
             if (day > 360) {
                 return (day / 360) + "y";

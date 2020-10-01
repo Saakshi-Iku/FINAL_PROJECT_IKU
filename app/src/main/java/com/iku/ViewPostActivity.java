@@ -8,12 +8,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -53,6 +55,8 @@ public class ViewPostActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,13 +79,15 @@ public class ViewPostActivity extends AppCompatActivity {
         initItems();
     }
 
+
     private void initCommentsView() {
-        Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("timestamp", Query.Direction.ASCENDING);
+        Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("heartsCount", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<CommentModel> options = new FirestoreRecyclerOptions.Builder<CommentModel>()
                 .setQuery(query, CommentModel.class)
                 .build();
         adapter = new CommentAdapter(options);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        ((SimpleItemAnimator) viewPostBinding.commentsView.getItemAnimator()).setSupportsChangeAnimations(false);
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -89,24 +95,144 @@ public class ViewPostActivity extends AppCompatActivity {
             }
         });
 
-        adapter.setOnItemClickListener((int position, DocumentSnapshot snapshot) -> {
-            CommentModel commentModel = snapshot.toObject(CommentModel.class);
-            if (commentModel != null) {
-                String name = commentModel.getCommenterName();
-                String uid = commentModel.getUid();
-                Intent userProfileIntent = new Intent(ViewPostActivity.this, UserProfileActivity.class);
-                userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
-                userProfileIntent.putExtra("EXTRA_PERSON_UID", uid);
-                startActivity(userProfileIntent);
+        adapter.setOnItemClickListener(new CommentAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int pos, DocumentSnapshot snapshot) {
+                CommentModel commentModel = snapshot.toObject(CommentModel.class);
+                if (commentModel != null) {
+                    String name = commentModel.getCommenterName();
+                    String uid = commentModel.getUid();
+                    Intent userProfileIntent = new Intent(ViewPostActivity.this, UserProfileActivity.class);
+                    userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
+                    userProfileIntent.putExtra("EXTRA_PERSON_UID", uid);
+                    startActivity(userProfileIntent);
+                }
+            }
+
+            @Override
+            public void onHeartClick(int pos, DocumentSnapshot snapshot) {
+                CommentModel commentModel = snapshot.toObject(CommentModel.class);
+                final String documentID = snapshot.getId();
+                if (commentModel != null) {
+                    boolean isLiked = false;
+                    int heartsCount = commentModel.getHeartsCount();
+                    ArrayList<String> heartsList = commentModel.getHeartsArray();
+                    String myUID = user.getUid();
+                    if (heartsCount >= 0) {
+                        for (String element : heartsList) {
+                            if (element.contains(myUID)) {
+                                isLiked = true;
+                                break;
+                            }
+                        }
+                        if (!isLiked) {
+                            db.collection("iku_earth_messages").document(messageId).collection("comments").document(documentID)
+                                    .update("heartsCount", commentModel.getHeartsCount() + 1,
+                                            "heartsArray", FieldValue.arrayUnion(myUID))
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            if (commentModel.getUid().equals(user.getUid())) {
+                                                //Log event
+                                                Bundle heart_params = new Bundle();
+                                                heart_params.putString("type", "heart_up");
+                                                heart_params.putString("commentID", documentID);
+                                                heart_params.putString("author_UID", commentModel.getUid());
+                                                heart_params.putString("action_by", user.getUid());
+                                                mFirebaseAnalytics.logEvent("comment_hearts", heart_params);
+                                            } else {
+                                                db.collection("users").document(commentModel.getUid())
+                                                        .get()
+                                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                                                if (usersData != null) {
+                                                                    db.collection("users").document(commentModel.getUid())
+                                                                            .update("points", usersData.getPoints() + 1)
+                                                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                                @Override
+                                                                                public void onSuccess(Void aVoid) {
+
+                                                                                    //Log event
+                                                                                    Bundle heart_params = new Bundle();
+                                                                                    heart_params.putString("type", "heart_up");
+                                                                                    heart_params.putString("commentID", documentID);
+                                                                                    heart_params.putString("author_UID", commentModel.getUid());
+                                                                                    heart_params.putString("action_by", user.getUid());
+                                                                                    mFirebaseAnalytics.logEvent("comment_hearts", heart_params);
+                                                                                }
+                                                                            })
+                                                                            .addOnFailureListener(e -> {
+                                                                            });
+                                                                }
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+
+                                    });
+                        } else {
+                            db.collection("iku_earth_messages").document(messageId).collection("comments").document(documentID)
+                                    .update("heartsCount", commentModel.getHeartsCount() - 1,
+                                            "heartsArray", FieldValue.arrayRemove(myUID))
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            if (commentModel.getUid().equals(user.getUid())) {
+                                                //Log event
+                                                Bundle params = new Bundle();
+                                                params.putString("type", "heart_down");
+                                                params.putString("messageID", documentID);
+                                                params.putString("author_UID", commentModel.getUid());
+                                                params.putString("action_by", user.getUid());
+                                                mFirebaseAnalytics.logEvent("comment_hearts", params);
+                                            } else {
+                                                db.collection("users").document(commentModel.getUid())
+                                                        .get()
+                                                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                                final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                                                db.collection("users").document(commentModel.getUid())
+                                                                        .update("points", usersData.getPoints() - 1)
+                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                            @Override
+                                                                            public void onSuccess(Void aVoid) {
+
+                                                                                //Log event
+                                                                                Bundle heart_params = new Bundle();
+                                                                                heart_params.putString("type", "heart_down");
+                                                                                heart_params.putString("messageID", documentID);
+                                                                                heart_params.putString("author_UID", commentModel.getUid());
+                                                                                heart_params.putString("action_by", user.getUid());
+                                                                                mFirebaseAnalytics.logEvent("comment_hearts", heart_params);
+                                                                            }
+                                                                        })
+                                                                        .addOnFailureListener(e -> {
+                                                                        });
+                                                            }
+                                                        });
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> {
+                                    });
+                        }
+                    }
+                    adapter.notifyItemChanged(pos);
+                }
             }
         });
-
         viewPostBinding.commentsView.setHasFixedSize(true);
         viewPostBinding.commentsView.setLayoutManager(linearLayoutManager);
         viewPostBinding.commentsView.setAdapter(adapter);
     }
 
     private void initItems() {
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         String message = extras.getString("EXTRA_MESSAGE");
         viewPostBinding.postDescription.setText(message);
     }
@@ -130,9 +256,9 @@ public class ViewPostActivity extends AppCompatActivity {
         data.put("comment", comment);
         data.put("uid", user.getUid());
         data.put("commenterName", user.getDisplayName());
-        data.put("hearts", 0);
+        data.put("heartsCount", 0);
         ArrayList<Object> heartsUidArray = new ArrayList<>();
-        data.put("upvoters", heartsUidArray);
+        data.put("heartsArray", heartsUidArray);
         data.put("timestamp", timestamp);
         data.put("readableTimestamp", FieldValue.serverTimestamp());
 

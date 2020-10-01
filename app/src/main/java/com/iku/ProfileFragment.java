@@ -9,23 +9,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import androidx.annotation.Nullable;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.MetadataChanges;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.iku.databinding.FragmentProfileBinding;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -45,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private FirebaseAnalytics mFirebaseAnalytics;
     private String photoUrl;
-    private ImageView userBioIcon,userLinkIcon;
+    private ImageView userBioIcon, userLinkIcon;
     private MaterialTextView userHeartsTextView, userBioTextView, userLinkTextView;
     private FragmentProfileBinding profileBinding;
 
@@ -69,8 +63,8 @@ public class ProfileFragment extends Fragment {
         userHeartsTextView = view.findViewById(R.id.userHearts);
         userBioTextView = view.findViewById(R.id.userBio);
         userLinkTextView = view.findViewById(R.id.linkInBio);
-        userBioIcon=view.findViewById(R.id.userBioIcon);
-        userLinkIcon=view.findViewById(R.id.linkInBioIcon);
+        userBioIcon = view.findViewById(R.id.userBioIcon);
+        userLinkIcon = view.findViewById(R.id.linkInBioIcon);
 
         initButtons();
         getUserDetails();
@@ -189,12 +183,12 @@ public class ProfileFragment extends Fragment {
                                 long points = (long) change.getDocument().get("points");
                                 String bio = (String) change.getDocument().get("userBio");
                                 String link = (String) change.getDocument().get("userBioLink");
-                                if (bio!=null&& !bio.equals("")){
+                                if (bio != null && !bio.equals("")) {
                                     userBioIcon.setVisibility(View.VISIBLE);
                                     userBioTextView.setVisibility(View.VISIBLE);
                                     userBioTextView.setText(bio);
                                 }
-                                if (link!=null&& !link.equals("")){
+                                if (link != null && !link.equals("")) {
                                     userLinkIcon.setVisibility(View.VISIBLE);
                                     userLinkTextView.setVisibility(View.VISIBLE);
                                     userLinkTextView.setText(link);
@@ -202,7 +196,7 @@ public class ProfileFragment extends Fragment {
                                 if (points == 0)
                                     userHeartsTextView.setText(R.string.yet_to_win_hearts);
                                 else
-                                    userHeartsTextView.setText((Integer) change.getDocument().get("points"));
+                                    userHeartsTextView.setText(String.valueOf(change.getDocument().getLong("points")));
                             }
                         }
                     });
