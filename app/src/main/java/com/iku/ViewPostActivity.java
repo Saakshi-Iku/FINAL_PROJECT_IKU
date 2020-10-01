@@ -192,7 +192,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
-                        Long upvotesCount, downvotesCount;
+                        long upvotesCount, downvotesCount;
                         ArrayList<String> HeartUpArray = (ArrayList) document.get("upvoters");
                         ArrayList<String> emoji1Array = (ArrayList) document.get("emoji1");
                         ArrayList<String> emoji2Array = (ArrayList) document.get("emoji2");
@@ -306,7 +306,7 @@ public class ViewPostActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         String authorOfMessage;
-                        Long upvotesCount, downvotesCount;
+                        long upvotesCount, downvotesCount;
                         authorOfMessage = (String) document.get("uid");
                         ArrayList<String> HeartUpArray = (ArrayList) document.get("upvoters");
                         ArrayList<String> emoji1Array = (ArrayList) document.get("emoji1");
@@ -316,12 +316,12 @@ public class ViewPostActivity extends AppCompatActivity {
                         ArrayList<String> HeartDownArray = (ArrayList) document.get("downvoters");
                         upvotesCount = (long) document.get("upvoteCount");
                         downvotesCount = (long) document.get("downvoteCount");
-                        Boolean HeartupLiked = false;
-                        Boolean emoji1Liked = false;
-                        Boolean emoji2Liked = false;
-                        Boolean emoji3Liked = false;
-                        Boolean emoji4Liked = false;
-                        Boolean disliked = false;
+                        boolean HeartupLiked = false;
+                        boolean emoji1Liked = false;
+                        boolean emoji2Liked = false;
+                        boolean emoji3Liked = false;
+                        boolean emoji4Liked = false;
+                        boolean disliked = false;
 
                         if (upvotesCount >= 0) {
                             for (String element : HeartUpArray) {
@@ -380,17 +380,15 @@ public class ViewPostActivity extends AppCompatActivity {
                                 changeLikesArray(messageDocumentID, emoji, "downvoters", upvotesCount, downvotesCount, authorOfMessage);
                             }
                         }
-                    } else {
                     }
-                } else {
                 }
             }
         });
     }
 
     private void changeLikesArray(String messageDocumentID, String currentEmoji, String previousEmoji, long upvotesCount, long downvotesCount, String authorOfMessage) {
-        if (currentEmoji == previousEmoji) {
-            if (currentEmoji == "upvoters" || currentEmoji == "emoji1" || currentEmoji == "emoji2" || currentEmoji == "emoji3" || currentEmoji == "emoji4") {
+        if (currentEmoji.equals(previousEmoji)) {
+            if (currentEmoji.equals("upvoters") || currentEmoji.equals("emoji1") || currentEmoji.equals("emoji2") || currentEmoji.equals("emoji3") || currentEmoji.equals("emoji4")) {
                 if (!authorOfMessage.equals(user.getUid())) {
                     db.collection("users").document(authorOfMessage)
                             .get()
@@ -473,7 +471,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 });
             }
 
-        } else if ((currentEmoji != previousEmoji) && (currentEmoji == "downvoters")) {
+        } else if ((!currentEmoji.equals(previousEmoji)) && (currentEmoji.equals("downvoters"))) {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -509,7 +507,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 }
             });
 
-        } else if ((previousEmoji == "downvoters") && (currentEmoji != previousEmoji)) {
+        } else if ((previousEmoji.equals("downvoters")) && (!currentEmoji.equals(previousEmoji))) {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -694,7 +692,7 @@ public class ViewPostActivity extends AppCompatActivity {
         }
     }
 
-    private void disableEmojiButtons(Boolean status) {
+    private void disableEmojiButtons(boolean status) {
         viewPostBinding.choose.setEnabled(status);
         viewPostBinding.choose1.setEnabled(status);
         viewPostBinding.choose2.setEnabled(status);
