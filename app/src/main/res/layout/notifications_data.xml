@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/notificationImage"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Notification Title"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Notification Description"
+            android:textColor="@android:color/darker_gray"
+            android:textSize="14sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_gravity="end">
+
+            <TextView
+                android:id="@+id/CTA2"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:padding="10dp"
+                android:layout_marginHorizontal="10dp"
+                android:gravity="center_vertical"
+                android:text="Like"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/CTA1"
+                android:layout_width="wrap_content"
+                android:layout_height="42dp"
+                android:text="View" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

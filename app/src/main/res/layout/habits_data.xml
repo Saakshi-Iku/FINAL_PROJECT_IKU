@@ -8,8 +8,8 @@
         android:id="@+id/habitCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#50DCDCDC"
         android:layout_margin="8dp"
+        android:backgroundTint="#50DCDCDC"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp"
         app:layout_constraintTop_toTopOf="parent">
@@ -44,7 +44,7 @@
                     android:maxLines="4"
                     android:paddingVertical="2dp"
                     android:text="This is a test description for the habit that will be shown here. This is a test description for the habit that will be shown here."
-                    android:textSize="15sp"/>
+                    android:textSize="15sp" />
 
             </LinearLayout>
 
@@ -67,8 +67,8 @@
                     android:paddingVertical="15dp"
                     android:textAlignment="viewStart"
                     android:textSize="14dp"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="visible"/>
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/charCounter"
@@ -106,8 +106,8 @@
                     <HorizontalScrollView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:scrollbars="none"
                         android:overScrollMode="never"
+                        android:scrollbars="none"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/frequencyTitle"
@@ -117,9 +117,9 @@
                             android:id="@+id/frequencyChipGroup"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:overScrollMode="never"
                             app:layout_constraintStart_toEndOf="@id/frequencyTitle"
                             app:layout_constraintTop_toTopOf="parent"
-                            android:overScrollMode="never"
                             app:singleLine="true"
                             app:singleSelection="true">
 
@@ -177,8 +177,8 @@
                     <HorizontalScrollView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:scrollbars="none"
                         android:overScrollMode="never"
+                        android:scrollbars="none"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/weekSelectionTitle"
@@ -188,11 +188,11 @@
                             android:id="@+id/weekSelectionChipGroup"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:overScrollMode="never"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
                             app:layout_constraintTop_toTopOf="parent"
-                            android:overScrollMode="never"
                             app:singleLine="true"
                             app:singleSelection="true">
 
@@ -250,8 +250,8 @@
                     <HorizontalScrollView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:scrollbars="none"
                         android:overScrollMode="never"
+                        android:scrollbars="none"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
@@ -261,11 +261,11 @@
                             android:id="@+id/daySelectionChipGroup"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:overScrollMode="never"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
                             app:layout_constraintTop_toTopOf="parent"
-                            android:overScrollMode="never"
                             app:singleLine="true"
                             app:singleSelection="true">
 
@@ -341,8 +341,8 @@
                     <HorizontalScrollView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:scrollbars="none"
                         android:overScrollMode="never"
+                        android:scrollbars="none"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/timeSlotTitle"
@@ -396,8 +396,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:visibility="visible"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/editHabit">
 
                 <!--Level info-->
@@ -405,43 +405,53 @@
                     android:id="@+id/streakInformation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="On streak since 12 Jan 2020!"
-                    android:textSize="12dp"
-                    android:layout_marginHorizontal="10dp"
+                    android:layout_alignStart="@id/supportHabit"
+                    android:layout_alignBottom="@id/supportHabit"
                     android:layout_alignParentStart="true"
-                    android:layout_alignStart="@id/supportCount"
-                    android:layout_alignBottom="@id/progressBar"/>
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_toStartOf="@+id/supportHabit"
+                    android:text="On streak since 12 Jan 2020!"
+                    android:textSize="12dp" />
 
                 <!--progress bar-->
                 <androidx.core.widget.ContentLoadingProgressBar
                     android:id="@+id/progressBar"
                     android:layout_width="0dp"
-                    android:layout_height="20dp"
-                    android:progressBackgroundTint="@color/colorPrimary"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_alignStart="@id/supportCount"
-                    android:layout_alignBottom="@id/supportCount"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true" />
-
-                <!--Heart button-->
-                <ImageView
-                    android:id="@+id/supportHabitButton"
-                    android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:padding="6dp"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_fire_filled" />
+                    android:layout_alignStart="@id/supportHabit"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_toStartOf="@+id/supportHabit"
+                    android:progressBackgroundTint="@color/colorPrimary" />
 
-                <TextView
-                    android:id="@+id/supportCount"
-                    android:layout_width="36dp"
+                <!--Habits support-->
+                <LinearLayout
+                    android:id="@+id/supportHabit"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="12sp"
-                    android:text="25"
-                    android:layout_below="@id/supportHabitButton"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_alignParentEnd="true"
+                    android:visibility="visible"
+                    android:orientation="vertical">
+
+                    <!--Heart button-->
+                    <ImageView
+                        android:id="@+id/supportHabitButton"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:padding="6dp"
+                        android:src="@drawable/ic_fire_filled" />
+
+                    <!--Hearts for habits-->
+                    <TextView
+                        android:id="@+id/supportCount"
+                        android:layout_width="36dp"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="25"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
 
             </RelativeLayout>
 
