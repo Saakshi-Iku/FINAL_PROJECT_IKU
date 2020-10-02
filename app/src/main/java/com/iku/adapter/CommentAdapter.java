@@ -67,6 +67,17 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
                 }
             }
         }
+        if (commentModel.getHeartsCount() == 0) {
+            commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart_unfilled);
+        }
+        if (commentModel.getHeartsCount() > 0) {
+            for (String element : heartsList) {
+                if (!element.contains(user.getUid())) {
+                    commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart_unfilled);
+                    break;
+                }
+            }
+        }
     }
 
     @NonNull
