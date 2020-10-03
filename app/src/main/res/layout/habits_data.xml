@@ -435,11 +435,12 @@
                     android:orientation="vertical">
 
                     <!--Heart button-->
-                    <ImageView
+                    <ImageButton
                         android:id="@+id/supportHabitButton"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
                         android:padding="6dp"
+                        android:background="@color/fui_transparent"
                         android:src="@drawable/ic_fire_filled" />
 
                     <!--Hearts for habits-->
@@ -504,6 +505,7 @@
                 android:layout_height="wrap_content"
                 android:text="Start"
                 android:textAllCaps="false"
+                android:hapticFeedbackEnabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/progress" />

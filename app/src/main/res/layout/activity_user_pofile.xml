@@ -41,10 +41,10 @@
                     android:id="@+id/back_button"
                     android:layout_width="56dp"
                     android:layout_height="56dp"
+                    android:layout_alignParentStart="true"
                     android:contentDescription="@string/back_button_content_desc"
                     android:padding="16dp"
-                    android:src="@drawable/ic_arrow_back_24"
-                    android:layout_alignParentStart="true"/>
+                    android:src="@drawable/ic_arrow_back_24" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -64,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Profile"
-                        android:textSize="18sp"/>
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -74,6 +74,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
+    <!--Rest of the page-->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -98,91 +99,97 @@
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
                 android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:maxLines="1"
+                android:paddingHorizontal="10dp"
                 android:textSize="20sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/profileImage"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@id/profileImage" />
 
             <!--About user-->
-            <ImageView
-                android:id="@+id/userBioIcon"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/userBioView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_baseline_about_24"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@id/userBio"
-                app:layout_constraintStart_toStartOf="@id/userBio"
-                app:layout_constraintTop_toTopOf="@id/userBio"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/userBio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginTop="5dp"
-                android:maxLines="6"
-                android:paddingVertical="10dp"
-                android:paddingStart="45dp"
-                android:paddingEnd="10dp"
-                android:textAlignment="center"
-                android:textSize="13sp"
-                android:visibility="visible"
+                android:gravity="center_vertical"
+                android:padding="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/profileImage"
-                app:layout_constraintTop_toBottomOf="@+id/userName" />
+                app:layout_constraintTop_toBottomOf="@id/userName">
+
+                <ImageView
+                    android:id="@+id/userBioIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_baseline_about_24" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/userBio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:maxLines="6"
+                    android:textAlignment="textStart"
+                    android:textSize="13sp"
+                    android:visibility="visible" />
+
+            </LinearLayout>
 
             <!--Link in bio-->
-            <ImageView
-                android:id="@+id/linkInBioIcon"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:id="@+id/linkInBioView"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/ic_baseline_insert_link_24"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="@id/linkInBio"
-                app:layout_constraintStart_toStartOf="@id/linkInBio"
-                app:layout_constraintTop_toTopOf="@id/linkInBio"
-                app:layout_constraintVertical_bias="0.0" />
-
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/linkInBio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="5dp"
-                android:minLines="1"
-                android:paddingVertical="10dp"
-                android:paddingStart="45dp"
-                android:paddingEnd="10dp"
-                android:textAlignment="center"
-                android:textColorLink="@color/colorAccent"
-                android:textSize="13sp"
-                android:visibility="visible"
+                android:gravity="center_vertical"
+                android:padding="5dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/profileImage"
-                app:layout_constraintTop_toBottomOf="@id/userBio" />
+                app:layout_constraintTop_toBottomOf="@id/userBioView">
+
+                <ImageView
+                    android:id="@+id/linkInBioIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_baseline_insert_link_24"
+                    android:visibility="visible" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/linkInBio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:autoLink="all"
+                    android:linksClickable="true"
+                    android:maxLines="2"
+                    android:textAlignment="textStart"
+                    android:textColorLink="@color/colorAccent"
+                    android:textSize="13sp"
+                    android:visibility="visible" />
+
+            </LinearLayout>
 
             <!--headline numbers-->
             <LinearLayout
                 android:id="@+id/headlineNumbers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="25dp"
                 android:isScrollContainer="false"
                 android:weightSum="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linkInBio">
+                app:layout_constraintTop_toBottomOf="@id/linkInBioView">
 
                 <!--Hearts count-->
                 <LinearLayout
@@ -192,6 +199,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/profile_selected_tab"
                     android:gravity="center"
+                    android:minHeight="50dp"
                     android:orientation="vertical"
                     android:paddingVertical="5dp">
 
@@ -201,7 +209,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:text="25"
-                        android:textSize="24dp" />
+                        android:textSize="24sp"
+                        android:visibility="visible" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -215,7 +224,8 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_marginVertical="5dp"
-                    android:background="@android:color/darker_gray" />
+                    android:background="@android:color/darker_gray"
+                    android:visibility="visible" />
 
                 <!--Habits count-->
                 <LinearLayout
@@ -225,7 +235,8 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingVertical="5dp">
+                    android:paddingVertical="5dp"
+                    android:visibility="visible">
 
                     <TextView
                         android:id="@+id/userHabits"
@@ -233,38 +244,120 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:text="2"
-                        android:textSize="24dp" />
+                        android:textSize="24sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Habits" />
+                        android:text="Habit streaks" />
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <!--Add habit button-->
+            <LinearLayout
+                android:id="@+id/addHabitButton"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:background="#66DCDCDC"
+                android:gravity="center"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@id/badgesView"
+                app:layout_constraintTop_toBottomOf="@id/headlineNumbers">
+
+                <TextView
+                    android:id="@+id/buttonTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/url_preview_background"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:gravity="center"
+                    android:text="Award a badge"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <!--Badges View-->
+            <LinearLayout
+                android:id="@+id/badgesView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@+id/addHabitButton">
+
+                <TextView
+                    android:id="@+id/badgesCount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#90DCDCDC"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="Badges (36/122)"
+                    android:textSize="10sp"
+                    android:visibility="visible" />
+
+                <HorizontalScrollView
+                    android:id="@+id/badges"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#90DCDCDC"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="bottom">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/badgesRecyclerView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#90DCDCDC"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="'The Minimilist Badge' \nearned for following posts in Aug 2020:"
+                    android:textSize="10sp"
+                    android:visibility="visible" />
+
+            </LinearLayout>
+
 
             <!--recycler view-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#25DCDCDC"
+                android:background="#66DCDCDC"
                 android:minHeight="20dp"
                 android:paddingHorizontal="8dp"
                 app:layout_constraintBottom_toTopOf="@id/endOfListText"
-                app:layout_constraintTop_toBottomOf="@id/headlineNumbers" />
+                app:layout_constraintTop_toBottomOf="@id/badgesView" />
 
-            <!--End of list textview-->
             <TextView
                 android:id="@+id/endOfListText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/chat_receive_heart_bubble"
+                android:backgroundTint="#66DCDCDC"
                 android:gravity="center"
                 android:paddingVertical="5dp"
                 android:text="That's All Folks!"
-                android:textSize="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                android:textSize="10sp"
+                android:visibility="visible"
                 app:layout_constraintTop_toBottomOf="@id/recyclerView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
