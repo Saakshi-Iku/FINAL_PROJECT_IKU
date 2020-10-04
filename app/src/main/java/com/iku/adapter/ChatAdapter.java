@@ -279,10 +279,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                         .load(chatModel.getimageUrl())
                         .noFade()
                         .networkPolicy(NetworkPolicy.OFFLINE)
+                        .placeholder(R.drawable.progress_animation)
                         .into(chatLeftImageViewHolder.receiverImage, new Callback() {
                             @Override
                             public void onSuccess() {
-
                             }
 
                             @Override
@@ -290,6 +290,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                 Picasso.get()
                                         .load(chatModel.getimageUrl())
                                         .noFade()
+                                        .placeholder(R.drawable.progress_animation)
                                         .into(chatLeftImageViewHolder.receiverImage);
                             }
                         });
