@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
 
@@ -33,8 +34,6 @@ import java.util.Map;
  */
 public class ProfileFragment extends Fragment {
 
-    private static final String TAG = ProfileFragment.class.getSimpleName();
-    private FirebaseAuth mAuth;
     private FirebaseFirestore db;
     private FirebaseUser user;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -49,14 +48,14 @@ public class ProfileFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         profileBinding = FragmentProfileBinding.inflate(inflater, container, false);
         View view = profileBinding.getRoot();
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mAuth = FirebaseAuth.getInstance();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(view.getContext());
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
         user = mAuth.getCurrentUser();
 
@@ -90,7 +89,7 @@ public class ProfileFragment extends Fragment {
         profileBinding.linkInBio.setOnClickListener(view -> {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.launchUrl(getActivity(), Uri.parse(profileBinding.linkInBio.getText().toString().trim()));
+            customTabsIntent.launchUrl(view.getContext(), Uri.parse(profileBinding.linkInBio.getText().toString().trim()));
         });
 
     }
@@ -178,25 +177,27 @@ public class ProfileFragment extends Fragment {
                         if (e != null) {
                             return;
                         }
-                        for (DocumentChange change : querySnapshot.getDocumentChanges()) {
-                            if (change.getType() == DocumentChange.Type.ADDED) {
-                                long points = (long) change.getDocument().get("points");
-                                String bio = (String) change.getDocument().get("userBio");
-                                String link = (String) change.getDocument().get("userBioLink");
-                                if (bio != null && !bio.equals("")) {
-                                    userBioIcon.setVisibility(View.VISIBLE);
-                                    userBioTextView.setVisibility(View.VISIBLE);
-                                    userBioTextView.setText(bio);
+                        if (querySnapshot != null) {
+                            for (DocumentChange change : querySnapshot.getDocumentChanges()) {
+                                if (change.getType() == DocumentChange.Type.ADDED) {
+                                    long points = (long) change.getDocument().get("points");
+                                    String bio = (String) change.getDocument().get("userBio");
+                                    String link = (String) change.getDocument().get("userBioLink");
+                                    if (bio != null && !bio.equals("")) {
+                                        userBioIcon.setVisibility(View.VISIBLE);
+                                        userBioTextView.setVisibility(View.VISIBLE);
+                                        userBioTextView.setText(bio);
+                                    }
+                                    if (link != null && !link.equals("")) {
+                                        userLinkIcon.setVisibility(View.VISIBLE);
+                                        userLinkTextView.setVisibility(View.VISIBLE);
+                                        userLinkTextView.setText(link);
+                                    }
+                                    if (points == 0)
+                                        userHeartsTextView.setText(R.string.yet_to_win_hearts);
+                                    else
+                                        userHeartsTextView.setText("Hearts won: " + points);
                                 }
-                                if (link != null && !link.equals("")) {
-                                    userLinkIcon.setVisibility(View.VISIBLE);
-                                    userLinkTextView.setVisibility(View.VISIBLE);
-                                    userLinkTextView.setText(link);
-                                }
-                                if (points == 0)
-                                    userHeartsTextView.setText(R.string.yet_to_win_hearts);
-                                else
-                                    userHeartsTextView.setText("Hearts won: " + change.getDocument().getLong("points"));
                             }
                         }
                     });

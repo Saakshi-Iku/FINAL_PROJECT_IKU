@@ -3,9 +3,7 @@ package com.iku;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,10 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -226,10 +220,12 @@ public class ViewPostActivity extends AppCompatActivity {
                     .load(imageUrl)
                     .noFade()
                     .networkPolicy(NetworkPolicy.OFFLINE)
+                    .placeholder(R.drawable.progress_animation)
+                    .resize(5000, 5000)
+                    .onlyScaleDown()
                     .into(viewPostBinding.viewedImage, new Callback() {
                         @Override
                         public void onSuccess() {
-
                         }
 
                         @Override
@@ -237,13 +233,14 @@ public class ViewPostActivity extends AppCompatActivity {
                             Picasso.get()
                                     .load(imageUrl)
                                     .noFade()
+                                    .resize(5000, 5000)
+                                    .onlyScaleDown()
+                                    .placeholder(R.drawable.progress_animation)
                                     .into(viewPostBinding.viewedImage);
                         }
                     });
-        } else {
-            finish();
-
         }
+
     }
 
     private void initialEmoticons(String messageId) {
@@ -265,31 +262,31 @@ public class ViewPostActivity extends AppCompatActivity {
                     if (upvotesCount >= 0) {
                         for (String element : HeartUpArray) {
                             if (element.contains(user.getUid())) {
-                                viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             }
                         }
                         for (String element : emoji1Array) {
                             if (element.contains(user.getUid())) {
-                                viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             }
                         }
                         for (String element : emoji2Array) {
                             if (element.contains(user.getUid())) {
-                                viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             }
                         }
                         for (String element : emoji3Array) {
                             if (element.contains(user.getUid())) {
-                                viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             }
                         }
                         for (String element : emoji4Array) {
                             if (element.contains(user.getUid())) {
-                                viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             }
                         }
@@ -297,7 +294,7 @@ public class ViewPostActivity extends AppCompatActivity {
                     if (downvotesCount >= 0) {
                         for (String element : HeartDownArray) {
                             if (element.contains(user.getUid())) {
-                                viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             }
                         }
@@ -422,7 +419,8 @@ public class ViewPostActivity extends AppCompatActivity {
         });
     }
 
-    private void changeLikesArray(String messageDocumentID, String currentEmoji, String previousEmoji, long upvotesCount, long downvotesCount, String authorOfMessage) {
+    private void changeLikesArray(String messageDocumentID, String currentEmoji, String
+            previousEmoji, long upvotesCount, long downvotesCount, String authorOfMessage) {
         if (currentEmoji.equals(previousEmoji)) {
             if (currentEmoji.equals("upvoters") || currentEmoji.equals("emoji1") || currentEmoji.equals("emoji2") || currentEmoji.equals("emoji3") || currentEmoji.equals("emoji4")) {
                 if (!authorOfMessage.equals(user.getUid())) {
@@ -442,19 +440,19 @@ public class ViewPostActivity extends AppCompatActivity {
                         .addOnSuccessListener(aVoid -> {
                             switch (currentEmoji) {
                                 case "upvoters":
-                                    viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                                    viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                                     break;
                                 case "emoji1":
-                                    viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                                    viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                                     break;
                                 case "emoji2":
-                                    viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                                    viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                                     break;
                                 case "emoji3":
-                                    viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                                    viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                                     break;
                                 case "emoji4":
-                                    viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                                    viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                                     break;
                             }
                             disableEmoticonButtons(true);
@@ -474,7 +472,7 @@ public class ViewPostActivity extends AppCompatActivity {
                         .update("downvoteCount", downvotesCount - 1,
                                 currentEmoji, FieldValue.arrayRemove(user.getUid()))
                         .addOnSuccessListener(aVoid -> {
-                            viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                            viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                             disableEmoticonButtons(true);
                         }).addOnFailureListener(e -> disableEmoticonButtons(true));
             }
@@ -532,7 +530,8 @@ public class ViewPostActivity extends AppCompatActivity {
         }
     }
 
-    private void newLikeOrDislike(String messageDocumentID, String emoji, long UpvotesCount, long DownvotesCount, String authorOfMessage) {
+    private void newLikeOrDislike(String messageDocumentID, String emoji, long UpvotesCount,
+                                  long DownvotesCount, String authorOfMessage) {
         if (emoji.equals("downvoters")) {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
@@ -549,7 +548,7 @@ public class ViewPostActivity extends AppCompatActivity {
                     .update(emoji, FieldValue.arrayUnion(user.getUid()),
                             "downvoteCount", DownvotesCount + 1)
                     .addOnSuccessListener(aVoid -> {
-                        viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                        viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                         disableEmoticonButtons(true);
                     }).addOnFailureListener(e -> disableEmoticonButtons(true));
         } else {
@@ -569,19 +568,19 @@ public class ViewPostActivity extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         switch (emoji) {
                             case "upvoters":
-                                viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             case "emoji1":
-                                viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             case "emoji2":
-                                viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             case "emoji3":
-                                viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             case "emoji4":
-                                viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                                viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                                 break;
                             default:
                                 // code block
@@ -594,42 +593,42 @@ public class ViewPostActivity extends AppCompatActivity {
     private void changeEmoticonBackground(String currentEmoji, String previousEmoji) {
         switch (currentEmoji) {
             case "upvoters":
-                viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                 break;
             case "emoji1":
-                viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                 break;
             case "emoji2":
-                viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                 break;
             case "emoji3":
-                viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                 break;
             case "emoji4":
-                viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                 break;
             case "downvoters":
-                viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_selected_viewpost_activity));
+                viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_selected_viewpost_activity));
                 break;
         }
         switch (previousEmoji) {
             case "upvoters":
-                viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                viewPostBinding.heartUp.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                 break;
             case "emoji1":
-                viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                viewPostBinding.emoji1.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                 break;
             case "emoji2":
-                viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                viewPostBinding.emoji2.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                 break;
             case "emoji3":
-                viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                viewPostBinding.emoji3.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                 break;
             case "emoji4":
-                viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                viewPostBinding.emoji4.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                 break;
             case "downvoters":
-                viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(),R.drawable.hearts_button_background_viewpost_activity));
+                viewPostBinding.heartDown.setBackground(ContextCompat.getDrawable(getApplicationContext(), R.drawable.hearts_button_background_viewpost_activity));
                 break;
         }
     }

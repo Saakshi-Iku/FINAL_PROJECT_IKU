@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -448,6 +447,7 @@ public class ChatFragment extends Fragment {
             ChatModel chatModel = documentSnapshot.toObject(ChatModel.class);
             String name = chatModel.getUserName();
             String url = chatModel.getimageUrl();
+            String originalUrl = chatModel.getOriginalImageUrl();
             String message = chatModel.getMessage();
             long timestamp = chatModel.getTimestamp();
             String userUid = chatModel.getUID();
@@ -455,7 +455,11 @@ public class ChatFragment extends Fragment {
             if (name != null && url != null) {
                 viewChatImageIntent.putExtra("EXTRA_PERSON_NAME", name);
                 viewChatImageIntent.putExtra("EXTRA_MESSAGE", message);
-                viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
+                if (originalUrl != null) {
+                    viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", originalUrl);
+                    viewChatImageIntent.putExtra("EXTRA_IMAGE_SECOND_URL", url);
+                } else
+                    viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
                 viewChatImageIntent.putExtra("EXTRA_POST_TIMESTAMP", timestamp);
                 viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", messageId);
                 viewChatImageIntent.putExtra("EXTRA_USER_ID", userUid);
@@ -580,7 +584,6 @@ public class ChatFragment extends Fragment {
                 if (UID.equals(user.getUid())) {
                     profileView.setVisibility(View.GONE);
                     reportView.setVisibility(View.GONE);
-                    Log.i(TAG, "MESSAGE :" + chatModel.getTimestamp() + "\nSystem -1Hr" + (System.currentTimeMillis() - (60 * 60 * 1000)));
                     if (!(chatModel.getTimestamp() < System.currentTimeMillis() - (60 * 60 * 1000))) {
                         updateMessageView.setVisibility(View.VISIBLE);
                         updateMessageView.setOnClickListener(new View.OnClickListener() {

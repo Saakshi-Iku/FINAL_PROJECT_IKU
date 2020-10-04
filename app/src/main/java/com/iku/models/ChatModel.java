@@ -8,10 +8,8 @@ public class ChatModel {
 
     @PropertyName("message")
     private String message;
-
     @PropertyName("uid")
     private String UID;
-
     @PropertyName("userName")
     private String userName;
     @PropertyName("type")
@@ -42,19 +40,20 @@ public class ChatModel {
     private boolean spam;
     @PropertyName("spamCount")
     private int spamCount;
+    @PropertyName("originalImageUrl")
+    private String originalImageUrl;
 
     private ChatModel() {
     }
 
-    private ChatModel(String message, long timestamp, String UID, String userName, String type, int upvoteCount, String imageUrl, ArrayList<String> upvoters,
-                      ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, int downvoteCount, boolean edited, boolean spam, int spamCount) {
+    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl) {
         this.message = message;
         this.UID = UID;
-        this.timestamp = timestamp;
         this.userName = userName;
         this.type = type;
         this.imageUrl = imageUrl;
         this.upvoteCount = upvoteCount;
+        this.timestamp = timestamp;
         this.upvoters = upvoters;
         this.emoji1 = emoji1;
         this.emoji2 = emoji2;
@@ -65,6 +64,7 @@ public class ChatModel {
         this.edited = edited;
         this.spam = spam;
         this.spamCount = spamCount;
+        this.originalImageUrl = originalImageUrl;
     }
 
     public String getMessage() {
@@ -205,4 +205,11 @@ public class ChatModel {
         this.spamCount = spamCount;
     }
 
+    public String getOriginalImageUrl() {
+        return originalImageUrl;
+    }
+
+    public void setOriginalImageUrl(String originalImageUrl) {
+        this.originalImageUrl = originalImageUrl;
+    }
 }
