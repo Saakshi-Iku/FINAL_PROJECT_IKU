@@ -2,7 +2,7 @@ package com.iku.models;
 
 import com.google.firebase.firestore.PropertyName;
 
-public class LeaderboardModel {
+public class UserModel {
 
     @PropertyName("firstName")
     private String firstName;
@@ -13,10 +13,10 @@ public class LeaderboardModel {
     @PropertyName("points")
     private int points;
 
-    private LeaderboardModel() {
+    private UserModel() {
     }
 
-    public LeaderboardModel(String firstName, String lastName, int points, String uid) {
+    public UserModel(String firstName, String lastName, int points, String uid) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.points = points;

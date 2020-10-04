@@ -14,9 +14,9 @@ import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.iku.R;
-import com.iku.models.LeaderboardModel;
+import com.iku.models.UserModel;
 
-public class LeaderBoardAdapter extends FirestorePagingAdapter<LeaderboardModel, RecyclerView.ViewHolder> {
+public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, RecyclerView.ViewHolder> {
 
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private LeaderBoardAdapter.OnItemClickOfSameUidListener listener;
@@ -27,25 +27,25 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<LeaderboardModel,
     public static final int SECOND_PLACE = 3;
     public static final int THIRD_PLACE = 4;
 
-    public LeaderBoardAdapter(@NonNull FirestorePagingOptions<LeaderboardModel> options) {
+    public LeaderBoardAdapter(@NonNull FirestorePagingOptions<UserModel> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i, @NonNull LeaderboardModel leaderboardModel) {
+    protected void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i, @NonNull UserModel userModel) {
         switch (viewHolder.getItemViewType()) {
             case CURRENT_USER:
                 LeaderBoardAdapter.CurrentUserViewHolder currentUserViewHolder = (CurrentUserViewHolder) viewHolder;
-                currentUserViewHolder.firstNameTextView.setText(leaderboardModel.getFirstName() + " " + leaderboardModel.getLastName());
-                currentUserViewHolder.pointsTextView.setText(String.valueOf(leaderboardModel.getPoints()));
+                currentUserViewHolder.firstNameTextView.setText(userModel.getFirstName() + " " + userModel.getLastName());
+                currentUserViewHolder.pointsTextView.setText(String.valueOf(userModel.getPoints()));
                 break;
             case OTHER_USER:
             case THIRD_PLACE:
             case FIRST_PLACE:
             case SECOND_PLACE:
                 LeaderBoardAdapter.OtherUserViewHolder otherUserViewHolder = (OtherUserViewHolder) viewHolder;
-                otherUserViewHolder.firstNameTextView.setText(leaderboardModel.getFirstName() + " " + leaderboardModel.getLastName());
-                otherUserViewHolder.pointsTextView.setText(String.valueOf(leaderboardModel.getPoints()));
+                otherUserViewHolder.firstNameTextView.setText(userModel.getFirstName() + " " + userModel.getLastName());
+                otherUserViewHolder.pointsTextView.setText(String.valueOf(userModel.getPoints()));
                 break;
         }
     }
@@ -99,8 +99,8 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<LeaderboardModel,
             firstNameTextView = itemView.findViewById(R.id.firstname);
             pointsTextView = itemView.findViewById(R.id.pointsText);
             itemView.setOnClickListener(view -> {
-                LeaderboardModel leaderboardModel = getItem(getAdapterPosition()).toObject(LeaderboardModel.class);
-                listenerDiff.onItemOfDiffUidClick(leaderboardModel.getUid(), leaderboardModel.getFirstName() + " " + leaderboardModel.getLastName());
+                UserModel userModel = getItem(getAdapterPosition()).toObject(UserModel.class);
+                listenerDiff.onItemOfDiffUidClick(userModel.getUid(), userModel.getFirstName() + " " + userModel.getLastName());
             });
         }
     }
@@ -115,8 +115,8 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<LeaderboardModel,
             firstNameTextView = itemView.findViewById(R.id.firstname);
             pointsTextView = itemView.findViewById(R.id.pointsText);
             itemView.setOnClickListener(view -> {
-                LeaderboardModel leaderboardModel = getItem(getAdapterPosition()).toObject(LeaderboardModel.class);
-                if (leaderboardModel.getUid().equals(user.getUid())) {
+                UserModel userModel = getItem(getAdapterPosition()).toObject(UserModel.class);
+                if (userModel.getUid().equals(user.getUid())) {
                     listener.onItemOfSameUidClick();
                     new CountDownTimer(10000, 1000) {
                         public void onTick(long millisUntilFinished) {

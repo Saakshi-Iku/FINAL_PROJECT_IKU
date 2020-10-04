@@ -22,7 +22,7 @@ import com.google.firebase.firestore.Query;
 import com.iku.adapter.CommentAdapter;
 import com.iku.databinding.ActivityViewPostBinding;
 import com.iku.models.CommentModel;
-import com.iku.models.LeaderboardModel;
+import com.iku.models.UserModel;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -427,7 +427,7 @@ public class ViewPostActivity extends AppCompatActivity {
                     db.collection("users").document(authorOfMessage)
                             .get()
                             .addOnSuccessListener(documentSnapshot -> {
-                                final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                 db.collection("users").document(authorOfMessage)
                                         .update("points", usersData.getPoints() - 1)
                                         .addOnSuccessListener(aVoid -> {
@@ -461,7 +461,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 if (!authorOfMessage.equals(user.getUid())) {
                     db.collection("users").document(authorOfMessage).get()
                             .addOnSuccessListener(documentSnapshot -> {
-                                final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                 db.collection("users").document(authorOfMessage)
                                         .update("points", usersData.getPoints() + 1)
                                         .addOnSuccessListener(aVoid -> {
@@ -481,7 +481,7 @@ public class ViewPostActivity extends AppCompatActivity {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                             db.collection("users").document(authorOfMessage)
                                     .update("points", usersData.getPoints() - 2)
                                     .addOnSuccessListener(aVoid -> {
@@ -502,7 +502,7 @@ public class ViewPostActivity extends AppCompatActivity {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                             db.collection("users").document(authorOfMessage)
                                     .update("points", usersData.getPoints() + 2)
                                     .addOnSuccessListener(aVoid -> {
@@ -536,7 +536,7 @@ public class ViewPostActivity extends AppCompatActivity {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                             db.collection("users").document(authorOfMessage)
                                     .update("points", usersData.getPoints() - 1)
                                     .addOnSuccessListener(aVoid -> {
@@ -555,7 +555,7 @@ public class ViewPostActivity extends AppCompatActivity {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                             db.collection("users").document(authorOfMessage)
                                     .update("points", usersData.getPoints() + 1)
                                     .addOnSuccessListener(aVoid -> {

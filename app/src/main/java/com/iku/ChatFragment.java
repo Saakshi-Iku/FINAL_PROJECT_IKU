@@ -50,7 +50,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.iku.adapter.ChatAdapter;
 import com.iku.databinding.FragmentChatBinding;
 import com.iku.models.ChatModel;
-import com.iku.models.LeaderboardModel;
+import com.iku.models.UserModel;
 import com.iku.utils.ItemClickSupport;
 
 import java.text.SimpleDateFormat;
@@ -341,7 +341,7 @@ public class ChatFragment extends Fragment {
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                     @Override
                                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                        final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                                        final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                                         Map<String, Object> docData = new HashMap<>();
                                                         if (isDisliked)
                                                             docData.put("points", usersData.getPoints() + 2);
@@ -402,7 +402,7 @@ public class ChatFragment extends Fragment {
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                                     @Override
                                                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                                        final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                                        final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                                         db.collection("users").document(chatadapter.getItem(position).getUID())
                                                                 .update("points", usersData.getPoints() - 1)
                                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -950,7 +950,7 @@ public class ChatFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                    final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                     db.collection("users").document(authorOfMessage)
                                             .update("points", usersData.getPoints() - 1)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -975,7 +975,7 @@ public class ChatFragment extends Fragment {
                             .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                                 @Override
                                 public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                    final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                     db.collection("users").document(authorOfMessage)
                                             .update("points", usersData.getPoints() + 1)
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -1002,7 +1002,7 @@ public class ChatFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                 db.collection("users").document(authorOfMessage)
                                         .update("points", usersData.getPoints() - 2)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -1031,7 +1031,7 @@ public class ChatFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                 db.collection("users").document(authorOfMessage)
                                         .update("points", usersData.getPoints() + 2)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -1075,7 +1075,7 @@ public class ChatFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                 db.collection("users").document(authorOfMessage)
                                         .update("points", usersData.getPoints() - 1)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -1101,7 +1101,7 @@ public class ChatFragment extends Fragment {
                         .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                final LeaderboardModel usersData = documentSnapshot.toObject(LeaderboardModel.class);
+                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                 db.collection("users").document(authorOfMessage)
                                         .update("points", usersData.getPoints() + 1)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {

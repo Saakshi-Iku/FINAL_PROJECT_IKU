@@ -21,7 +21,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.iku.adapter.LeaderBoardAdapter;
-import com.iku.models.LeaderboardModel;
+import com.iku.models.UserModel;
 
 import nl.dionsegijn.konfetti.KonfettiView;
 import nl.dionsegijn.konfetti.models.Shape;
@@ -66,12 +66,12 @@ public class LeaderboardActivity extends AppCompatActivity {
                 .setInitialLoadSizeHint(100)
                 .setPageSize(25)
                 .build();
-        FirestorePagingOptions<LeaderboardModel> options = new FirestorePagingOptions.Builder<LeaderboardModel>()
+        FirestorePagingOptions<UserModel> options = new FirestorePagingOptions.Builder<UserModel>()
                 .setQuery(query, config, snapshot -> {
-                    LeaderboardModel leaderboardModel = snapshot.toObject(LeaderboardModel.class);
+                    UserModel userModel = snapshot.toObject(UserModel.class);
                     String uid = snapshot.getId();
-                    leaderboardModel.setUid(uid);
-                    return leaderboardModel;
+                    userModel.setUid(uid);
+                    return userModel;
                 })
                 .setLifecycleOwner(this)
                 .build();
