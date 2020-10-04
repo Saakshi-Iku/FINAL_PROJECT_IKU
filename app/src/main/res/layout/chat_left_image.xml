@@ -25,7 +25,6 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="5dp"
             android:singleLine="true"
-            android:text="Abhishake"
             android:textColor="#009E9E"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
@@ -185,10 +184,8 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:autoLink="web"
                 android:background="#DCDCDC"
                 android:gravity="start"
-                android:text="This is the loooooooooooooong body of the message."
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#4A4A4A"
                 android:textSize="14sp"
@@ -347,8 +344,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="3dp"
-                android:text="5" />
+                android:layout_marginStart="3dp" />
 
         </LinearLayout>
 

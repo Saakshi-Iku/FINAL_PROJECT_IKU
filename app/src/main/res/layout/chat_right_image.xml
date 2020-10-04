@@ -156,9 +156,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:autoLink="web"
                 android:gravity="start"
-                android:text="This is the looooooooooooooong body of the message."
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/white"
                 android:textSize="14sp"
@@ -304,8 +302,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center_vertical"
                 android:padding="3dp"
-                android:src="@drawable/ic_heart"
-                android:visibility="invisible" />
+                android:src="@drawable/ic_heart" />
 
             <!--Upvote count-->
             <com.google.android.material.textview.MaterialTextView
@@ -313,8 +310,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="3dp"
-                android:text="555" />
+                android:layout_marginStart="3dp" />
 
         </LinearLayout>
 

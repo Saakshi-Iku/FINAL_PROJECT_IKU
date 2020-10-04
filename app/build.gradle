@@ -90,6 +90,7 @@ dependencies {
     implementation 'nl.dionsegijn:konfetti:1.2.2'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation 'com.borjabravo:readmoretextview:2.1.0'
+    implementation 'me.saket:better-link-movement-method:2.2.0'
 
     // Life cycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

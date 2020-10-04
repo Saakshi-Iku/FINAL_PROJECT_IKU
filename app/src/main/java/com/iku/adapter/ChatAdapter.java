@@ -1,8 +1,9 @@
 package com.iku.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Build;
+import android.net.Uri;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -29,7 +31,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerView.ViewHolder> {
 
@@ -81,7 +83,23 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             case MSG_TYPE_LEFT:
                 ChatLeftViewHolder chatLeftViewHolder = (ChatLeftViewHolder) viewHolder;
                 long timeStampLeft = chatModel.getTimestamp();
+
                 chatLeftViewHolder.messageText.setText(chatModel.getMessage());
+                chatLeftViewHolder.messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+                chatLeftViewHolder.messageText.setLinkTextColor(Color.parseColor("#1111b7"));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                        .setOnLinkLongClickListener(((textView, url) -> {
+
+                            return true;
+                        }))
+                        .setOnLinkClickListener((textView, url) -> {
+                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                            CustomTabsIntent customTabsIntent = builder.build();
+                            customTabsIntent.launchUrl(mContext, Uri.parse(url));
+                            return true;
+                        });
+
                 chatLeftViewHolder.messageTime.setText(sfd.format(new Date(timeStampLeft)));
                 chatLeftViewHolder.messageTime2.setText(sfd.format(new Date(timeStampLeft)));
                 chatLeftViewHolder.messageTime3.setText(sfd.format(new Date(timeStampLeft)));
@@ -186,6 +204,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     chatRightViewHolder.itemView.findViewById(R.id.upvotesLayout).setVisibility(View.GONE);
 
                 chatRightViewHolder.messageText.setText(chatModel.getMessage());
+                chatRightViewHolder.messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+                chatRightViewHolder.messageText.setLinkTextColor(Color.parseColor("#1111b7"));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                        .setOnLinkClickListener((textView, url) -> {
+                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                            CustomTabsIntent customTabsIntent = builder.build();
+                            customTabsIntent.launchUrl(mContext, Uri.parse(url));
+                            return true;
+                        });
+
                 chatRightViewHolder.messageTime.setText(sfd.format(new Date(timeStampRight)));
                 chatRightViewHolder.messageTime2.setText(sfd.format(new Date(timeStampRight)));
                 chatRightViewHolder.upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
@@ -217,6 +246,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 long timeStampImageLeft = chatModel.getTimestamp();
 
                 chatLeftImageViewHolder.messageText.setText(chatModel.getMessage());
+                chatLeftImageViewHolder.messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+                chatLeftImageViewHolder.messageText.setLinkTextColor(Color.parseColor("#1111b7"));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                        .setOnLinkClickListener((textView, url) -> {
+                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                            CustomTabsIntent customTabsIntent = builder.build();
+                            customTabsIntent.launchUrl(mContext, Uri.parse(url));
+                            return true;
+                        });
+
                 chatLeftImageViewHolder.messageTime.setText(sfd.format(new Date(timeStampImageLeft)));
                 chatLeftImageViewHolder.messageTime2.setText(sfd.format(new Date(timeStampImageLeft)));
                 chatLeftImageViewHolder.messageTime3.setText(sfd.format(new Date(timeStampImageLeft)));
@@ -304,6 +344,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 long timeStampImageRight = chatModel.getTimestamp();
 
                 chatRightImageViewHolder.messageText.setText(chatModel.getMessage());
+                chatRightImageViewHolder.messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+                chatRightImageViewHolder.messageText.setLinkTextColor(Color.parseColor("#1111b7"));
+                BetterLinkMovementMethod
+                        .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                        .setOnLinkClickListener((textView, url) -> {
+                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                            CustomTabsIntent customTabsIntent = builder.build();
+                            customTabsIntent.launchUrl(mContext, Uri.parse(url));
+                            return true;
+                        });
+
                 chatRightImageViewHolder.messageTime.setText(sfd.format(new Date(timeStampImageRight)));
                 chatRightImageViewHolder.messageTime2.setText(sfd.format(new Date(timeStampImageRight)));
 
@@ -461,12 +512,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             edited = itemView.findViewById(R.id.editFlag);
             reportLayout = itemView.findViewById(R.id.flag_layout);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
-            messageText.setLinkTextColor(Color.parseColor("#1111b7"));
-            Linkify.addLinks(messageText, Linkify.WEB_URLS);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                messageText.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
-            }
 
             itemView.setOnLongClickListener(view -> {
                 int position = getAdapterPosition();
@@ -501,14 +546,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             viewPostBtn = itemView.findViewById(R.id.viewPostButton);
             reportLayout = itemView.findViewById(R.id.flag_layout);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
-
-
-            messageText.setLinkTextColor(Color.parseColor("#1111b7"));
-            Linkify.addLinks(messageText, Linkify.WEB_URLS);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                messageText.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
-            }
 
             itemView.setOnLongClickListener(view -> {
                 int position = getAdapterPosition();
@@ -550,13 +587,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             spamCount = itemView.findViewById(R.id.spamCount_textView);
             reportLayout = itemView.findViewById(R.id.flag_layout);
 
-            messageText.setLinkTextColor(Color.parseColor("#1111b7"));
-            Linkify.addLinks(messageText, Linkify.WEB_URLS);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                messageText.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
-            }
-
             itemView.setOnLongClickListener(view -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && longClickListener != null) {
@@ -592,13 +622,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             reportLayout = itemView.findViewById(R.id.flag_layout);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                messageText.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
-            }
-
-            messageText.setLinkTextColor(Color.parseColor("#1111b7"));
-            Linkify.addLinks(messageText, Linkify.WEB_URLS);
-
             itemView.setOnLongClickListener(view -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && longClickListener != null) {
@@ -611,28 +634,22 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     }
 
     private class ChatRightDeletedViewHolder extends RecyclerView.ViewHolder {
-
         private MaterialTextView messageTime;
 
         public ChatRightDeletedViewHolder(View itemView) {
             super(itemView);
-
             messageTime = itemView.findViewById(R.id.message_time);
-
         }
     }
 
     private class ChatLeftDeletedViewHolder extends RecyclerView.ViewHolder {
-
         private MaterialTextView messageTime, messageTime2, senderName;
 
         public ChatLeftDeletedViewHolder(View itemView) {
             super(itemView);
-
             messageTime = itemView.findViewById(R.id.message_time);
             messageTime2 = itemView.findViewById(R.id.message_time2);
             senderName = itemView.findViewById(R.id.sender_name);
-
         }
     }
 }

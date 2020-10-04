@@ -111,7 +111,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:text="Abhishake"
             android:textColor="#009E9E"
             android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@id/linkPreview"
@@ -123,8 +122,6 @@
             android:id="@+id/message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:text="This is the of the message."
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="#4A4A4A"
             android:textSize="14sp"
@@ -142,7 +139,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:gravity="end"
-            android:text="12:34 PM"
             android:textColor="#4A4A4A"
             android:textSize="12sp"
             android:visibility="visible"
@@ -290,8 +286,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="3dp"
-                android:text="5" />
+                android:layout_marginLeft="3dp" />
 
         </LinearLayout>
 
