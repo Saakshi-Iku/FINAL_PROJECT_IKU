@@ -69,7 +69,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 if (chatLeftDeletedViewHolder.senderName.getVisibility() == View.VISIBLE) {
                     chatLeftDeletedViewHolder.messageTime.setVisibility(View.VISIBLE);
                     chatLeftDeletedViewHolder.messageTime2.setVisibility(View.GONE);
-                }else{
+                } else {
                     chatLeftDeletedViewHolder.messageTime.setVisibility(View.GONE);
                     chatLeftDeletedViewHolder.messageTime2.setVisibility(View.VISIBLE);
                 }
@@ -275,24 +275,24 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 } else
                     chatLeftImageViewHolder.itemView.findViewById(R.id.upvotesLayout).setVisibility(View.GONE);
 
-                    Picasso.get()
-                            .load(chatModel.getimageUrl())
-                            .noFade()
-                            .networkPolicy(NetworkPolicy.OFFLINE)
-                            .into(chatLeftImageViewHolder.receiverImage, new Callback() {
-                                @Override
-                                public void onSuccess() {
+                Picasso.get()
+                        .load(chatModel.getimageUrl())
+                        .noFade()
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(chatLeftImageViewHolder.receiverImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
 
-                                }
+                            }
 
-                                @Override
-                                public void onError(Exception e) {
-                                    Picasso.get()
-                                            .load(chatModel.getimageUrl())
-                                            .noFade()
-                                            .into(chatLeftImageViewHolder.receiverImage);
-                                }
-                            });
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get()
+                                        .load(chatModel.getimageUrl())
+                                        .noFade()
+                                        .into(chatLeftImageViewHolder.receiverImage);
+                            }
+                        });
 
                 break;
 
@@ -354,24 +354,25 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 } else
                     chatRightImageViewHolder.itemView.findViewById(R.id.upvotesLayout).setVisibility(View.GONE);
 
-                    Picasso.get()
-                            .load(chatModel.getimageUrl())
-                            .noFade()
-                            .networkPolicy(NetworkPolicy.OFFLINE)
-                            .into(chatRightImageViewHolder.sentImage, new Callback() {
-                                @Override
-                                public void onSuccess() {
+                Picasso.get()
+                        .load(chatModel.getimageUrl())
+                        .noFade()
+                        .networkPolicy(NetworkPolicy.OFFLINE)
+                        .placeholder(R.drawable.progress_animation)
+                        .into(chatRightImageViewHolder.sentImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                            }
 
-                                }
-
-                                @Override
-                                public void onError(Exception e) {
-                                    Picasso.get()
-                                            .load(chatModel.getimageUrl())
-                                            .noFade()
-                                            .into(chatRightImageViewHolder.sentImage);
-                                }
-                            });
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get()
+                                        .load(chatModel.getimageUrl())
+                                        .noFade()
+                                        .placeholder(R.drawable.progress_animation)
+                                        .into(chatRightImageViewHolder.sentImage);
+                            }
+                        });
                 break;
 
         }
@@ -402,24 +403,23 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         } else if (viewType == MSG_TYPE_IMAGE_RIGHT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_right_image, parent, false);
             return new ChatRightImageViewHolder(view);
-        } else if (viewType == MSG_TYPE_DELETED_RIGHT){
+        } else if (viewType == MSG_TYPE_DELETED_RIGHT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_deleted_right, parent, false);
             return new ChatRightDeletedViewHolder(view);
-        }else if (viewType == MSG_TYPE_DELETED_LEFT){
+        } else if (viewType == MSG_TYPE_DELETED_LEFT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_deleted_left, parent, false);
             return new ChatLeftDeletedViewHolder(view);
-        }
-        else
+        } else
             return null;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if(getItem(position).isSpam()){
+        if (getItem(position).isSpam()) {
             if (getItem(position).getUID().equals(user.getUid()))
                 return MSG_TYPE_DELETED_RIGHT;
             else
-               return MSG_TYPE_DELETED_LEFT;
+                return MSG_TYPE_DELETED_LEFT;
         } else {
             if (getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("text")) {
                 return MSG_TYPE_RIGHT;
@@ -446,6 +446,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
         private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount;
         private LinearLayout reportLayout;
+
         public ChatLeftViewHolder(@NonNull View itemView) {
             super(itemView);
 

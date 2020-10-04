@@ -9,8 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -23,19 +21,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.github.chrisbanes.photoview.PhotoView;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.iku.databinding.ActivityChatImageBinding;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
@@ -63,6 +59,8 @@ public class ChatImageActivity extends AppCompatActivity {
     private String docId, message, imageUrl;
     byte[] dataSave;
     private int STORAGE_PERMISSION_CODE = 10;
+    private String originalImageUrl;
+    private String originalFileName;
 
     private String[] appPermissions = {
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -79,10 +77,15 @@ public class ChatImageActivity extends AppCompatActivity {
 
     private EditText messageEntered;
 
+    private UploadTask uploadTaskOriginal;
+
+    private ActivityChatImageBinding chatImageBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_image);
+        chatImageBinding = ActivityChatImageBinding.inflate(getLayoutInflater());
+        setContentView(chatImageBinding.getRoot());
 
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
@@ -108,44 +111,30 @@ public class ChatImageActivity extends AppCompatActivity {
             Picasso.get().load(imageUrl).into(chosenImage);
         }
 
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
+        backButton.setOnClickListener(view -> onBackPressed());
+
+        sendImageChatbtn.setOnClickListener(view -> {
+            if (!messageEntered.getText().toString().isEmpty()) {
+                if (docId.equals("default")) {
+                    uploadFile(messageEntered.getText().toString());
+                    sendImageChatbtn.setClickable(false);
+                } else if (!docId.equals("default")) {
+                    updateMessage(docId, messageEntered.getText().toString());
+                }
+            } else
+                Toast.makeText(ChatImageActivity.this, "Caption such empty..much wow!", Toast.LENGTH_SHORT).show();
         });
-
-        sendImageChatbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (!messageEntered.getText().toString().isEmpty()) {
-
-                    if (docId.equals("default")) {
-
-                        uploadFile(messageEntered.getText().toString());
-
-                        sendImageChatbtn.setClickable(false);
-
-                    } else if (!docId.equals("default")) {
-                        updateMessage(docId, messageEntered.getText().toString());
-                    }
-
-                } else
-                    Toast.makeText(ChatImageActivity.this, "Caption such empty..much wow!", Toast.LENGTH_SHORT).show();
-            }
-        });
-
     }
 
     private void uploadFile(String message) {
         if (dataSave != null) {
-            StorageReference imageRef = mStorageRef.child("IKU-img_"
-                    + dateFormatter.format(new Date()) + ".png");
+
+            StorageReference imageRef = mStorageRef.child("IKU-img_" + dateFormatter.format(new Date()) + ".png");
             UploadTask uploadTask = imageRef.putBytes(dataSave);
             uploadTask.addOnSuccessListener(taskSnapshot -> {
                 Task<Uri> downloadUrl = imageRef.getDownloadUrl();
                 downloadUrl.addOnSuccessListener(uri -> {
+
                     Date d = new Date();
                     long timestamp = d.getTime();
                     Map<String, Object> docData = new HashMap<>();
@@ -154,6 +143,7 @@ public class ChatImageActivity extends AppCompatActivity {
                     docData.put("uid", user.getUid());
                     docData.put("type", "image");
                     docData.put("imageUrl", uri.toString());
+                    docData.put("originalImageUrl", originalImageUrl);
                     docData.put("userName", user.getDisplayName());
                     docData.put("upvoteCount", 0);
                     ArrayList<Object> upvotersArray = new ArrayList<>();
@@ -180,57 +170,39 @@ public class ChatImageActivity extends AppCompatActivity {
 
                     db.collection("iku_earth_messages")
                             .add(docData)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    db.collection("users").document(user.getUid()).get()
-                                            .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        DocumentSnapshot document = task.getResult();
-                                                        if (document.exists()) {
-                                                            Boolean isFirstImage = (Boolean) document.get("firstImage");
-                                                            if (!isFirstImage) {
-                                                                db.collection("users").document(user.getUid())
-                                                                        .update(normalMessage)
-                                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                            @Override
-                                                                            public void onSuccess(Void aVoid) {
-                                                                                //Log event
-                                                                                Bundle params = new Bundle();
-                                                                                params.putString("type", "image");
-                                                                                params.putString("uid", user.getUid());
-                                                                                mFirebaseAnalytics.logEvent("first_message", params);
-                                                                            }
-                                                                        })
-                                                                        .addOnFailureListener(new OnFailureListener() {
-                                                                            @Override
-                                                                            public void onFailure(@NonNull Exception e) {
-
-                                                                            }
-                                                                        });
-
-                                                            }
-                                                        } else {
-                                                        }
-                                                    } else {
+                            .addOnSuccessListener(documentReference -> {
+                                db.collection("users").document(user.getUid()).get()
+                                        .addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    Boolean isFirstImage = (Boolean) document.get("firstImage");
+                                                    if (!isFirstImage) {
+                                                        Toast.makeText(ChatImageActivity.this, "Aren't you the best", Toast.LENGTH_LONG).show();
+                                                        db.collection("users").document(user.getUid())
+                                                                .update(normalMessage)
+                                                                .addOnSuccessListener(aVoid -> {
+                                                                    //Log event
+                                                                    Bundle params = new Bundle();
+                                                                    params.putString("type", "image");
+                                                                    params.putString("uid", user.getUid());
+                                                                    mFirebaseAnalytics.logEvent("first_image_message", params);
+                                                                })
+                                                                .addOnFailureListener(e -> {
+                                                                });
                                                     }
                                                 }
-                                            });
+                                            }
+                                        });
+                                messageEntered.setText("");
+                                messageEntered.requestFocus();
+                                ChatImageActivity.super.onBackPressed();
 
-
-                                    messageEntered.setText("");
-                                    Toast.makeText(ChatImageActivity.this, "Aren't you the best", Toast.LENGTH_LONG).show();
-                                    messageEntered.requestFocus();
-                                    ChatImageActivity.super.onBackPressed();
-
-                                    //Log event
-                                    Bundle params = new Bundle();
-                                    params.putString("type", "image");
-                                    params.putString("uid", user.getUid());
-                                    mFirebaseAnalytics.logEvent("messaging", params);
-                                }
+                                //Log event
+                                Bundle params = new Bundle();
+                                params.putString("type", "image");
+                                params.putString("uid", user.getUid());
+                                mFirebaseAnalytics.logEvent("messaging", params);
                             })
                             .addOnFailureListener(e -> {
                                 sendImageChatbtn.setClickable(true);
@@ -251,10 +223,34 @@ public class ChatImageActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        uploadTaskOriginal.cancel();
+        mStorageRef.child(originalFileName).delete().addOnSuccessListener(aVoid -> {
+        }).addOnFailureListener(e -> {
+            //Log event
+            Bundle params = new Bundle();
+            params.putString("type", "image");
+            params.putString("message", "image deletion fail because not found.");
+            mFirebaseAnalytics.logEvent("image_delete_fail", params);
+        });
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && data != null) {
             mImageUri = data.getData();
+
+            originalFileName = "IKU-orig_img_" + dateFormatter.format(new Date()) + ".png";
+            StorageReference imageOriginalRef = mStorageRef.child(originalFileName);
+            uploadTaskOriginal = imageOriginalRef.putFile(mImageUri);
+            uploadTaskOriginal.addOnSuccessListener(taskOriginalSnapshot -> {
+                Task<Uri> downloadOriginalUrl = imageOriginalRef.getDownloadUrl();
+                downloadOriginalUrl.addOnSuccessListener(originalUri -> originalImageUrl = originalUri.toString()).addOnFailureListener(e -> {
+                });
+            });
+
             Bitmap bitmap = null;
             try {
                 bitmap = decodeUriToBitmap(getApplicationContext(), mImageUri);
@@ -266,8 +262,6 @@ public class ChatImageActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
         } else
             onBackPressed();
     }
@@ -279,7 +273,6 @@ public class ChatImageActivity extends AppCompatActivity {
                 listPermissionsNeeded.add(perm);
             }
         }
-
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(this,
                     listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),
@@ -290,39 +283,28 @@ public class ChatImageActivity extends AppCompatActivity {
     }
 
     private void updateMessage(String messageDocumentID, String message) {
-
         Map<String, Object> map = new HashMap<>();
         map.put("message", message);
         map.put("edited", true);
         db.collection("iku_earth_messages").document(messageDocumentID)
                 .update(map)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        messageEntered.setText("");
-                        messageEntered.requestFocus();
-                        ChatImageActivity.super.onBackPressed();
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    messageEntered.setText("");
+                    messageEntered.requestFocus();
+                    ChatImageActivity.super.onBackPressed();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
+                .addOnFailureListener(e -> {
                 });
     }
 
     public static Bitmap decodeUriToBitmap(Context mContext, Uri sendUri) throws IOException {
         Bitmap getBitmap = null;
-
         InputStream image_stream;
-
         image_stream = mContext.getContentResolver().openInputStream(sendUri);
         getBitmap = BitmapFactory.decodeStream(image_stream);
         image_stream.close();
-
         return getBitmap;
     }
-
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {
         int width = bm.getWidth();
@@ -333,10 +315,8 @@ public class ChatImageActivity extends AppCompatActivity {
         Matrix matrix = new Matrix();
         // RESIZE THE BIT MAP
         matrix.postScale(scaleWidth, scaleHeight);
-
         // "RECREATE" THE NEW BITMAP
-        Bitmap resizedBitmap = Bitmap.createBitmap(
-                bm, 0, 0, width, height, matrix, false);
+        Bitmap resizedBitmap = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, false);
         bm.recycle();
         return resizedBitmap;
     }
