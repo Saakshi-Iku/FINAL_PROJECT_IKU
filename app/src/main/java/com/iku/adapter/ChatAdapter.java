@@ -83,10 +83,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 chatLeftViewHolder.messageTime2.setText(sfd.format(new Date(timeStampLeft)));
                 chatLeftViewHolder.messageTime3.setText(sfd.format(new Date(timeStampLeft)));
                 chatLeftViewHolder.senderName.setText(chatModel.getUserName());
-                if(chatModel.getSpamCount() > 0){
+                /*if(chatModel.getSpamCount() > 0){
                     chatLeftViewHolder.reportLayout.setVisibility(View.VISIBLE);
                     chatLeftViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
+                }*/
                 if (chatModel.isEdited())
                     chatLeftViewHolder.edited.setVisibility(View.VISIBLE);
                 else
@@ -187,10 +187,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 chatRightViewHolder.messageTime2.setText(sfd.format(new Date(timeStampRight)));
                 chatRightViewHolder.upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
 
-                if(chatModel.getSpamCount() > 0){
+                /*if(chatModel.getSpamCount() > 0){
                     chatRightViewHolder.reportLayout.setVisibility(View.VISIBLE);
                     chatRightViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
+                }*/
                 if (chatModel.isEdited()) {
                     chatRightViewHolder.edited.setVisibility(View.VISIBLE);
                     chatRightViewHolder.messageTime2.setVisibility(View.VISIBLE);
@@ -218,10 +218,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 chatLeftImageViewHolder.messageTime2.setText(sfd.format(new Date(timeStampImageLeft)));
                 chatLeftImageViewHolder.messageTime3.setText(sfd.format(new Date(timeStampImageLeft)));
                 chatLeftImageViewHolder.senderName.setText(chatModel.getUserName());
-                if(chatModel.getSpamCount() > 0){
+                /*if(chatModel.getSpamCount() > 0){
                     chatLeftImageViewHolder.reportLayout.setVisibility(View.VISIBLE);
                     chatLeftImageViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
+                }*/
 
                 if (chatLeftImageViewHolder.senderName.getVisibility() == View.VISIBLE) {
                     chatLeftImageViewHolder.messageTime.setVisibility(View.VISIBLE);
@@ -304,10 +304,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 chatRightImageViewHolder.messageTime.setText(sfd.format(new Date(timeStampImageRight)));
                 chatRightImageViewHolder.messageTime2.setText(sfd.format(new Date(timeStampImageRight)));
 
-                if(chatModel.getSpamCount() > 0){
+                /*if(chatModel.getSpamCount() > 0){
                     chatRightImageViewHolder.reportLayout.setVisibility(View.VISIBLE);
                     chatRightImageViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
+                }*/
 
                 if (chatModel.isEdited()) {
                     chatRightImageViewHolder.edited.setVisibility(View.VISIBLE);
@@ -595,15 +595,12 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageText.setLinkTextColor(Color.parseColor("#1111b7"));
             Linkify.addLinks(messageText, Linkify.WEB_URLS);
 
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && longClickListener != null) {
-                        longClickListener.onItemLongClick(getSnapshots().getSnapshot(position), position);
-                    }
-                    return false;
+            itemView.setOnLongClickListener(view -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && longClickListener != null) {
+                    longClickListener.onItemLongClick(getSnapshots().getSnapshot(position), position);
                 }
+                return false;
             });
 
         }

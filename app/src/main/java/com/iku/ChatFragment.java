@@ -33,6 +33,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -624,22 +625,29 @@ public class ChatFragment extends Fragment {
                         });
                     }
                     deleteMessageView.setVisibility(View.VISIBLE);
-                    deleteMessageView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                    deleteMessageView.setOnClickListener(view -> {
+                        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(getContext());
+                        materialAlertDialogBuilder.setTitle("Delete Message");
+                        materialAlertDialogBuilder.setMessage("Delete for everyone?");
+                        materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
                             deleteMessage(documentSnapshot.getId());
                             bottomSheetDialog.dismiss();
-                        }
+                            //log event
+                            Bundle delete_bundle = new Bundle();
+                            delete_bundle.putString("uid", user.getUid());
+                            mFirebaseAnalytics.logEvent("message_deleted", delete_bundle);
+                        }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                        }).show();
                     });
                     bottomSheetDialog.setContentView(parentView);
                     bottomSheetDialog.show();
                 } else {
                     profileView.setVisibility(View.VISIBLE);
-                    reportView.setVisibility(View.VISIBLE);
+                    // reportView.setVisibility(View.VISIBLE);
                     bottomSheetDialog.setContentView(parentView);
                     bottomSheetDialog.show();
 
-                    reportView.setOnClickListener(new View.OnClickListener() {
+                    /*reportView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             DocumentReference docRef = db.collection("iku_earth_messages").document(documentSnapshot.getId());
@@ -673,29 +681,24 @@ public class ChatFragment extends Fragment {
                             });
                             bottomSheetDialog.dismiss();
                         }
+                    });*/
+
+                    profileView.setOnClickListener(view -> {
+                        Intent userProfileIntent = new Intent(ChatFragment.this.getContext(), UserProfileActivity.class);
+
+                        String name = chatModel.getUserName();
+                        String userUID = chatModel.getUID();
+                        if (name != null) {
+                            userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
+                            userProfileIntent.putExtra("EXTRA_PERSON_UID", userUID);
+                            ChatFragment.this.startActivity(userProfileIntent);
+                        } else
+                            return;
+                        bottomSheetDialog.dismiss();
                     });
-
-                    profileView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent userProfileIntent = new Intent(ChatFragment.this.getContext(), UserProfileActivity.class);
-
-                            String name = chatModel.getUserName();
-                            String userUID = chatModel.getUID();
-                            if (name != null) {
-                                userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
-                                userProfileIntent.putExtra("EXTRA_PERSON_UID", userUID);
-                                ChatFragment.this.startActivity(userProfileIntent);
-                            } else
-                                return;
-                            bottomSheetDialog.dismiss();
-                        }
-                    });
-
                 }
             }
         });
-
     }
 
     private void updateMessage(String messageDocumentID, int position, String message) {

@@ -82,7 +82,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <!--Profile image-->
             <de.hdodenhof.circleimageview.CircleImageView
@@ -108,53 +108,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/profileImage" />
 
-            <!--Count of hearts won--> <!-- Used this for card background, this looks better. #3B558F -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/userHeartsView"
+            <!--Count of hearts won-->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/userHearts"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:padding="12dp"
-                app:cardCornerRadius="18dp"
-                app:cardBackgroundColor="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/userName">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="12dp">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/userHearts"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@android:color/white"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginBottom="8dp"/>
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Hearts won"
-                        android:layout_below="@id/userHearts"
-                        android:textColor="@android:color/white"
-                        android:layout_toEndOf="@id/heartPic"
-                        android:layout_marginStart="8dp"/>
-
-                    <ImageView
-                        android:id="@+id/heartPic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/userHearts"
-                        android:layout_alignParentBottom="true"
-                        android:src="@drawable/ic_heart"
-                        android:layout_marginStart="8dp"/>
-
-                </RelativeLayout>
-
-            </com.google.android.material.card.MaterialCardView>
+                app:layout_constraintTop_toBottomOf="@id/userName" />
 
             <!--About user-->
             <ImageView
@@ -177,14 +139,14 @@
                 android:layout_marginTop="20dp"
                 android:maxLines="6"
                 android:paddingVertical="10dp"
+                android:visibility="gone"
                 android:paddingStart="60dp"
                 android:paddingEnd="60dp"
                 android:textAlignment="center"
                 android:textSize="13sp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/userHeartsView" />
+                app:layout_constraintTop_toBottomOf="@id/userHearts" />
 
             <!--Link in bio-->
             <ImageView
@@ -207,11 +169,11 @@
                 android:layout_marginTop="10dp"
                 android:minLines="1"
                 android:paddingHorizontal="60dp"
+                android:visibility="gone"
                 android:paddingVertical="10dp"
                 android:textAlignment="center"
                 android:textColorLink="@color/colorAccent"
                 android:textSize="13sp"
-                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/userBio" />

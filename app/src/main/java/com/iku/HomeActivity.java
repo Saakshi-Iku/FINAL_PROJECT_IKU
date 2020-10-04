@@ -76,7 +76,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         }, 1000);
 
-        homeBinding.educationalFilter.setOnClickListener(view -> {
+        /*homeBinding.educationalFilter.setOnClickListener(view -> {
             Fragment fragmentFilter = new EducationalFragment();
             if (fragmentFilter != null) {
                 fragmentManager = getSupportFragmentManager();
@@ -100,7 +100,7 @@ public class HomeActivity extends AppCompatActivity {
                 fragmentManager.beginTransaction().replace(R.id.fragment_container, fragmentFilter)
                         .commit();
             }
-        });
+        });*/
 
 
         if (savedInstanceState == null) {
@@ -116,7 +116,7 @@ public class HomeActivity extends AppCompatActivity {
             switch (newTab.getId()) {
                 case R.id.chat:
                     fragment = new ChatFragment();
-                    homeBinding.categories.setVisibility(View.VISIBLE);
+                    //homeBinding.categories.setVisibility(View.VISIBLE);
                     /*Log event*/
                     Bundle chat_bundle = new Bundle();
                     chat_bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "Main Chat");
@@ -127,7 +127,7 @@ public class HomeActivity extends AppCompatActivity {
                 case R.id.profile:
 
                     fragment = new ProfileFragment();
-                    homeBinding.categories.setVisibility(View.GONE);
+                    //homeBinding.categories.setVisibility(View.GONE);
                     /*Log event*/
                     Bundle profile_bundle = new Bundle();
                     profile_bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "My Profile");

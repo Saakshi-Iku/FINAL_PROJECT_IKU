@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <HorizontalScrollView
+    <!--<HorizontalScrollView
         android:id="@+id/categories"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -42,7 +42,7 @@
                 android:textColor="@android:color/black" />
 
         </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
+    </HorizontalScrollView>-->
 
     <FrameLayout
         android:id="@+id/fragment_container"

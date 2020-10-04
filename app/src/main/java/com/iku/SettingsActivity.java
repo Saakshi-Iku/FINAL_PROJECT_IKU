@@ -154,7 +154,6 @@ public class SettingsActivity extends AppCompatActivity {
                 Intent intent = new Intent(SettingsActivity.this, SplashActivity.class);
                 startActivity(intent);
             }).setNegativeButton("Cancel", (dialogInterface, i) -> {
-
             }).show();
         });
         initProgressDialog();

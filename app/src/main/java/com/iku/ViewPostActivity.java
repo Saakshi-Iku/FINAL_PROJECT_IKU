@@ -1,10 +1,14 @@
 package com.iku;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,9 +87,8 @@ public class ViewPostActivity extends AppCompatActivity {
         initItems();
     }
 
-
     private void initCommentsView() {
-        Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("heartsCount", Query.Direction.DESCENDING);
+        Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("timestamp", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<CommentModel> options = new FirestoreRecyclerOptions.Builder<CommentModel>()
                 .setQuery(query, CommentModel.class)
                 .build();
@@ -95,7 +98,7 @@ public class ViewPostActivity extends AppCompatActivity {
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                viewPostBinding.scrollView.smoothScrollTo(0, viewPostBinding.commentsView.getTop());
+                viewPostBinding.scrollView.smoothScrollTo(0, viewPostBinding.heartsArea.getBottom());
             }
         });
 
@@ -239,8 +242,6 @@ public class ViewPostActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         String message = extras.getString("EXTRA_MESSAGE");
         viewPostBinding.postDescription.setText(message);
-        viewPostBinding.topCommentsFilter.setChipStrokeColor(ColorStateList.valueOf(getColor(R.color.white)));
-        viewPostBinding.topCommentsFilter.setTextColor(ColorStateList.valueOf(getColor(R.color.white)));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             viewPostBinding.postDescription.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
         }
@@ -274,6 +275,7 @@ public class ViewPostActivity extends AppCompatActivity {
         db.collection("iku_earth_messages").document(messageId)
                 .collection("comments").add(data)
                 .addOnSuccessListener(documentReference -> {
+                    adapter.notifyDataSetChanged();
                 })
                 .addOnFailureListener(e -> {
                 });
@@ -835,4 +837,6 @@ public class ViewPostActivity extends AppCompatActivity {
         super.onStart();
         adapter.startListening();
     }
+
 }
+

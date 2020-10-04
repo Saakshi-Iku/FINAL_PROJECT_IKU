@@ -196,7 +196,7 @@ public class ProfileFragment extends Fragment {
                                 if (points == 0)
                                     userHeartsTextView.setText(R.string.yet_to_win_hearts);
                                 else
-                                    userHeartsTextView.setText(String.valueOf(change.getDocument().getLong("points")));
+                                    userHeartsTextView.setText("Hearts won: " + change.getDocument().getLong("points"));
                             }
                         }
                     });

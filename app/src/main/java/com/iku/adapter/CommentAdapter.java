@@ -36,9 +36,13 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
 
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+    private static final int SECOND_MILLIS = 1000;
+    private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
+    private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
     public interface OnItemClickListener {
         void onItemClick(int pos, DocumentSnapshot snapshot);
-
         void onHeartClick(int pos, DocumentSnapshot snapshot);
     }
 
@@ -178,12 +182,6 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
                     });
         }
     }
-
-    private static final int SECOND_MILLIS = 1000;
-    private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
-    private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
-    private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
-
 
     public static String getTimeAgo(long time) {
         if (time < 1000000000000L) {
