@@ -66,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:padding="6dp"
+        android:background="#15FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -77,8 +78,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="6dp"
-            android:background="@drawable/ic_chatbox"
-            android:backgroundTint="#50ffffff"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"

@@ -231,7 +231,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="6dp"
-            android:background="@drawable/ic_chatbox"
+            android:background="@drawable/chatbox"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sendMessageButton"

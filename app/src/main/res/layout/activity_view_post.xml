@@ -85,7 +85,8 @@
             <com.github.chrisbanes.photoview.PhotoView
                 android:id="@+id/viewed_image"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
                 android:adjustViewBounds="true" />
 
             <!--Post description-->
@@ -96,7 +97,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="5dp"
                 android:textColor="@android:color/white"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                android:autoLink="email|web|map"/>
 
             <!--To upvote or downvote-->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -267,7 +269,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:overScrollMode="never"
-                android:paddingBottom="10dp" />
+                android:paddingBottom="10dp"
+                android:visibility="visible"/>
 
         </LinearLayout>
 
