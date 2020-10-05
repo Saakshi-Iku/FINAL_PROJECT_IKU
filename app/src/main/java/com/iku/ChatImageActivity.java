@@ -14,14 +14,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.github.chrisbanes.photoview.PhotoView;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -225,7 +223,8 @@ public class ChatImageActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        uploadTaskOriginal.cancel();
+        if (uploadTaskOriginal != null)
+            uploadTaskOriginal.cancel();
         mStorageRef.child(originalFileName).delete().addOnSuccessListener(aVoid -> {
         }).addOnFailureListener(e -> {
             //Log event
