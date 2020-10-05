@@ -214,6 +214,7 @@
 
                 <!--Hearts count-->
                 <LinearLayout
+                    android:id="@+id/heartsTab"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="10dp"
@@ -234,9 +235,11 @@
                         android:visibility="visible" />
 
                     <TextView
+                        android:id="@+id/addnTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hearts won" />
+                        android:text="Hearts won"
+                        android:textSize="13sp"/>
 
                 </LinearLayout>
 
@@ -250,6 +253,7 @@
 
                 <!--Habits count-->
                 <LinearLayout
+                    android:id="@+id/habitsTab"
                     android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_marginHorizontal="10dp"
@@ -270,7 +274,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Habit streaks" />
+                        android:text="Habit streaks"
+                        android:textSize="13sp"/>
 
                 </LinearLayout>
 
@@ -381,17 +386,14 @@
 
             </LinearLayout>
 
-
-
-
             <!--Add habit button-->
             <LinearLayout
                 android:id="@+id/addHabitButton"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:background="#33DCDCDC"
+                android:layout_height="50dp"
+                android:background="#66DCDCDC"
                 android:gravity="center"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toTopOf="@id/recyclerView"
                 app:layout_constraintTop_toBottomOf="@id/badgesView">
 
@@ -411,7 +413,7 @@
                     android:gravity="center"
                     android:text="Add / edit habits"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -425,7 +427,7 @@
                 android:minHeight="20dp"
                 android:paddingHorizontal="8dp"
                 app:layout_constraintBottom_toTopOf="@id/endOfListText"
-                app:layout_constraintTop_toBottomOf="@id/badgesView" />
+                app:layout_constraintTop_toBottomOf="@id/addHabitButton" />
 
             <TextView
                 android:id="@+id/endOfListText"

@@ -43,7 +43,7 @@
         android:paddingHorizontal="25dp"
         android:paddingVertical="5dp"
         android:textColor="@android:color/secondary_text_dark"
-        android:text="Nominate <abhi> for a badge. Most nominated badge will be awarded to <abhi> at the end of the month. "/>
+        android:text="Nominate abhi for a badge. Most nominated badge will be awarded to abhi at the end of the month. "/>
 
     <ScrollView
         android:layout_width="match_parent"

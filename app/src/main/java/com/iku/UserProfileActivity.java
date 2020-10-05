@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
@@ -32,7 +33,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
 
     private ImageView profilePicture;
-    private TextView nameTextView, userHeartsTextView, userLinkTextView, linkHeaderTextView,bioHeaderTextView,bioTextView;
+    private TextView nameTextView, userHeartsTextView, userHeartsAddnTextView, userLinkTextView, linkHeaderTextView,bioHeaderTextView,bioTextView;
     private FirebaseFirestore db;
 
     private String userName;
@@ -61,6 +62,7 @@ public class UserProfileActivity extends AppCompatActivity {
         nameTextView.setText(userName);
         profilePicture = findViewById(R.id.profileImage);
         userHeartsTextView = findViewById(R.id.userHearts);
+        userHeartsAddnTextView = findViewById(R.id.addnTextView1);
         userLinkTextView = findViewById(R.id.linkInBio);
         bioTextView=findViewById(R.id.userBio);
         getUserDetails(userUID);
@@ -149,10 +151,12 @@ public class UserProfileActivity extends AppCompatActivity {
                                 userPofileBinding.linkInBio.setText(link);
                             }
 
-                            if (points == 0)
-                                userHeartsTextView.setText(R.string.yet_to_win_hearts);
+                            if (points == 0) {
+                                userHeartsTextView.setVisibility(View.GONE);
+                                userHeartsAddnTextView.setText(R.string.yet_to_win_hearts);
+                            }
                             else
-                                userHeartsTextView.setText("Hearts Won: " + change.getDocument().get("points"));
+                                userHeartsTextView.setText((Integer) change.getDocument().get("points"));
                         }
                     }
                 });

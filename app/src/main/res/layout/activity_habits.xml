@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".HabitsActivity">
 
     <!--App Bar-->
     <com.google.android.material.appbar.AppBarLayout
@@ -94,8 +96,8 @@
                 android:layout_height="match_parent"
                 android:backgroundTint="#50DCDCDC"
                 android:layout_margin="8dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="2dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="1dp"
                 app:layout_constraintTop_toBottomOf="@id/listHabits">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -134,6 +136,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         app:layout_constraintTop_toBottomOf="@id/addHabitButton">
 
                         <!--Name of the habit-->
@@ -169,7 +172,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingVertical="5dp"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@id/editHabitName">
 
                             <TextView
@@ -238,7 +241,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingVertical="5dp"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@id/frequency">
 
                             <TextView
@@ -307,7 +310,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingVertical="5dp"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@id/weekSelection">
 
                             <TextView
@@ -394,7 +397,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:paddingVertical="5dp"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             app:layout_constraintTop_toBottomOf="@id/daySelection">
 
                             <TextView
@@ -464,6 +467,7 @@
                             android:layout_marginEnd="6dp"
                             android:text="Save"
                             android:textAllCaps="false"
+                            android:visibility="gone"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/timeSlot" />
 
@@ -480,7 +484,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="Complete 21 entries of any habit without breaking \nit's streak to unlock additional habits."
-                android:textSize="10dp"
+                android:textSize="10sp"
                 app:layout_constraintTop_toBottomOf="@id/addHabitCardView" />
 
             <!--Content divider-->
@@ -524,7 +528,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:text="Choose from the following:"
-                android:textSize="10dp"
+                android:textSize="10sp"
                 app:layout_constraintTop_toBottomOf="@id/contentDivider" />
 
             <androidx.recyclerview.widget.RecyclerView

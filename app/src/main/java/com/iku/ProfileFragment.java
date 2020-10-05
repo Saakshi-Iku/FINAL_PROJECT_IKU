@@ -39,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseAnalytics mFirebaseAnalytics;
     private String photoUrl;
     private ImageView userBioIcon, userLinkIcon;
-    private MaterialTextView userHeartsTextView, userBioTextView, userLinkTextView;
+    private MaterialTextView userHeartsTextView, userHeartsAddnTextView, userBioTextView, userLinkTextView;
     private FragmentProfileBinding profileBinding;
 
     public ProfileFragment() {
@@ -60,6 +60,7 @@ public class ProfileFragment extends Fragment {
         user = mAuth.getCurrentUser();
 
         userHeartsTextView = view.findViewById(R.id.userHearts);
+        userHeartsAddnTextView = view.findViewById(R.id.addnTextView);
         userBioTextView = view.findViewById(R.id.userBio);
         userLinkTextView = view.findViewById(R.id.linkInBio);
         userBioIcon = view.findViewById(R.id.userBioIcon);
@@ -90,6 +91,11 @@ public class ProfileFragment extends Fragment {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.launchUrl(view.getContext(), Uri.parse(profileBinding.linkInBio.getText().toString().trim()));
+        });
+
+        profileBinding.addHabitButton.setOnClickListener(view -> {
+            Intent goToHabitsPage = new Intent(getActivity(), HabitsActivity.class);
+            startActivity(goToHabitsPage);
         });
 
     }
@@ -193,10 +199,12 @@ public class ProfileFragment extends Fragment {
                                         userLinkTextView.setVisibility(View.VISIBLE);
                                         userLinkTextView.setText(link);
                                     }
-                                    if (points == 0)
-                                        userHeartsTextView.setText(R.string.yet_to_win_hearts);
-                                    else
-                                        userHeartsTextView.setText("Hearts won: " + points);
+
+                                    if (points == 0) {
+                                        userHeartsTextView.setVisibility(View.GONE);
+                                        userHeartsAddnTextView.setText(R.string.yet_to_win_hearts);
+                                    } else
+                                        userHeartsTextView.setText(String.valueOf(change.getDocument().getLong("points")));
                                 }
                             }
                         }

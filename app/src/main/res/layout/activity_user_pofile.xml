@@ -193,8 +193,9 @@
 
                 <!--Hearts count-->
                 <LinearLayout
+                    android:id="@+id/heartsTab"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginHorizontal="10dp"
                     android:layout_weight="1"
                     android:background="@drawable/profile_selected_tab"
@@ -213,9 +214,11 @@
                         android:visibility="visible" />
 
                     <TextView
+                        android:id="@+id/addnTextView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hearts won" />
+                        android:text="Hearts won"
+                        android:textSize="13sp"/>
 
                 </LinearLayout>
 
@@ -229,8 +232,9 @@
 
                 <!--Habits count-->
                 <LinearLayout
+                    android:id="@+id/habitsTab"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginHorizontal="10dp"
                     android:layout_weight="1"
                     android:gravity="center"
@@ -249,7 +253,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Habit streaks" />
+                        android:text="Habit streaks"
+                        android:textSize="13sp"/>
 
                 </LinearLayout>
 
@@ -286,7 +291,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@+id/addHabitButton">
 
                 <TextView
