@@ -1,11 +1,15 @@
 package com.iku.adapter;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.util.Linkify;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -47,9 +51,14 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     private Context mContext;
     private SimpleDateFormat sfd = new SimpleDateFormat("hh:mm a");
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private GestureDetector detector;
+
+    private DocumentSnapshot passedSnapshot;
+    private int snapshotPosition;
 
     public ChatAdapter(Context context, @NonNull FirestoreRecyclerOptions<ChatModel> options) {
         super(options);
+        detector = new GestureDetector(mContext, new GestureListener());
         mContext = context;
     }
 
@@ -489,6 +498,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
+
+        void onItemDoubleClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public interface onItemLongClickListener {
@@ -611,6 +622,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, spamCount;
         private LinearLayout reportLayout;
 
+        @SuppressLint("ClickableViewAccessibility")
         public ChatRightViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -630,6 +642,19 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 return false;
             });
 
+            messageText.setOnTouchListener((v, event) -> {
+                if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                    passedSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
+                }
+                return detector.onTouchEvent(event);
+            });
+            itemView.setOnTouchListener((v, event) -> {
+                if (getAdapterPosition() != RecyclerView.NO_POSITION && listener != null) {
+                    passedSnapshot = getSnapshots().getSnapshot(getAdapterPosition());
+                    snapshotPosition = getAdapterPosition();
+                }
+                return detector.onTouchEvent(event);
+            });
         }
     }
 
@@ -650,6 +675,25 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime = itemView.findViewById(R.id.message_time);
             messageTime2 = itemView.findViewById(R.id.message_time2);
             senderName = itemView.findViewById(R.id.sender_name);
+        }
+    }
+
+    public class GestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            Log.e("onDoubleTap", e.getAction() + "");
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            Log.e("onDoubleTapEvent", e.getAction() + "");
+            if (e.getAction() == 1) {
+                //Do your action on double tap
+                listener.onItemDoubleClick(passedSnapshot, snapshotPosition);
+            }
+            return super.onDoubleTapEvent(e);
         }
     }
 }

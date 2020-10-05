@@ -8,11 +8,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,8 +47,8 @@ public class NameInputActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
 
         user = fAuth.getCurrentUser();
-
-        email = user.getEmail();
+        if (user != null)
+            email = user.getEmail();
 
         db = FirebaseFirestore.getInstance();
 
@@ -75,52 +73,39 @@ public class NameInputActivity extends AppCompatActivity {
                     verify_bundle.putString("verification_email_status", "verified");
                     mFirebaseAnalytics.logEvent("user_verification", verify_bundle);
                     Toast.makeText(NameInputActivity.this, "Email verification successful!", Toast.LENGTH_SHORT).show();
-
                 }
             }
         }, 1000);
 
-        binding.resendEmailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(NameInputActivity.this, "Verification email sent", Toast.LENGTH_SHORT).show();
-                        //log event
-                        Bundle password_bundle = new Bundle();
-                        password_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
-                        password_bundle.putString("verification_email_status", "sent");
-                        mFirebaseAnalytics.logEvent("resend_verification_email", password_bundle);
+        binding.resendEmailButton.setOnClickListener(view -> {
+            user.sendEmailVerification().addOnSuccessListener(aVoid -> {
+                Toast.makeText(NameInputActivity.this, "Verification email sent", Toast.LENGTH_SHORT).show();
+                //log event
+                Bundle password_bundle = new Bundle();
+                password_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
+                password_bundle.putString("verification_email_status", "sent");
+                mFirebaseAnalytics.logEvent("resend_verification_email", password_bundle);
+            }).addOnFailureListener(e -> {
+                //log event
+                Bundle password_bundle = new Bundle();
+                password_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
+                password_bundle.putString("verification_email_status", "failed");
+                mFirebaseAnalytics.logEvent("resend_verification_email", password_bundle);
+            });
+            new CountDownTimer(60000, 1000) {
 
+                public void onTick(long millisUntilFinished) {
+                    binding.resendEmailButton.setEnabled(false);
+                    binding.resendEmailButton.setText("Resend in " + new SimpleDateFormat("ss").format(new Date(millisUntilFinished)) + "s");
+                    binding.resendEmailButton.setTextColor(getResources().getColor(R.color.colorTextSecondary));
+                }
 
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //log event
-                        Bundle password_bundle = new Bundle();
-                        password_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
-                        password_bundle.putString("verification_email_status", "failed");
-                        mFirebaseAnalytics.logEvent("resend_verification_email", password_bundle);
-                    }
-                });
-                new CountDownTimer(1 * 60000, 1000) {
-
-                    public void onTick(long millisUntilFinished) {
-                        binding.resendEmailButton.setEnabled(false);
-                        binding.resendEmailButton.setText("Resend in " + new SimpleDateFormat("ss").format(new Date(millisUntilFinished)) + "s");
-                        binding.resendEmailButton.setTextColor(getResources().getColor(R.color.colorTextSecondary));
-                    }
-
-                    public void onFinish() {
-                        binding.resendEmailButton.setText("Resend Verification Email");
-                        binding.resendEmailButton.setEnabled(true);
-                        binding.resendEmailButton.setTextColor(getResources().getColor(R.color.colorAccent));
-
-                    }
-                }.start();
-            }
+                public void onFinish() {
+                    binding.resendEmailButton.setText("Resend Verification Email");
+                    binding.resendEmailButton.setEnabled(true);
+                    binding.resendEmailButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorAccent));
+                }
+            }.start();
         });
 
         binding.namesNextButton.setOnClickListener(view -> {
@@ -179,7 +164,8 @@ public class NameInputActivity extends AppCompatActivity {
                     userInfo.put("points", 0);
                     userInfo.put("firstMessage", false);
                     userInfo.put("firstImage", false);
-                    userInfo.put("signUpTime",FieldValue.serverTimestamp());
+                    userInfo.put("signUpTime", FieldValue.serverTimestamp());
+                    userInfo.put("role", "member");
 
                     Map<String, Object> userRegistrationTokenInfo = new HashMap<>();
                     userRegistrationTokenInfo.put("registrationToken", token);
@@ -192,23 +178,20 @@ public class NameInputActivity extends AppCompatActivity {
 
                         db.collection("users").document(fAuth.getUid())
                                 .set(userInfo)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        DocumentReference groupRef = db.collection("groups").document("iku_earth");
-                                        groupRef.update("members", FieldValue.arrayUnion(userID));
-                                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                                .setDisplayName(firstName + " " + lastName).build();
+                                .addOnSuccessListener(aVoid -> {
+                                    DocumentReference groupRef = db.collection("groups").document("iku_earth");
+                                    groupRef.update("members", FieldValue.arrayUnion(userID));
+                                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                            .setDisplayName(firstName + " " + lastName).build();
 
-                                        user.updateProfile(profileUpdates).addOnCompleteListener(task1 -> updateUI(user));
+                                    user.updateProfile(profileUpdates).addOnCompleteListener(task1 -> updateUI(user));
 
-                                        /*Log event*/
-                                        Bundle signup_bundle = new Bundle();
-                                        signup_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
-                                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, signup_bundle);
-                                        Toast.makeText(NameInputActivity.this, "Welcome to the community", Toast.LENGTH_LONG).show();
+                                    /*Log event*/
+                                    Bundle signup_bundle = new Bundle();
+                                    signup_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
+                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, signup_bundle);
+                                    Toast.makeText(NameInputActivity.this, "Welcome to the community", Toast.LENGTH_LONG).show();
 
-                                    }
                                 })
                                 .addOnFailureListener(e -> {
                                     /*Log event*/
@@ -224,7 +207,6 @@ public class NameInputActivity extends AppCompatActivity {
                                 .addOnSuccessListener(aVoid -> {
                                 })
                                 .addOnFailureListener(e -> {
-
                                 });
                     }
                 });

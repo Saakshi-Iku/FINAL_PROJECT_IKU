@@ -89,45 +89,34 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void initButtons() {
 
-        binding.googleSigninButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                signIn();
-            }
+        binding.googleSigninButton.setOnClickListener(view -> signIn());
+
+        binding.emailSigninButton.setOnClickListener(view -> {
+            Intent enterEmailIntent = new Intent(WelcomeActivity.this, EmailInputActivity.class);
+            startActivity(enterEmailIntent);
         });
 
-        binding.emailSigninButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent enterEmailIntent = new Intent(WelcomeActivity.this, EmailInputActivity.class);
-                startActivity(enterEmailIntent);
-            }
-        });
+        binding.facebookLoginButton.setOnClickListener(view -> {
+            mProgress.show();
+            LoginManager.getInstance().logInWithReadPermissions(WelcomeActivity.this,
+                    Arrays.asList("email", "public_profile"));
+            LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    Log.d(TAG, "facebook:onSuccess:" + loginResult);
+                    handleFacebookAccessToken(loginResult.getAccessToken());
+                }
 
-        binding.facebookLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mProgress.show();
-                LoginManager.getInstance().logInWithReadPermissions(WelcomeActivity.this,
-                        Arrays.asList("email", "public_profile"));
-                LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        Log.d(TAG, "facebook:onSuccess:" + loginResult);
-                        handleFacebookAccessToken(loginResult.getAccessToken());
-                    }
+                @Override
+                public void onCancel() {
+                    Log.d(TAG, "facebook:onCancel");
+                }
 
-                    @Override
-                    public void onCancel() {
-                        Log.d(TAG, "facebook:onCancel");
-                    }
-
-                    @Override
-                    public void onError(FacebookException error) {
-                        Log.d(TAG, "facebook:onError", error);
-                    }
-                });
-            }
+                @Override
+                public void onError(FacebookException error) {
+                    Log.d(TAG, "facebook:onError", error);
+                }
+            });
         });
     }
 
@@ -140,29 +129,24 @@ public class WelcomeActivity extends AppCompatActivity {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user != null) {
-                                String displayName = user.getDisplayName();
-                                if (displayName != null) {
-                                    String firstName = displayName.substring(0, displayName.indexOf(' ')).trim();
-                                    String lastName = displayName.substring(displayName.indexOf(' ')).trim();
-                                    String email = user.getEmail();
-                                    newUserSignUp(firstName, lastName, email);
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        if (user != null) {
+                            String displayName = user.getDisplayName();
+                            if (displayName != null) {
+                                String firstName = displayName.substring(0, displayName.indexOf(' ')).trim();
+                                String lastName = displayName.substring(displayName.indexOf(' ')).trim();
+                                String email = user.getEmail();
+                                newUserSignUp(firstName, lastName, email);
 
-                                    /*Log event*/
-                                    Bundle signup_bundle = new Bundle();
-                                    signup_bundle.putString(FirebaseAnalytics.Param.METHOD, "Facebook");
-                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, signup_bundle);
-                                }
+                                /*Log event*/
+                                Bundle signup_bundle = new Bundle();
+                                signup_bundle.putString(FirebaseAnalytics.Param.METHOD, "Facebook");
+                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, signup_bundle);
                             }
-                        } else {
-                            String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
                         }
                     }
                 });
@@ -189,25 +173,21 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void FirebaseGoogleAuth(GoogleSignInAccount inAccount) {
         AuthCredential authCredential = GoogleAuthProvider.getCredential(inAccount.getIdToken(), null);
-        mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(WelcomeActivity.this);
-                    String firstName = null, lastName = null, email = null;
-                    if (acct != null) {
-                        firstName = acct.getGivenName();
-                        lastName = acct.getFamilyName();
-                        email = acct.getEmail();
-                        mProgress.show();
-                        newUserSignUp(firstName, lastName, email);
+        mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(WelcomeActivity.this);
+                String firstName = null, lastName = null, email = null;
+                if (acct != null) {
+                    firstName = acct.getGivenName();
+                    lastName = acct.getFamilyName();
+                    email = acct.getEmail();
+                    mProgress.show();
+                    newUserSignUp(firstName, lastName, email);
 
-                        /*Log event*/
-                        Bundle signup_bundle = new Bundle();
-                        signup_bundle.putString(FirebaseAnalytics.Param.METHOD, "Google");
-                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, signup_bundle);
-                    }
-                } else {
+                    /*Log event*/
+                    Bundle signup_bundle = new Bundle();
+                    signup_bundle.putString(FirebaseAnalytics.Param.METHOD, "Google");
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, signup_bundle);
                 }
             }
         });
@@ -228,76 +208,61 @@ public class WelcomeActivity extends AppCompatActivity {
     private void newUserSignUp(final String firstName, final String lastName, final String email) {
 
         FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
-                        }
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w(TAG, "getInstanceId failed", task.getException());
+                        return;
+                    }
+                    // Get new Instance ID token
+                    String token = task.getResult().getToken();
 
-                        // Create the arguments to the callable function.
-                        Map<String, Object> userInfo = new HashMap<>();
-                        userInfo.put("firstName", firstName);
-                        userInfo.put("lastName", lastName);
-                        userInfo.put("email", email);
-                        userInfo.put("uid", mAuth.getUid());
-                        userInfo.put("points", 0);
-                        userInfo.put("firstMessage", false);
-                        userInfo.put("firstImage", false);
-                        userInfo.put("signUpTime",FieldValue.serverTimestamp());
+                    // Create the arguments to the callable function.
+                    Map<String, Object> userInfo = new HashMap<>();
+                    userInfo.put("firstName", firstName);
+                    userInfo.put("lastName", lastName);
+                    userInfo.put("email", email);
+                    userInfo.put("uid", mAuth.getUid());
+                    userInfo.put("points", 0);
+                    userInfo.put("firstMessage", false);
+                    userInfo.put("firstImage", false);
+                    userInfo.put("signUpTime",FieldValue.serverTimestamp());
+                    userInfo.put("role","member");
 
-                        final String userID = mAuth.getUid();
+                    final String userID = mAuth.getUid();
 
-                        if (userID != null) {
-                            sendRegistrationToken(token, userID);
+                    if (userID != null) {
+                        sendRegistrationToken(token, userID);
 
-                            DocumentReference docRef = db.collection("users").document(mAuth.getUid());
-                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
+                        DocumentReference docRef = db.collection("users").document(mAuth.getUid());
+                        docRef.get().addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                DocumentSnapshot document = task1.getResult();
+                                if (document.exists()) {
 
-                                            FirebaseUser user = mAuth.getCurrentUser();
-                                            updateUI(user);
+                                    FirebaseUser user = mAuth.getCurrentUser();
+                                    updateUI(user);
 
-                                            //log event
-                                            Bundle user_bundle = new Bundle();
-                                            user_bundle.putString(FirebaseAnalytics.Param.METHOD, "Google/FB Sign In");
-                                            user_bundle.putString("user_status", "Previous user authenticated via social media");
-                                            mFirebaseAnalytics.logEvent("who_is_this_user", user_bundle);
-                                        } else {
-                                            db.collection("users").document(mAuth.getUid())
-                                                    .set(userInfo)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-                                                            FirebaseUser user = mAuth.getCurrentUser();
-                                                            DocumentReference groupRef = db.collection("groups").document("iku_earth");
-                                                            groupRef.update("members", FieldValue.arrayUnion(userID));
-                                                            updateUI(user);
-                                                            Log.d(TAG, "DocumentSnapshot successfully written!");
-                                                            Toast.makeText(WelcomeActivity.this, "Welcome to the community", Toast.LENGTH_LONG).show();
-
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(new OnFailureListener() {
-                                                        @Override
-                                                        public void onFailure(@NonNull Exception e) {
-                                                            Log.w(TAG, e);
-                                                        }
-                                                    });
-                                        }
-                                    } else {
-                                        Log.d(TAG, "get failed with ", task.getException());
-                                    }
+                                    //log event
+                                    Bundle user_bundle = new Bundle();
+                                    user_bundle.putString(FirebaseAnalytics.Param.METHOD, "Google/FB Sign In");
+                                    user_bundle.putString("user_status", "Previous user authenticated via social media");
+                                    mFirebaseAnalytics.logEvent("who_is_this_user", user_bundle);
+                                } else {
+                                    db.collection("users").document(mAuth.getUid())
+                                            .set(userInfo)
+                                            .addOnSuccessListener(aVoid -> {
+                                                FirebaseUser user = mAuth.getCurrentUser();
+                                                DocumentReference groupRef = db.collection("groups").document("iku_earth");
+                                                groupRef.update("members", FieldValue.arrayUnion(userID));
+                                                updateUI(user);
+                                                Log.d(TAG, "DocumentSnapshot successfully written!");
+                                                Toast.makeText(WelcomeActivity.this, "Welcome to the community", Toast.LENGTH_LONG).show();
+                                            })
+                                            .addOnFailureListener(e -> {
+                                            });
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 });
     }
@@ -316,16 +281,10 @@ public class WelcomeActivity extends AppCompatActivity {
         userRegistrationTokenInfo.put("uid", uid);
         db.collection("registrationTokens").document(uid)
                 .set(userRegistrationTokenInfo)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                    }
+                .addOnSuccessListener(aVoid -> {
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
+                .addOnFailureListener(e -> {
 
-                    }
                 });
     }
 }
