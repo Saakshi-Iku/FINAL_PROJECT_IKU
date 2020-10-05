@@ -197,6 +197,7 @@ public class ViewPostActivity extends AppCompatActivity {
         ArrayList<Object> heartsUidArray = new ArrayList<>();
         data.put("heartsArray", heartsUidArray);
         data.put("timestamp", timestamp);
+        data.put("commenterImageUrl", String.valueOf(user.getPhotoUrl()));
         data.put("readableTimestamp", FieldValue.serverTimestamp());
 
         db.collection("iku_earth_messages").document(messageId)
