@@ -187,7 +187,9 @@ public class ViewPostActivity extends AppCompatActivity {
     private void sendComment(String comment) {
         Date d = new Date();
         long timestamp = d.getTime();
+        String authorUid = extras.getString("EXTRA_USER_ID");
         Map<String, Object> data = new HashMap<>();
+        data.put("postAuthorUid", authorUid);
         data.put("comment", comment);
         data.put("uid", user.getUid());
         data.put("commenterName", user.getDisplayName());

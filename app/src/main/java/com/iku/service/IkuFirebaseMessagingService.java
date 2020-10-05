@@ -21,6 +21,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.iku.HomeActivity;
 import com.iku.R;
+import com.iku.ViewPostActivity;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -39,17 +40,12 @@ public class IkuFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        if (remoteMessage.getNotification() != null) {
-            String notificationBody = remoteMessage.getNotification().getBody();
-            String notificationTitle = remoteMessage.getNotification().getTitle();
-            if (isForeground(getApplicationContext())) {
-            } else {
-                //if in background then perform notification operation
-                sendUpvotesNotification(notificationTitle, notificationBody);
-            }
-        }
         String title = remoteMessage.getData().get("title");
         String message = remoteMessage.getData().get("message");
+        String data_type = remoteMessage.getData().get("data_type");
+        String message_id = remoteMessage.getData().get("message_id");
+        String timestamp = remoteMessage.getData().get("timestamp");
+        String notificationId = timestamp.substring(2, 10);
 
         db = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
@@ -57,47 +53,85 @@ public class IkuFirebaseMessagingService extends FirebaseMessagingService {
         ArrayList<String> titleList = new ArrayList<>();
         ArrayList<String> messageList = new ArrayList<>();
 
-        db.collection("users").document(mAuth.getUid()).get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        timeStamp = (long) document.get("lastSeen");
+        if (data_type.equals("direct_message")) {
+            db.collection("users").document(mAuth.getUid()).get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            timeStamp = (long) document.get("lastSeen");
 
-                        db.collection("iku_earth_messages").whereGreaterThan("timestamp", timeStamp).orderBy("timestamp", Query.Direction.DESCENDING).limit(4)
-                                .get().addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-                                for (QueryDocumentSnapshot document1 : task1.getResult()) {
-                                    titleList.add((String) document1.get("userName"));
-                                    messageList.add((String) document1.get("message"));
+                            db.collection("iku_earth_messages").whereGreaterThan("timestamp", timeStamp).orderBy("timestamp", Query.Direction.DESCENDING).limit(4)
+                                    .get().addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document1 : task1.getResult()) {
+                                        titleList.add((String) document1.get("userName"));
+                                        messageList.add((String) document1.get("message"));
+                                    }
+                                    if (isForeground(getApplicationContext())) {
+                                    } else {
+                                        //if in background then perform notification operation
+                                        sendMessageNotification(title, message, titleList, messageList);
+                                    }
                                 }
-                                if (isForeground(getApplicationContext())) {
-                                } else {
-                                    //if in background then perform notification operation
-                                    sendMessageNotification(title, message, titleList, messageList);
-                                }
-                            }
-                        });
-                    }
-                });
+                            });
+                        }
+                    });
+        } else if (data_type.equals("comment")) {
+            if (isForeground(getApplicationContext())) {
+            } else {
+                String doc_message = remoteMessage.getData().get("doc_message");
+                String doc_imageUrl = remoteMessage.getData().get("doc_imageUrl");
+                String userName = remoteMessage.getData().get("userName");
+                String uid = remoteMessage.getData().get("uid");
+
+                //if in background then perform notification operation
+                sendCommentNotification(title, message, notificationId, doc_message, doc_imageUrl, userName, uid, timestamp, message_id);
+            }
+        } else if (data_type.equals("upvotes")) {
+            if (isForeground(getApplicationContext())) {
+            } else {
+                //if in background then perform notification operation
+                sendUpvotesNotification(title, message, notificationId);
+            }
+        }
     }
 
-    private void sendUpvotesNotification(String title, String message) {
+    private void sendCommentNotification(String title, String message, String notificationId, String doc_message, String doc_imageUrl, String userName, String uid, String timestamp, String message_id) {
+        Intent intent = new Intent(this, ViewPostActivity.class);
+
+        intent.putExtra("EXTRA_MESSAGE", doc_message);
+        intent.putExtra("EXTRA_PERSON_NAME", userName);
+        intent.putExtra("EXTRA_POST_TIMESTAMP", Integer.parseInt(timestamp));
+        intent.putExtra("EXTRA_IMAGE_URL", doc_imageUrl);
+        intent.putExtra("EXTRA_MESSAGE_ID", message_id);
+
+        intent.putExtra("EXTRA_USER_ID", uid);
+
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "iku_comments")
+                .setSmallIcon(R.drawable.ic_iku)
+                .setContentTitle(title)
+                .setContentText(message)
+                .setContentIntent(pendingIntent);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(Integer.parseInt(notificationId), builder.build());
+    }
+
+    private void sendUpvotesNotification(String title, String message, String notificationId) {
         Intent intent = new Intent(this, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "iku_hearts")
                 .setSmallIcon(R.drawable.ic_iku)
                 .setContentTitle(title)
                 .setContentText(message)
-                .setPriority(Notification.PRIORITY_DEFAULT)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(title))
-                // Set the intent that will fire when the user taps the notification
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+                .setContentIntent(pendingIntent);
+
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(999, builder.build());
+        notificationManager.notify(Integer.parseInt(notificationId), builder.build());
 
     }
 
