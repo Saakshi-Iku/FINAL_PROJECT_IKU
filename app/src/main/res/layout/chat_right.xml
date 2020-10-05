@@ -172,7 +172,7 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <!--Comments preview-->
-        <view
+        <View
             android:id="@+id/div"
             android:layout_width="0dp"
             android:layout_height="1dp"
