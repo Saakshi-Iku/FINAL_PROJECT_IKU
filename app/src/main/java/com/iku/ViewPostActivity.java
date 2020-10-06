@@ -461,9 +461,8 @@ public class ViewPostActivity extends AppCompatActivity {
                     db.collection("users").document(authorOfMessage)
                             .get()
                             .addOnSuccessListener(documentSnapshot -> {
-                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                 db.collection("users").document(authorOfMessage)
-                                        .update("points", usersData.getPoints() - 1)
+                                        .update("points", FieldValue.increment(-1))
                                         .addOnSuccessListener(aVoid -> {
                                         });
                             });
@@ -497,7 +496,7 @@ public class ViewPostActivity extends AppCompatActivity {
                             .addOnSuccessListener(documentSnapshot -> {
                                 final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                 db.collection("users").document(authorOfMessage)
-                                        .update("points", usersData.getPoints() + 1)
+                                        .update("points", FieldValue.increment(1))
                                         .addOnSuccessListener(aVoid -> {
                                         });
                             });
@@ -515,9 +514,8 @@ public class ViewPostActivity extends AppCompatActivity {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                             db.collection("users").document(authorOfMessage)
-                                    .update("points", usersData.getPoints() - 2)
+                                    .update("points", FieldValue.increment(-2))
                                     .addOnSuccessListener(aVoid -> {
                                     });
                         });
@@ -536,9 +534,8 @@ public class ViewPostActivity extends AppCompatActivity {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                             db.collection("users").document(authorOfMessage)
-                                    .update("points", usersData.getPoints() + 2)
+                                    .update("points", FieldValue.increment(2))
                                     .addOnSuccessListener(aVoid -> {
                                     });
                         });
@@ -564,15 +561,13 @@ public class ViewPostActivity extends AppCompatActivity {
         }
     }
 
-    private void newLikeOrDislike(String messageDocumentID, String emoji, long UpvotesCount,
-                                  long DownvotesCount, String authorOfMessage) {
+    private void newLikeOrDislike(String messageDocumentID, String emoji, long UpvotesCount, long DownvotesCount, String authorOfMessage) {
         if (emoji.equals("downvoters")) {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                             db.collection("users").document(authorOfMessage)
-                                    .update("points", usersData.getPoints() - 1)
+                                    .update("points", FieldValue.increment(-1))
                                     .addOnSuccessListener(aVoid -> {
 
                                     });
@@ -589,9 +584,8 @@ public class ViewPostActivity extends AppCompatActivity {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                             db.collection("users").document(authorOfMessage)
-                                    .update("points", usersData.getPoints() + 1)
+                                    .update("points", FieldValue.increment(1))
                                     .addOnSuccessListener(aVoid -> {
                                     });
                         });
