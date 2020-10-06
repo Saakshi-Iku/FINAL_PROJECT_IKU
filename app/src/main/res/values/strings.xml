@@ -15,10 +15,22 @@
     <string name="name_changed_warning">Name changed once.</string>
     <string name="yet_to_win_hearts">Yet to win some hearts!</string>
     <string name="acra_toast_text">Sorry, the application crashed. An email will be sent to developers.</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="today_text">Today</string>
     <string name="yesterday_text">Yesterday</string>
+    <string name="recently_added">Recently added</string>
+    <string name="most_requested">Most requested</string>
+    <string name="upcoming_features">Upcoming Features</string>
+    <string name="feature_upvote">Feature Upvote</string>
+    <string name="logout">Logout</string>
+    <string name="report_a_bug">Report a bug</string>
+    <string name="feedback">Feedback:</string>
+    <string name="your_optional_message_1000_characters">Your optional message (1000 characters)</string>
+    <string name="how_would_you_rate_your_overall_experience">How would you rate your overall experience?</string>
+    <string name="settings">Settings</string>
 
 
 </resources>

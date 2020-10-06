@@ -43,7 +43,7 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:padding="6dp"
-                    android:src="@drawable/ic_circle_account"
+                    android:src="@drawable/ic_baseline_vote_24"
                     tools:layout_editor_absoluteX="114dp"
                     tools:layout_editor_absoluteY="13dp" />
 
@@ -52,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Upcoming Features"
+                    android:text="@string/upcoming_features"
                     android:textSize="18sp"
                     tools:layout_editor_absoluteX="152dp"
                     tools:layout_editor_absoluteY="16dp" />
@@ -90,13 +90,13 @@
             android:id="@+id/mostRequested"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Most requested" />
+            android:text="@string/most_requested" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/recentlyAdded"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Recently added" />
+            android:text="@string/recently_added" />
 
     </com.google.android.material.chip.ChipGroup>
 

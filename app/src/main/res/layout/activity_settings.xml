@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Settings"
+                    android:text="@string/settings"
                     android:textSize="18sp"
                     tools:layout_editor_absoluteX="152dp"
                     tools:layout_editor_absoluteY="16dp" />
@@ -85,7 +85,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:id="@+id/starlayout"
@@ -105,7 +105,7 @@
                     android:id="@+id/startext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="How would you rate your overall experience?"
+                    android:text="@string/how_would_you_rate_your_overall_experience"
                     android:textAlignment="center"
                     android:textColor="@android:color/black"
                     android:textSize="16sp" />
@@ -171,7 +171,7 @@
                 android:background="@drawable/feedback_edittext_border"
                 android:ems="10"
                 android:gravity="start|top"
-                android:hint="Your optional message (1000 characters)"
+                android:hint="@string/your_optional_message_1000_characters"
                 android:inputType="textMultiLine"
                 android:paddingLeft="10dp"
                 android:paddingTop="10dp"
@@ -200,22 +200,22 @@
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp" />
+                    android:layout_marginEnd="20dp" />
 
                 <ImageView
                     android:id="@+id/secondImage"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_centerInParent="true"
-                    android:layout_toRightOf="@+id/firstImage" />
+                    android:layout_toEndOf="@+id/firstImage" />
 
                 <ImageView
                     android:id="@+id/thirdImage"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="20dp"
-                    android:layout_toRightOf="@+id/secondImage" />
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@+id/secondImage" />
 
                 <ImageView
                     android:id="@+id/hiddenImageView"
@@ -276,7 +276,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="Feedback:"
+                android:text="@string/feedback"
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -311,16 +311,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="12dp"
-                        android:layout_toRightOf="@id/bug_icon"
-                        android:text="Report a bug" />
+                        android:layout_marginStart="12dp"
+                        android:layout_toEndOf="@id/bug_icon"
+                        android:text="@string/report_a_bug" />
 
                     <ImageButton
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="24dp"
+                        android:layout_marginEnd="24dp"
                         android:background="@drawable/ic_next_36" />
 
                 </RelativeLayout>
@@ -356,16 +356,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="12dp"
-                        android:layout_toRightOf="@id/feature_upvote_icon"
-                        android:text="Feature Upvote" />
+                        android:layout_marginStart="12dp"
+                        android:layout_toEndOf="@id/feature_upvote_icon"
+                        android:text="@string/feature_upvote" />
 
                     <ImageButton
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="24dp"
+                        android:layout_marginEnd="24dp"
                         android:background="@drawable/ic_next_36" />
 
                 </RelativeLayout>
@@ -401,16 +401,16 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="12dp"
-                        android:layout_toRightOf="@id/logout_icon"
-                        android:text="Logout" />
+                        android:layout_marginStart="12dp"
+                        android:layout_toEndOf="@id/logout_icon"
+                        android:text="@string/logout" />
 
                     <ImageButton
                         android:layout_width="16dp"
                         android:layout_height="16dp"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginRight="24dp"
+                        android:layout_marginEnd="24dp"
                         android:background="@drawable/ic_next_36" />
 
                 </RelativeLayout>
