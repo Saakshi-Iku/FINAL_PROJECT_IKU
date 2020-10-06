@@ -1,5 +1,6 @@
 package com.iku.models;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.PropertyName;
 
 import java.util.ArrayList;
@@ -20,6 +21,8 @@ public class ChatModel {
     private int upvoteCount;
     @PropertyName("timestamp")
     private long timestamp;
+    @PropertyName("messageUpdateTime")
+    private long messageUpdateTime;
     @PropertyName("upvoters")
     private ArrayList<String> upvoters;
     @PropertyName("emoji1")
@@ -32,6 +35,8 @@ public class ChatModel {
     private ArrayList<String> emoji4;
     @PropertyName("downvoters")
     private ArrayList<String> downvoters;
+    @PropertyName("spamReportedBy")
+    private ArrayList<String> spamReportedBy;
     @PropertyName("downvoteCount")
     private int downvoteCount;
     @PropertyName("edited")
@@ -42,11 +47,13 @@ public class ChatModel {
     private int spamCount;
     @PropertyName("originalImageUrl")
     private String originalImageUrl;
+    @PropertyName("readableMessageUpdateTime")
+    private Timestamp readableMessageUpdateTime;
 
     private ChatModel() {
     }
 
-    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl) {
+    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime) {
         this.message = message;
         this.UID = UID;
         this.userName = userName;
@@ -54,162 +61,103 @@ public class ChatModel {
         this.imageUrl = imageUrl;
         this.upvoteCount = upvoteCount;
         this.timestamp = timestamp;
+        this.messageUpdateTime = messageUpdateTime;
         this.upvoters = upvoters;
         this.emoji1 = emoji1;
         this.emoji2 = emoji2;
         this.emoji3 = emoji3;
         this.emoji4 = emoji4;
         this.downvoters = downvoters;
+        this.spamReportedBy = spamReportedBy;
         this.downvoteCount = downvoteCount;
         this.edited = edited;
         this.spam = spam;
         this.spamCount = spamCount;
         this.originalImageUrl = originalImageUrl;
+        this.readableMessageUpdateTime = readableMessageUpdateTime;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
     public String getUID() {
         return UID;
-    }
-
-    public void setUID(String UID) {
-        this.UID = UID;
     }
 
     public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
     public String getUserName() {
         return userName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getimageUrl() {
         return imageUrl;
     }
 
-    public void setimageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public int getUpvoteCount() {
         return upvoteCount;
     }
 
-    public void setUpvoteCount(int upvoteCount) {
-        this.upvoteCount = upvoteCount;
-    }
-
-
     public ArrayList<String> getupvoters() {
         return upvoters;
-    }
-
-    public void setupvoters(ArrayList<String> upvoters) {
-        this.upvoters = upvoters;
     }
 
     public ArrayList<String> getEmoji1() {
         return emoji1;
     }
 
-    public void setEmoji1(ArrayList<String> emoji1) {
-        this.emoji1 = emoji1;
-    }
-
     public ArrayList<String> getEmoji2() {
         return emoji2;
-    }
-
-    public void setEmoji2(ArrayList<String> emoji2) {
-        this.emoji2 = emoji2;
     }
 
     public ArrayList<String> getEmoji3() {
         return emoji3;
     }
 
-    public void setEmoji3(ArrayList<String> emoji3) {
-        this.emoji3 = emoji3;
-    }
-
     public ArrayList<String> getEmoji4() {
         return emoji4;
-    }
-
-    public void setEmoji4(ArrayList<String> emoji4) {
-        this.emoji4 = emoji4;
     }
 
     public ArrayList<String> getDownvoters() {
         return downvoters;
     }
 
-    public void setDownvoters(ArrayList<String> downvoters) {
-        this.downvoters = downvoters;
-    }
-
     public int getDownvoteCount() {
         return downvoteCount;
-    }
-
-    public void setDownvoteCount(int downvoteCount) {
-        this.downvoteCount = downvoteCount;
     }
 
     public boolean isEdited() {
         return edited;
     }
 
-    public void setEdited(boolean edited) {
-        this.edited = edited;
-    }
-
     public boolean isSpam() {
         return spam;
-    }
-
-    public void setSpam(boolean spam) {
-        this.spam = spam;
     }
 
     public int getSpamCount() {
         return spamCount;
     }
 
-    public void setSpamCount(int spamCount) {
-        this.spamCount = spamCount;
-    }
-
     public String getOriginalImageUrl() {
         return originalImageUrl;
     }
 
-    public void setOriginalImageUrl(String originalImageUrl) {
-        this.originalImageUrl = originalImageUrl;
+    public long getMessageUpdateTime() {
+        return messageUpdateTime;
+    }
+
+    public ArrayList<String> getSpamReportedBy() {
+        return spamReportedBy;
+    }
+
+    public Timestamp getReadableMessageUpdateTime() {
+        return readableMessageUpdateTime;
     }
 }

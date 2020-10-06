@@ -17,6 +17,8 @@
     <string name="acra_toast_text">Sorry, the application crashed. An email will be sent to developers.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="today_text">Today</string>
+    <string name="yesterday_text">Yesterday</string>
 
 
 </resources>
