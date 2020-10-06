@@ -10,6 +10,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -208,7 +209,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
                 params.removeRule(RelativeLayout.BELOW);
                 viewPostBinding.imageContainer.setLayoutParams(params);
-                slideView(viewPostBinding.imageContainer,viewPostBinding.imageContainer.getLayoutParams().height,parentHeight);
+                slideView(viewPostBinding.imageContainer,viewPostBinding.imageContainer.getLayoutParams().height, ConstraintLayout.LayoutParams.MATCH_PARENT);
                 viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
                 viewPostBinding.seeIcon.setRotation(-90);
                 viewPostBinding.seeType.setText(R.string.see_more);
@@ -685,8 +686,7 @@ public class ViewPostActivity extends AppCompatActivity {
          * and manually updates the height of the view  */
 
         slideAnimator.addUpdateListener(animation1 -> {
-            Integer value = (Integer) animation1.getAnimatedValue();
-            view.getLayoutParams().height = value.intValue();
+            view.getLayoutParams().height = (Integer) animation1.getAnimatedValue();
             view.requestLayout();
         });
 
