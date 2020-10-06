@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/view_post_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    android:id="@+id/view_post_layout"
     tools:context=".ViewPostActivity">
 
     <!--top bar-->
@@ -110,9 +110,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="See more"
+                android:text="@string/see_more"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"/>
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/postDescriptionPreview"
@@ -189,6 +189,7 @@
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:background="?selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/choose"
                             android:padding="0dp"
                             app:srcCompat="@drawable/ic_heart" />
                     </FrameLayout>
@@ -363,7 +364,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@color/fui_transparent"
-                android:hint="Add a comment"
+                android:hint="@string/add_a_comment"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="3"
                 android:minHeight="45dp"
@@ -385,6 +386,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@drawable/bg_send"
+            android:contentDescription="@string/send"
             app:layout_constraintBottom_toBottomOf="@+id/chatbox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/chatbox"

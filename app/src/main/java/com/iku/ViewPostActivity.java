@@ -1,9 +1,12 @@
 package com.iku;
 
+import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -194,7 +197,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 params.addRule(RelativeLayout.BELOW, R.id.appBar);
                 viewPostBinding.imageContainer.setLayoutParams(params);
                 parentHeight = viewPostBinding.imageContainer.getMaxHeight();
-                viewPostBinding.imageContainer.setMaxHeight(400);
+                slideView(viewPostBinding.imageContainer,viewPostBinding.imageContainer.getLayoutParams().height,400);
                 viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
                 viewPostBinding.seeIcon.setRotation(90);
                 viewPostBinding.seeType.setText(R.string.see_less);
@@ -205,7 +208,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
                 params.removeRule(RelativeLayout.BELOW);
                 viewPostBinding.imageContainer.setLayoutParams(params);
-                viewPostBinding.imageContainer.setMaxHeight(parentHeight);
+                slideView(viewPostBinding.imageContainer,viewPostBinding.imageContainer.getLayoutParams().height,parentHeight);
                 viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
                 viewPostBinding.seeIcon.setRotation(-90);
                 viewPostBinding.seeType.setText(R.string.see_more);
@@ -668,6 +671,31 @@ public class ViewPostActivity extends AppCompatActivity {
         viewPostBinding.choose3.setEnabled(status);
         viewPostBinding.choose4.setEnabled(status);
         viewPostBinding.choose6.setEnabled(status);
+    }
+
+    public static void slideView(View view,
+                                 int currentHeight,
+                                 int newHeight) {
+
+        ValueAnimator slideAnimator = ValueAnimator
+                .ofInt(currentHeight, newHeight)
+                .setDuration(500);
+
+        /* We use an update listener which listens to each tick
+         * and manually updates the height of the view  */
+
+        slideAnimator.addUpdateListener(animation1 -> {
+            Integer value = (Integer) animation1.getAnimatedValue();
+            view.getLayoutParams().height = value.intValue();
+            view.requestLayout();
+        });
+
+        /*  We use an animationSet to play the animation  */
+
+        AnimatorSet animationSet = new AnimatorSet();
+        animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
+        animationSet.play(slideAnimator);
+        animationSet.start();
     }
 
     @Override
