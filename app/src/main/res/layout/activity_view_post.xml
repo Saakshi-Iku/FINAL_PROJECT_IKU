@@ -67,27 +67,76 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <!--Image-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/imageContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/viewed_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio="H,0.618:1"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/view_handle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#25FAFAFA"
+            android:backgroundTint="@color/white"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="5dp"
+            app:layout_constraintBottom_toBottomOf="@id/imageContainer"
+            app:layout_constraintTop_toTopOf="@id/imageContainer"
+            app:layout_constraintVertical_bias="1.0">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rotation="-90"
+                android:src="@drawable/ic_next_36" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="See More"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/postDescriptionPreview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginVertical="5dp"
+                android:autoLink="email|web|map"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <!--Scroll view-->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/messageArea"
-        android:layout_below="@id/appBar"
+        android:layout_below="@id/imageContainer"
         android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <!--Image-->
-            <com.github.chrisbanes.photoview.PhotoView
-                android:id="@+id/viewed_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:scaleType="center"
-                android:adjustViewBounds="true" />
 
             <!--Post description-->
             <com.borjabravo.readmoretextview.ReadMoreTextView
@@ -96,9 +145,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="5dp"
+                android:autoLink="email|web|map"
                 android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:autoLink="email|web|map"/>
+                android:textSize="12sp" />
 
             <!--To upvote or downvote-->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -270,7 +319,7 @@
                 android:layout_height="wrap_content"
                 android:overScrollMode="never"
                 android:paddingBottom="10dp"
-                android:visibility="visible"/>
+                android:visibility="visible" />
 
         </LinearLayout>
 
@@ -284,7 +333,7 @@
         android:layout_alignParentBottom="true"
         android:background="#15ffffff"
         android:padding="6dp"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">

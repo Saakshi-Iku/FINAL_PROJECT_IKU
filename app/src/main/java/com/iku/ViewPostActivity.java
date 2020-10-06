@@ -3,6 +3,7 @@ package com.iku;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -182,6 +183,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 viewPostBinding.messageTextField.clearFocus();
             }
         });
+        viewPostBinding.viewHandle.setOnClickListener(view -> viewPostBinding.imageContainer.setMaxHeight(400));
     }
 
     private void sendComment(String comment) {
