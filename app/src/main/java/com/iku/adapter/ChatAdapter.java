@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -35,6 +36,7 @@ import com.squareup.picasso.Picasso;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerView.ViewHolder> {
@@ -260,6 +262,29 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             return true;
                         });
 
+                if (chatModel.getTopComment()!=null){
+                    chatLeftImageViewHolder.commentsLayout.setVisibility(View.VISIBLE);
+                    chatLeftImageViewHolder.commentTextView.setText(chatModel.getTopComment());
+                    Picasso.get()
+                            .load(chatModel.getTopCommenterImageUrl())
+                            .noFade()
+                            .networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(chatLeftImageViewHolder.commenterProfilePicture, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Picasso.get()
+                                            .load(chatModel.getTopCommenterImageUrl())
+                                            .noFade()
+                                            .placeholder(R.drawable.ic_circle_account)
+                                            .into(chatLeftImageViewHolder.commenterProfilePicture);
+                                }
+                            });
+                }
+
                 chatLeftImageViewHolder.messageTime.setText(sfd.format(new Date(timeStampImageLeft)));
                 chatLeftImageViewHolder.messageTime2.setText(sfd.format(new Date(timeStampImageLeft)));
                 chatLeftImageViewHolder.messageTime3.setText(sfd.format(new Date(timeStampImageLeft)));
@@ -365,6 +390,29 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     chatRightImageViewHolder.reportLayout.setVisibility(View.VISIBLE);
                     chatRightImageViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
                 }*/
+
+                if (chatModel.getTopComment()!=null){
+                    chatRightImageViewHolder.commentsLayout.setVisibility(View.VISIBLE);
+                    chatRightImageViewHolder.commentTextView.setText(chatModel.getTopComment());
+                    Picasso.get()
+                            .load(chatModel.getTopCommenterImageUrl())
+                            .noFade()
+                            .networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(chatRightImageViewHolder.commenterProfilePicture, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Picasso.get()
+                                            .load(chatModel.getTopCommenterImageUrl())
+                                            .noFade()
+                                            .placeholder(R.drawable.ic_circle_account)
+                                            .into(chatRightImageViewHolder.commenterProfilePicture);
+                                }
+                            });
+                }
 
                 if (chatModel.isEdited()) {
                     chatRightImageViewHolder.edited.setVisibility(View.VISIBLE);
@@ -513,10 +561,12 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftImageViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount;
+        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount,commentTextView;
         private ImageView receiverImage;
         private MaterialButton viewPostBtn;
         private LinearLayout reportLayout;
+        private ConstraintLayout commentsLayout;
+        private CircleImageView commenterProfilePicture;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftImageViewHolder(@NonNull View itemView) {
@@ -533,6 +583,9 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             viewPostBtn = itemView.findViewById(R.id.viewPostButton);
             reportLayout = itemView.findViewById(R.id.flag_layout);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
+            commentsLayout = itemView.findViewById(R.id.commentsPreview);
+            commenterProfilePicture = itemView.findViewById(R.id.profileImage);
+            commentTextView = itemView.findViewById(R.id.comment);
 
             viewPostBtn.setOnClickListener(view -> {
                 int position = getAdapterPosition();
@@ -545,10 +598,12 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightImageViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, upvoteCount, edited, spamCount;
+        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, upvoteCount, edited, spamCount,commentTextView;
         private ImageView sentImage;
         private MaterialButton viewPostBtn;
         private LinearLayout reportLayout;
+        private ConstraintLayout commentsLayout;
+        private CircleImageView commenterProfilePicture;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightImageViewHolder(@NonNull View itemView) {
@@ -564,6 +619,9 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             viewPostBtn = itemView.findViewById(R.id.viewPostButton);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
             reportLayout = itemView.findViewById(R.id.flag_layout);
+            commentsLayout = itemView.findViewById(R.id.commentsPreview);
+            commenterProfilePicture = itemView.findViewById(R.id.profileImage);
+            commentTextView = itemView.findViewById(R.id.comment);
 
             viewPostBtn.setOnClickListener(view -> {
                 int position = getAdapterPosition();
