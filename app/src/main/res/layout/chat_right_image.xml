@@ -256,7 +256,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!--comment-->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/comment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

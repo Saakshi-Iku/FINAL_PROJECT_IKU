@@ -49,11 +49,15 @@ public class ChatModel {
     private String originalImageUrl;
     @PropertyName("readableMessageUpdateTime")
     private Timestamp readableMessageUpdateTime;
+    @PropertyName("topComment")
+    private String topComment;
+    @PropertyName("topCommenterImageUrl")
+    private String topCommenterImageUrl;
 
     private ChatModel() {
     }
 
-    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime) {
+    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime, String topComment, String topCommenterImageUrl) {
         this.message = message;
         this.UID = UID;
         this.userName = userName;
@@ -75,6 +79,8 @@ public class ChatModel {
         this.spamCount = spamCount;
         this.originalImageUrl = originalImageUrl;
         this.readableMessageUpdateTime = readableMessageUpdateTime;
+        this.topComment = topComment;
+        this.topCommenterImageUrl = topCommenterImageUrl;
     }
 
     public String getMessage() {
@@ -159,5 +165,13 @@ public class ChatModel {
 
     public Timestamp getReadableMessageUpdateTime() {
         return readableMessageUpdateTime;
+    }
+
+    public String getTopComment() {
+        return topComment;
+    }
+
+    public String getTopCommenterImageUrl() {
+        return topCommenterImageUrl;
     }
 }
