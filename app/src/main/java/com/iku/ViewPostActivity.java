@@ -3,9 +3,12 @@ package com.iku;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.ViewGroup;
+import android.util.Log;
+import android.view.View;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,6 +58,9 @@ public class ViewPostActivity extends AppCompatActivity {
     private FirebaseFirestore db;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    private int scrollStatus = 0;
+    private int parentHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +174,8 @@ public class ViewPostActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         String message = extras.getString("EXTRA_MESSAGE");
         viewPostBinding.postDescription.setText(message);
+        viewPostBinding.postDescriptionPreview.setText(message);
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             viewPostBinding.postDescription.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
         }
@@ -183,7 +191,32 @@ public class ViewPostActivity extends AppCompatActivity {
                 viewPostBinding.messageTextField.clearFocus();
             }
         });
-        viewPostBinding.viewHandle.setOnClickListener(view -> viewPostBinding.imageContainer.setMaxHeight(400));
+        viewPostBinding.viewHandle.setOnClickListener(view -> {
+            if (scrollStatus == 0) {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
+                params.addRule(RelativeLayout.BELOW, R.id.appBar);
+                viewPostBinding.imageContainer.setLayoutParams(params);
+                parentHeight = viewPostBinding.imageContainer.getMaxHeight();
+                viewPostBinding.imageContainer.setMaxHeight(400);
+                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_next_36));
+                viewPostBinding.seeIcon.setRotation(90);
+                viewPostBinding.seeType.setText("See less");
+                viewPostBinding.messageArea.setVisibility(View.VISIBLE);
+                viewPostBinding.postDescriptionPreview.setVisibility(View.GONE);
+                scrollStatus = 1;
+            } else if (scrollStatus == 1) {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
+                params.removeRule(RelativeLayout.BELOW);
+                viewPostBinding.imageContainer.setLayoutParams(params);
+                viewPostBinding.imageContainer.setMaxHeight(parentHeight);
+                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_next_36));
+                viewPostBinding.seeIcon.setRotation(-90);
+                viewPostBinding.seeType.setText("See more");
+                viewPostBinding.messageArea.setVisibility(View.GONE);
+                viewPostBinding.postDescriptionPreview.setVisibility(View.VISIBLE);
+                scrollStatus = 0;
+            }
+        });
     }
 
     private void sendComment(String comment) {

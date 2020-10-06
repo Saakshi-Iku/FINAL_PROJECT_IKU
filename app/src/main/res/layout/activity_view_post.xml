@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
+    android:id="@+id/view_post_layout"
     tools:context=".ViewPostActivity">
 
     <!--top bar-->
@@ -12,6 +13,7 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:translationZ="1dp"
         app:contentInsetStart="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,16 +98,18 @@
             app:layout_constraintVertical_bias="1.0">
 
             <ImageView
+                android:id="@+id/see_icon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:rotation="-90"
                 android:src="@drawable/ic_next_36" />
 
             <TextView
+                android:id="@+id/see_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="See More"
+                android:text="See more"
                 android:textColor="@android:color/darker_gray" />
 
             <TextView
@@ -139,7 +143,7 @@
             android:orientation="vertical">
 
             <!--Post description-->
-            <com.borjabravo.readmoretextview.ReadMoreTextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/postDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
