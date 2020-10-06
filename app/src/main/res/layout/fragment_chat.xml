@@ -253,7 +253,7 @@
                 android:background="@color/fui_transparent"
                 android:hint="Enter message"
                 android:inputType="textCapSentences|textMultiLine"
-                android:maxLines="3"
+                android:maxLines="5"
                 android:minHeight="45dp"
                 android:padding="4dp"
                 android:paddingStart="20dp"
