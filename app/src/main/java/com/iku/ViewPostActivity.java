@@ -3,12 +3,10 @@ package com.iku;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -68,20 +66,13 @@ public class ViewPostActivity extends AppCompatActivity {
         viewPostBinding = ActivityViewPostBinding.inflate(getLayoutInflater());
         setContentView(viewPostBinding.getRoot());
 
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        user = mAuth.getCurrentUser();
-        db = FirebaseFirestore.getInstance();
-        extras = this.getIntent().getExtras();
-        if (extras != null)
-            messageId = extras.getString("EXTRA_MESSAGE_ID");
-
+        initItems();
         setImage();
         setDetails();
         initButtons();
         initialEmoticons(messageId);
         reactions(messageId);
         initCommentsView();
-        initItems();
     }
 
     private void initCommentsView() {
@@ -171,6 +162,12 @@ public class ViewPostActivity extends AppCompatActivity {
     }
 
     private void initItems() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        db = FirebaseFirestore.getInstance();
+        extras = this.getIntent().getExtras();
+        if (extras != null)
+            messageId = extras.getString("EXTRA_MESSAGE_ID");
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         String message = extras.getString("EXTRA_MESSAGE");
         viewPostBinding.postDescription.setText(message);
@@ -198,9 +195,9 @@ public class ViewPostActivity extends AppCompatActivity {
                 viewPostBinding.imageContainer.setLayoutParams(params);
                 parentHeight = viewPostBinding.imageContainer.getMaxHeight();
                 viewPostBinding.imageContainer.setMaxHeight(400);
-                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_next_36));
+                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
                 viewPostBinding.seeIcon.setRotation(90);
-                viewPostBinding.seeType.setText("See less");
+                viewPostBinding.seeType.setText(R.string.see_less);
                 viewPostBinding.messageArea.setVisibility(View.VISIBLE);
                 viewPostBinding.postDescriptionPreview.setVisibility(View.GONE);
                 scrollStatus = 1;
@@ -209,9 +206,9 @@ public class ViewPostActivity extends AppCompatActivity {
                 params.removeRule(RelativeLayout.BELOW);
                 viewPostBinding.imageContainer.setLayoutParams(params);
                 viewPostBinding.imageContainer.setMaxHeight(parentHeight);
-                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_next_36));
+                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
                 viewPostBinding.seeIcon.setRotation(-90);
-                viewPostBinding.seeType.setText("See more");
+                viewPostBinding.seeType.setText(R.string.see_more);
                 viewPostBinding.messageArea.setVisibility(View.GONE);
                 viewPostBinding.postDescriptionPreview.setVisibility(View.VISIBLE);
                 scrollStatus = 0;
@@ -457,8 +454,7 @@ public class ViewPostActivity extends AppCompatActivity {
         });
     }
 
-    private void changeLikesArray(String messageDocumentID, String currentEmoji, String
-            previousEmoji, long upvotesCount, long downvotesCount, String authorOfMessage) {
+    private void changeLikesArray(String messageDocumentID, String currentEmoji, String previousEmoji, long upvotesCount, long downvotesCount, String authorOfMessage) {
         if (currentEmoji.equals(previousEmoji)) {
             if (currentEmoji.equals("upvoters") || currentEmoji.equals("emoji1") || currentEmoji.equals("emoji2") || currentEmoji.equals("emoji3") || currentEmoji.equals("emoji4")) {
                 if (!authorOfMessage.equals(user.getUid())) {
