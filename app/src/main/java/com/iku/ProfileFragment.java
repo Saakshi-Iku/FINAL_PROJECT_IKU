@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -38,8 +39,8 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private FirebaseAnalytics mFirebaseAnalytics;
     private String photoUrl;
-    private ImageView userBioIcon, userLinkIcon;
     private MaterialTextView userHeartsTextView, userHeartsAddnTextView, userBioTextView, userLinkTextView;
+    private LinearLayout userBioView,userLinkView;
     private FragmentProfileBinding profileBinding;
 
     public ProfileFragment() {
@@ -63,8 +64,8 @@ public class ProfileFragment extends Fragment {
         userHeartsAddnTextView = view.findViewById(R.id.addnTextView);
         userBioTextView = view.findViewById(R.id.userBio);
         userLinkTextView = view.findViewById(R.id.linkInBio);
-        userBioIcon = view.findViewById(R.id.userBioIcon);
-        userLinkIcon = view.findViewById(R.id.linkInBioIcon);
+        userBioView = view.findViewById(R.id.userBioView);
+        userLinkView = view.findViewById(R.id.linkInBioView);
 
         initButtons();
         getUserDetails();
@@ -190,13 +191,11 @@ public class ProfileFragment extends Fragment {
                                     String bio = (String) change.getDocument().get("userBio");
                                     String link = (String) change.getDocument().get("userBioLink");
                                     if (bio != null && !bio.equals("")) {
-                                        userBioIcon.setVisibility(View.VISIBLE);
-                                        userBioTextView.setVisibility(View.VISIBLE);
+                                        userBioView.setVisibility(View.VISIBLE);
                                         userBioTextView.setText(bio);
                                     }
                                     if (link != null && !link.equals("")) {
-                                        userLinkIcon.setVisibility(View.VISIBLE);
-                                        userLinkTextView.setVisibility(View.VISIBLE);
+                                        userLinkView.setVisibility(View.VISIBLE);
                                         userLinkTextView.setText(link);
                                     }
 

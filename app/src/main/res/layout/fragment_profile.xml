@@ -249,7 +249,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginVertical="5dp"
                     android:background="@android:color/darker_gray"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <!--Habits count-->
                 <LinearLayout
@@ -261,7 +261,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingVertical="5dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/userHabits"
@@ -393,7 +393,7 @@
                 android:layout_height="50dp"
                 android:background="#66DCDCDC"
                 android:gravity="center"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/recyclerView"
                 app:layout_constraintTop_toBottomOf="@id/badgesView">
 
@@ -425,6 +425,7 @@
                 android:layout_height="wrap_content"
                 android:background="#66DCDCDC"
                 android:minHeight="20dp"
+                android:visibility="gone"
                 android:paddingHorizontal="8dp"
                 app:layout_constraintBottom_toTopOf="@id/endOfListText"
                 app:layout_constraintTop_toBottomOf="@id/addHabitButton" />
@@ -439,7 +440,7 @@
                 android:paddingVertical="5dp"
                 android:text="That's All Folks!"
                 android:textSize="10sp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/recyclerView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
