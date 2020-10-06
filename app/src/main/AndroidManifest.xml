@@ -20,7 +20,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".FeatureUpvoteActivity" />
-        <activity android:name=".EditProfileActivity" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SplashActivity"
             android:screenOrientation="portrait">

@@ -2,10 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/view_post_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
+    android:id="@+id/view_post_layout"
     tools:context=".ViewPostActivity">
 
     <!--top bar-->
@@ -15,6 +15,7 @@
         android:layout_height="56dp"
         android:translationZ="1dp"
         app:contentInsetStart="0dp"
+        android:background="#10000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -88,8 +89,7 @@
             android:id="@+id/view_handle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#25FAFAFA"
-            android:backgroundTint="@color/white"
+            android:background="#10000000"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="5dp"
@@ -102,15 +102,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:rotation="-90"
-                android:src="@drawable/ic_next_36" />
+                android:src="@drawable/ic_next_36"
+                app:tint="@android:color/white" />
 
             <TextView
                 android:id="@+id/see_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="@string/see_more"
-                android:textColor="@android:color/darker_gray" />
+                android:text="See more"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"/>
 
             <TextView
                 android:id="@+id/postDescriptionPreview"
@@ -187,7 +189,6 @@
                             android:layout_width="45dp"
                             android:layout_height="45dp"
                             android:background="?selectableItemBackgroundBorderless"
-                            android:contentDescription="@string/choose"
                             android:padding="0dp"
                             app:srcCompat="@drawable/ic_heart" />
                     </FrameLayout>
@@ -362,7 +363,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:background="@color/fui_transparent"
-                android:hint="@string/add_a_comment"
+                android:hint="Add a comment"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="3"
                 android:minHeight="45dp"
@@ -384,7 +385,6 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:background="@drawable/bg_send"
-            android:contentDescription="@string/send"
             app:layout_constraintBottom_toBottomOf="@+id/chatbox"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/chatbox"

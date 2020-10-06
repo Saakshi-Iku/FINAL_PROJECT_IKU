@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -62,7 +61,7 @@
                 android:layout_marginBottom="5dp"
                 android:padding="8dp"
                 android:src="@drawable/ic_baseline_notifications_36"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
                 app:layout_constraintEnd_toStartOf="@+id/settingsButton"
                 app:layout_constraintTop_toTopOf="@+id/topAppBar" />
@@ -74,7 +73,7 @@
                 android:layout_margin="12dp"
                 android:background="@drawable/hearts_button_background"
                 android:backgroundTint="@android:color/holo_red_light"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="@id/notificationsButton"
                 app:layout_constraintTop_toTopOf="@id/notificationsButton" />
 
@@ -124,10 +123,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginEnd="10dp"
                 android:gravity="center_vertical"
                 android:padding="5dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/profileImage"
@@ -160,6 +160,7 @@
                 android:layout_marginEnd="10dp"
                 android:gravity="center_vertical"
                 android:padding="5dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/profileImage"
@@ -177,11 +178,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
-                    android:autoLink="all"
                     android:linksClickable="true"
-                    android:maxLines="2"
+                    android:maxLines="1"
                     android:textAlignment="textStart"
-                    android:textColorLink="@color/colorAccent"
+                    android:textColor="@color/colorAccent"
                     android:textSize="13sp"
                     android:visibility="visible" />
 
@@ -210,7 +210,7 @@
                 android:weightSum="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linkInBioView">
+                app:layout_constraintTop_toBottomOf="@id/profileImage">
 
                 <!--Hearts count-->
                 <LinearLayout
@@ -239,7 +239,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Hearts won"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -275,7 +275,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Habit streaks"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -287,16 +287,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/headlineNumbers"
-                android:visibility="gone">
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/headlineNumbers">
 
                 <TextView
                     android:id="@+id/badgesCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#90DCDCDC"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:background="#90DCDCDC"
                     android:text="Badges (36/122)"
                     android:textSize="10sp"
                     android:visibility="visible" />
@@ -377,9 +377,9 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="#90DCDCDC"
                     android:gravity="center"
                     android:padding="5dp"
-                    android:background="#90DCDCDC"
                     android:text="'The Minimilist Badge' \nearned for following posts in Aug 2020:"
                     android:textSize="10sp"
                     android:visibility="visible" />
@@ -425,8 +425,8 @@
                 android:layout_height="wrap_content"
                 android:background="#66DCDCDC"
                 android:minHeight="20dp"
-                android:visibility="gone"
                 android:paddingHorizontal="8dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/endOfListText"
                 app:layout_constraintTop_toBottomOf="@id/addHabitButton" />
 
