@@ -43,7 +43,7 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:padding="6dp"
-                    android:src="@drawable/ic_circle_account"
+                    android:src="@drawable/ic_baseline_vote_24"
                     tools:layout_editor_absoluteX="114dp"
                     tools:layout_editor_absoluteY="13dp" />
 
