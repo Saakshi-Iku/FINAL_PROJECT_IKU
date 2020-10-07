@@ -162,6 +162,7 @@ public class ChatImageActivity extends AppCompatActivity {
                     docData.put("spamReportedBy", spamArray);
                     docData.put("spamCount", 0);
                     docData.put("spam", false);
+                    docData.put("deleted", false);
 
                     Map<String, Object> normalMessage = new HashMap<>();
                     normalMessage.put("firstImage", true);

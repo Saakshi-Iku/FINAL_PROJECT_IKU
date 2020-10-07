@@ -65,11 +65,15 @@ public class ChatModel {
     private String linkPreviewDesc;
     @PropertyName("linkPreviewImageUrl")
     private String linkPreviewImageUrl;
+    @PropertyName("deleted")
+    private boolean deleted;
+    @PropertyName("deletedBy")
+    private String deletedBy;
 
     private ChatModel() {
     }
 
-    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime, String topComment, String topCommenterImageUrl, String topCommenterName, int linkPreview, String linkPreviewUrl, String linkPreviewTitle, String linkPreviewDesc, String linkPreviewImageUrl) {
+    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime, String topComment, String topCommenterImageUrl, String topCommenterName, int linkPreview, String linkPreviewUrl, String linkPreviewTitle, String linkPreviewDesc, String linkPreviewImageUrl, boolean deleted , String deletedBy) {
         this.message = message;
         this.UID = UID;
         this.userName = userName;
@@ -99,6 +103,8 @@ public class ChatModel {
         this.linkPreviewTitle = linkPreviewTitle;
         this.linkPreviewDesc = linkPreviewDesc;
         this.linkPreviewImageUrl = linkPreviewImageUrl;
+        this.deleted = deleted;
+        this.deletedBy = deletedBy;
     }
 
     public String getMessage() {
@@ -216,4 +222,21 @@ public class ChatModel {
     public String getLinkPreviewImageUrl() {
         return linkPreviewImageUrl;
     }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getDeletedBy() {
+        return deletedBy;
+    }
+
+    public void setDeletedBy(String deletedBy) {
+        this.deletedBy = deletedBy;
+    }
+
 }

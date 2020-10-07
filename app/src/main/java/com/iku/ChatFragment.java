@@ -123,9 +123,14 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         return view;
     }
 
-    private void deleteMessage(String messageDocumentID) {
+    private void deleteMessage(String messageDocumentID, String deletedBy) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("deleted", true);
+        map.put("deletedBy", deletedBy);
+        if(deletedBy.equals("admin"))
+            map.put("spam", true);
         db.collection("iku_earth_messages").document(messageDocumentID)
-                .delete()
+                .update(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -367,6 +372,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         docData.put("spamReportedBy", spamArray);
                         docData.put("spamCount", 0);
                         docData.put("spam", false);
+                        docData.put("deleted", false);
 
                         Map<String, Object> normalMessage = new HashMap<>();
                         normalMessage.put("firstMessage", true);
@@ -1118,7 +1124,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         materialAlertDialogBuilder.setTitle("Delete Message");
                         materialAlertDialogBuilder.setMessage("Delete for everyone?");
                         materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
-                            deleteMessage(documentID);
+                            deleteMessage(documentID, "author");
                             bottomSheetDialog.dismiss();
                             //log event
                             Bundle delete_bundle = new Bundle();
@@ -1152,8 +1158,11 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                             Map<String, Object> map = new HashMap<>();
                                             map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
                                             map.put("spamCount", spamCount + 1);
-                                            if (spamCount >= 4)
+                                            if (spamCount >= 4) {
                                                 map.put("spam", true);
+                                                map.put("deleted", true);
+                                                map.put("deletedBy", "users");
+                                            }
                                             db.collection("iku_earth_messages").document(documentID)
                                                     .update(map)
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -1205,7 +1214,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                         materialAlertDialogBuilder.setTitle("Delete Message");
                                         materialAlertDialogBuilder.setMessage("Delete for everyone?");
                                         materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
-                                            deleteMessage(documentID);
+                                            deleteMessage(documentID, "admin");
                                             bottomSheetDialog.dismiss();
                                             //log event
                                             Bundle delete_bundle = new Bundle();

@@ -74,6 +74,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 ChatRightDeletedViewHolder chatRightDeletedViewHolder = (ChatRightDeletedViewHolder) viewHolder;
                 long timeStampDeletedRight = chatModel.getTimestamp();
                 chatRightDeletedViewHolder.messageTime.setText(sfd.format(new Date(timeStampDeletedRight)));
+                if(chatModel.getDeletedBy().equals("admin"))
+                    chatRightDeletedViewHolder.messageText.setText("This message was reported by others and deleted by an admin.");
+                else
+                    chatRightDeletedViewHolder.messageText.setText("This message was deleted.");
                 break;
 
             case MSG_TYPE_DELETED_LEFT:
@@ -152,7 +156,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     @Override
     public int getItemViewType(int position) {
-        if (getItem(position).isSpam()) {
+        if (getItem(position).isSpam() || getItem(position).isDeleted()) {
             if (getItem(position).getUID().equals(user.getUid()))
                 return MSG_TYPE_DELETED_RIGHT;
             else
@@ -1085,22 +1089,24 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     }
 
     private class ChatRightDeletedViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView messageTime;
+        private MaterialTextView messageTime, messageText;
 
         public ChatRightDeletedViewHolder(View itemView) {
             super(itemView);
             messageTime = itemView.findViewById(R.id.message_time);
+            messageText = itemView.findViewById(R.id.message);
         }
     }
 
     private class ChatLeftDeletedViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView messageTime, messageTime2, senderName;
+        private MaterialTextView messageTime, messageTime2, senderName, messageText;
 
         public ChatLeftDeletedViewHolder(View itemView) {
             super(itemView);
             messageTime = itemView.findViewById(R.id.message_time);
             messageTime2 = itemView.findViewById(R.id.message_time2);
             senderName = itemView.findViewById(R.id.sender_name);
+            messageText = itemView.findViewById(R.id.message);
         }
 
         void bindChat(ChatModel chatModel) {
@@ -1115,6 +1121,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 messageTime.setVisibility(View.GONE);
                 messageTime2.setVisibility(View.VISIBLE);
             }
+            if(chatModel.getDeletedBy().equals("admin"))
+                messageText.setText("This message was reported by others and deleted by an admin.");
+            else
+                messageText.setText("This message was deleted.");
         }
     }
 
