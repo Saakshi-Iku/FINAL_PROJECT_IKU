@@ -27,7 +27,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.iku.R;
 import com.iku.models.ChatModel;
 import com.squareup.picasso.Callback;
@@ -35,6 +37,7 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -55,6 +58,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     private Context mContext;
     private SimpleDateFormat sfd = new SimpleDateFormat("hh:mm a");
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public ChatAdapter(Context context, @NonNull FirestoreRecyclerOptions<ChatModel> options) {
         super(options);
@@ -228,10 +232,30 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampLeft)));
             messageTime3.setText(sfd.format(new Date(timeStampLeft)));
             senderName.setText(chatModel.getUserName());
-                /*if(chatModel.getSpamCount() > 0){
-                    chatLeftViewHolder.reportLayout.setVisibility(View.VISIBLE);
-                    chatLeftViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }*/
+
+            DocumentReference docRef = db.collection("groups").document("iku_earth");
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ArrayList<String> admins = (ArrayList) document.get("admins");
+                        boolean isAdmin = false;
+                        for (String element : admins) {
+                            if (element.contains(user.getUid())) {
+                                isAdmin = true;
+                                break;
+                            }
+                        }
+                        if (isAdmin) {
+                            if (chatModel.getSpamCount() > 0) {
+                                reportLayout.setVisibility(View.VISIBLE);
+                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+                            }
+                        }
+                    }
+                }
+            });
+
             if (chatModel.isEdited())
                 edited.setVisibility(View.VISIBLE);
             else
@@ -353,10 +377,30 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampLeft)));
             messageTime3.setText(sfd.format(new Date(timeStampLeft)));
             senderName.setText(chatModel.getUserName());
-                /*if(chatModel.getSpamCount() > 0){
-                    chatLeftViewHolder.reportLayout.setVisibility(View.VISIBLE);
-                    chatLeftViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }*/
+
+            DocumentReference docRef = db.collection("groups").document("iku_earth");
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ArrayList<String> admins = (ArrayList) document.get("admins");
+                        boolean isAdmin = false;
+                        for (String element : admins) {
+                            if (element.contains(user.getUid())) {
+                                isAdmin = true;
+                                break;
+                            }
+                        }
+                        if (isAdmin) {
+                            if (chatModel.getSpamCount() > 0) {
+                                reportLayout.setVisibility(View.VISIBLE);
+                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+                            }
+                        }
+                    }
+                }
+            });
+
             if (chatModel.isEdited())
                 edited.setVisibility(View.VISIBLE);
             else
@@ -510,10 +554,29 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampImageLeft)));
             messageTime3.setText(sfd.format(new Date(timeStampImageLeft)));
             senderName.setText(chatModel.getUserName());
-                /*if(chatModel.getSpamCount() > 0){
-                    chatLeftImageViewHolder.reportLayout.setVisibility(View.VISIBLE);
-                    chatLeftImageViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }*/
+
+            DocumentReference docRef = db.collection("groups").document("iku_earth");
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ArrayList<String> admins = (ArrayList) document.get("admins");
+                        boolean isAdmin = false;
+                        for (String element : admins) {
+                            if (element.contains(user.getUid())) {
+                                isAdmin = true;
+                                break;
+                            }
+                        }
+                        if (isAdmin) {
+                            if (chatModel.getSpamCount() > 0) {
+                                reportLayout.setVisibility(View.VISIBLE);
+                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+                            }
+                        }
+                    }
+                }
+            });
 
             if (senderName.getVisibility() == View.VISIBLE) {
                 messageTime.setVisibility(View.VISIBLE);
@@ -650,10 +713,28 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime.setText(sfd.format(new Date(timeStampImageRight)));
             messageTime2.setText(sfd.format(new Date(timeStampImageRight)));
 
-            /*if(chatModel.getSpamCount() > 0){
-                    chatRightImageViewHolder.reportLayout.setVisibility(View.VISIBLE);
-                    chatRightImageViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-            }*/
+            DocumentReference docRef = db.collection("groups").document("iku_earth");
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ArrayList<String> admins = (ArrayList) document.get("admins");
+                        boolean isAdmin = false;
+                        for (String element : admins) {
+                            if (element.contains(user.getUid())) {
+                                isAdmin = true;
+                                break;
+                            }
+                        }
+                        if (isAdmin) {
+                            if (chatModel.getSpamCount() > 0) {
+                                reportLayout.setVisibility(View.VISIBLE);
+                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+                            }
+                        }
+                    }
+                }
+            });
 
             if (chatModel.getTopComment() != null) {
                 commentsLayout.setVisibility(View.VISIBLE);
@@ -832,10 +913,29 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampRight)));
             upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
 
-            /*if(chatModel.getSpamCount() > 0){
-                  chatRightViewHolder.reportLayout.setVisibility(View.VISIBLE);
-                  chatRightViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-            }*/
+            DocumentReference docRef = db.collection("groups").document("iku_earth");
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ArrayList<String> admins = (ArrayList) document.get("admins");
+                        boolean isAdmin = false;
+                        for (String element : admins) {
+                            if (element.contains(user.getUid())) {
+                                isAdmin = true;
+                                break;
+                            }
+                        }
+                        if (isAdmin) {
+                            if (chatModel.getSpamCount() > 0) {
+                                reportLayout.setVisibility(View.VISIBLE);
+                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+                            }
+                        }
+                    }
+                }
+            });
+
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
                 messageTime2.setVisibility(View.VISIBLE);
@@ -944,10 +1044,29 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampRight)));
             upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
 
-            /*if(chatModel.getSpamCount() > 0){
-                  chatRightViewHolder.reportLayout.setVisibility(View.VISIBLE);
-                  chatRightViewHolder.spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-            }*/
+            DocumentReference docRef = db.collection("groups").document("iku_earth");
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ArrayList<String> admins = (ArrayList) document.get("admins");
+                        boolean isAdmin = false;
+                        for (String element : admins) {
+                            if (element.contains(user.getUid())) {
+                                isAdmin = true;
+                                break;
+                            }
+                        }
+                        if (isAdmin) {
+                            if (chatModel.getSpamCount() > 0) {
+                                reportLayout.setVisibility(View.VISIBLE);
+                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+                            }
+                        }
+                    }
+                }
+            });
+
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
                 messageTime2.setVisibility(View.VISIBLE);
