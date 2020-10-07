@@ -5,18 +5,27 @@ import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,7 +50,7 @@ import java.util.Map;
 
 import static android.graphics.text.LineBreaker.JUSTIFICATION_MODE_INTER_WORD;
 
-public class ViewPostActivity extends AppCompatActivity {
+public class ViewPostActivity extends AppCompatActivity implements RecyclerView.OnItemTouchListener {
 
     private static final String TAG = ViewPostActivity.class.getSimpleName();
 
@@ -60,6 +69,8 @@ public class ViewPostActivity extends AppCompatActivity {
     private FirebaseFirestore db;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    private GestureDetectorCompat detector;
 
     private int scrollStatus = 0;
 
@@ -168,6 +179,9 @@ public class ViewPostActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
 
+        detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListener());
+        viewPostBinding.commentsView.addOnItemTouchListener(this);
+
         extras = this.getIntent().getExtras();
         if (extras != null)
             messageId = extras.getString("EXTRA_MESSAGE_ID");
@@ -255,7 +269,7 @@ public class ViewPostActivity extends AppCompatActivity {
         viewPostBinding.userName.setOnClickListener(view -> {
             String name = extras.getString("EXTRA_PERSON_NAME");
             String uid = extras.getString("EXTRA_USER_ID");
-            if (uid!=null){
+            if (uid != null) {
                 if (!uid.equals(user.getUid())) {
                     Intent userProfileIntent = new Intent(ViewPostActivity.this, UserProfileActivity.class);
                     userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
@@ -711,5 +725,147 @@ public class ViewPostActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         adapter.startListening();
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+        detector.onTouchEvent(e);
+        return false;
+    }
+
+    @Override
+    public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+    }
+
+    @Override
+    public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+    }
+
+    private class RecyclerViewOnGestureListener extends GestureDetector.SimpleOnGestureListener {
+
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            Log.i(TAG, "onDoubleTapEvent: " + e.getAction());
+            return super.onDoubleTapEvent(e);
+        }
+
+        @Override
+        public void onLongPress(MotionEvent e) {
+            View view = viewPostBinding.commentsView.findChildViewUnder(e.getX(), e.getY());
+            Log.i(TAG, "onLongPress: " + e.getAction() + "\nView" + view);
+            if (view != null) {
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(ViewPostActivity.this);
+                View parentView = getLayoutInflater().inflate(R.layout.user_bottom_sheet, null);
+                RelativeLayout profileView = parentView.findViewById(R.id.profile_layout);
+                RelativeLayout deleteMessageView = parentView.findViewById(R.id.delete_layout);
+                RelativeLayout addCommentView = parentView.findViewById(R.id.comment_layout);
+                RelativeLayout reportView = parentView.findViewById(R.id.report_layout);
+                ConstraintLayout heartsArea = parentView.findViewById(R.id.heartsArea);
+                MaterialTextView deleteHeader = parentView.findViewById(R.id.delete_header);
+                deleteHeader.setText(R.string.delete_comment);
+
+                heartsArea.setVisibility(View.GONE);
+                addCommentView.setVisibility(View.GONE);
+
+                int position = viewPostBinding.commentsView.getChildAdapterPosition(view);
+                DocumentSnapshot snapshot = adapter.getSnapshots().getSnapshot(position);
+
+                String documentID = snapshot.getId();
+                String UID = adapter.getItem(position).getUid();
+
+                if (UID.equals(user.getUid())) {
+                    profileView.setVisibility(View.GONE);
+                    reportView.setVisibility(View.GONE);
+                    deleteMessageView.setVisibility(View.VISIBLE);
+                    deleteMessageView.setOnClickListener(view1 -> {
+                        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
+                        materialAlertDialogBuilder.setTitle("Delete Comment");
+                        materialAlertDialogBuilder.setMessage("Are you sure?");
+                        materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
+                            deleteComment(documentID);
+                            bottomSheetDialog.dismiss();
+                            //log event
+                            Bundle delete_bundle = new Bundle();
+                            delete_bundle.putString("uid", user.getUid());
+                            mFirebaseAnalytics.logEvent("message_deleted", delete_bundle);
+                        }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                        }).show();
+                    });
+                    bottomSheetDialog.setContentView(parentView);
+                    bottomSheetDialog.show();
+                } else {
+                    profileView.setVisibility(View.VISIBLE);
+                    // reportView.setVisibility(View.VISIBLE);
+                    bottomSheetDialog.setContentView(parentView);
+                    bottomSheetDialog.show();
+
+                /*reportView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        DocumentReference docRef = db.collection("iku_earth_messages").document(documentSnapshot.getId());
+                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        ArrayList<String> spamReportedArray = (ArrayList) document.get("spamReportedBy");
+                                        long spamCount = (long) document.get("spamCount");
+                                        boolean spam = (boolean) document.get("spam");
+                                        if (!spamReportedArray.contains(user.getUid())) {
+                                            Map<String, Object> map = new HashMap<>();
+                                            map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
+                                            map.put("spamCount", spamCount + 1);
+                                            if (spamCount >= 4)
+                                                map.put("spam", true);
+                                            db.collection("iku_earth_messages").document(documentSnapshot.getId())
+                                                    .update(map)
+                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+
+                                                        }
+                                                    });
+                                        }
+                                    }
+                                }
+                            }
+                        });
+                        bottomSheetDialog.dismiss();
+                    }
+                });*/
+
+                    profileView.setOnClickListener(view2 -> {
+                        Intent userProfileIntent = new Intent(ViewPostActivity.this, UserProfileActivity.class);
+
+                        String name = adapter.getItem(position).getCommenterName();
+                        String userUID = adapter.getItem(position).getUid();
+                        if (name != null) {
+                            userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
+                            userProfileIntent.putExtra("EXTRA_PERSON_UID", userUID);
+                            startActivity(userProfileIntent);
+                        } else
+                            return;
+                        bottomSheetDialog.dismiss();
+                    });
+                }
+            }
+            super.onLongPress(e);
+        }
+    }
+
+
+    private void deleteComment(String commentDocumentID) {
+        db.collection("iku_earth_messages").document(messageId).collection("comments").document(commentDocumentID)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    //Log event
+                    Bundle delete_bundle = new Bundle();
+                    delete_bundle.putString("UID", user.getUid());
+                    delete_bundle.putString("Name", user.getDisplayName());
+                    mFirebaseAnalytics.logEvent("deleted_message", delete_bundle);
+                });
     }
 }
