@@ -58,8 +58,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import io.github.ponnamkarthik.richlinkpreview.MetaData;
+import io.github.ponnamkarthik.richlinkpreview.ResponseListener;
+import io.github.ponnamkarthik.richlinkpreview.RichPreview;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
 
@@ -318,50 +324,147 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     private void sendTheMessage(String message) {
         Date d = new Date();
         long timestamp = d.getTime();
-        if (user != null) {
-            Map<String, Object> docData = new HashMap<>();
-            docData.put("message", message);
-            docData.put("timestamp", timestamp);
-            docData.put("uid", user.getUid());
-            docData.put("type", "text");
-            docData.put("userName", user.getDisplayName());
-            docData.put("upvoteCount", 0);
-            ArrayList<Object> upvotersArray = new ArrayList<>();
-            docData.put("upvoters", upvotersArray);
-            ArrayList<Object> thumbsUpArray = new ArrayList<>();
-            docData.put("emoji1", thumbsUpArray);
-            ArrayList<Object> clapsArray = new ArrayList<>();
-            docData.put("emoji2", clapsArray);
-            ArrayList<Object> thinkArray = new ArrayList<>();
-            docData.put("emoji3", thinkArray);
-            ArrayList<Object> ideaArray = new ArrayList<>();
-            docData.put("emoji4", ideaArray);
-            ArrayList<Object> dounvotersArray = new ArrayList<>();
-            docData.put("downvoters", dounvotersArray);
-            docData.put("downvoteCount", 0);
-            docData.put("edited", false);
-            ArrayList<Object> spamArray = new ArrayList<>();
-            docData.put("spamReportedBy", spamArray);
-            docData.put("spamCount", 0);
-            docData.put("spam", false);
+        List<String> extractedUrls = extractUrls(message);
+        RichPreview richPreview = new RichPreview(new ResponseListener() {
+            @Override
+            public void onData(MetaData metaData) {
+                if (metaData != null) {
+                    String linkImageUrl = metaData.getImageurl();
+                    String title = metaData.getTitle();
+                    String description = metaData.getDescription();
+                    String url = metaData.getUrl();
+                    if (user != null) {
+                        Map<String, Object> docData = new HashMap<>();
+                        docData.put("message", message);
+                        docData.put("timestamp", timestamp);
+                        docData.put("uid", user.getUid());
+                        docData.put("type", "text");
+                        docData.put("userName", user.getDisplayName());
+                        docData.put("upvoteCount", 0);
 
-            Map<String, Object> normalMessage = new HashMap<>();
-            normalMessage.put("firstMessage", true);
+                        docData.put("linkPreview", 1);
+                        docData.put("linkPreviewImageUrl", linkImageUrl);
+                        docData.put("linkPreviewTitle", title);
+                        docData.put("linkPreviewDesc", description);
+                        docData.put("linkPreviewUrl", url);
 
-            db.collection("iku_earth_messages")
-                    .add(docData)
-                    .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
-                            .addOnCompleteListener(task -> {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        Boolean isFirstMessage = (Boolean) document.get("firstMessage");
-                                        if (!isFirstMessage) {
-                                            db.collection("users").document(user.getUid())
-                                                    .update(normalMessage)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
+                        ArrayList<Object> upvotersArray = new ArrayList<>();
+                        docData.put("upvoters", upvotersArray);
+                        ArrayList<Object> thumbsUpArray = new ArrayList<>();
+                        docData.put("emoji1", thumbsUpArray);
+                        ArrayList<Object> clapsArray = new ArrayList<>();
+                        docData.put("emoji2", clapsArray);
+                        ArrayList<Object> thinkArray = new ArrayList<>();
+                        docData.put("emoji3", thinkArray);
+                        ArrayList<Object> ideaArray = new ArrayList<>();
+                        docData.put("emoji4", ideaArray);
+                        ArrayList<Object> dounvotersArray = new ArrayList<>();
+                        docData.put("downvoters", dounvotersArray);
+                        docData.put("downvoteCount", 0);
+                        docData.put("edited", false);
+                        ArrayList<Object> spamArray = new ArrayList<>();
+                        docData.put("spamReportedBy", spamArray);
+                        docData.put("spamCount", 0);
+                        docData.put("spam", false);
+
+                        Map<String, Object> normalMessage = new HashMap<>();
+                        normalMessage.put("firstMessage", true);
+
+                        db.collection("iku_earth_messages")
+                                .add(docData)
+                                .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
+                                        .addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    Boolean isFirstMessage = (Boolean) document.get("firstMessage");
+                                                    if (!isFirstMessage) {
+                                                        db.collection("users").document(user.getUid())
+                                                                .update(normalMessage)
+                                                                .addOnSuccessListener(aVoid -> {
+                                                                    editTextStatus = 0;
+                                                                    binding.viewConfetti.build()
+                                                                            .addColors(Color.BLUE, Color.LTGRAY, getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent))
+                                                                            .setDirection(0.0, 359.0)
+                                                                            .setSpeed(1f, 8f)
+                                                                            .setFadeOutEnabled(true)
+                                                                            .setTimeToLive(2000L)
+                                                                            .addShapes(Shape.Square.INSTANCE, Shape.Circle.INSTANCE)
+                                                                            .addSizes(new Size(10, 10f))
+                                                                            .setPosition(-50f, binding.viewConfetti.getWidth() + 50f, -50f, -50f)
+                                                                            .streamFor(300, 5000L);
+
+                                                                    //Log event
+                                                                    Bundle params = new Bundle();
+                                                                    params.putString("type", "text");
+                                                                    params.putString("uid", user.getUid());
+                                                                    mFirebaseAnalytics.logEvent("first_message", params);
+                                                                })
+                                                                .addOnFailureListener(e -> editTextStatus = 0);
+                                                    }
+                                                }
+                                            }
+                                        }))
+                                .addOnFailureListener(e -> {
+                                });
+                    }
+                }
+            }
+
+            @Override
+            public void onError(Exception e) {
+                //handle error
+            }
+        });
+        if (!extractedUrls.isEmpty()) {
+            Log.i(TAG, "EXTRACT URLS NOT EMPTY RAN: ");
+            richPreview.getPreview(extractedUrls.get(0));
+        } else {
+            if (user != null) {
+                Map<String, Object> docData = new HashMap<>();
+                docData.put("message", message);
+                docData.put("timestamp", timestamp);
+                docData.put("uid", user.getUid());
+                docData.put("type", "text");
+                docData.put("userName", user.getDisplayName());
+                docData.put("upvoteCount", 0);
+
+                docData.put("linkPreview", 0);
+
+                ArrayList<Object> upvotersArray = new ArrayList<>();
+                docData.put("upvoters", upvotersArray);
+                ArrayList<Object> thumbsUpArray = new ArrayList<>();
+                docData.put("emoji1", thumbsUpArray);
+                ArrayList<Object> clapsArray = new ArrayList<>();
+                docData.put("emoji2", clapsArray);
+                ArrayList<Object> thinkArray = new ArrayList<>();
+                docData.put("emoji3", thinkArray);
+                ArrayList<Object> ideaArray = new ArrayList<>();
+                docData.put("emoji4", ideaArray);
+                ArrayList<Object> dounvotersArray = new ArrayList<>();
+                docData.put("downvoters", dounvotersArray);
+                docData.put("downvoteCount", 0);
+                docData.put("edited", false);
+                ArrayList<Object> spamArray = new ArrayList<>();
+                docData.put("spamReportedBy", spamArray);
+                docData.put("spamCount", 0);
+                docData.put("spam", false);
+
+                Map<String, Object> normalMessage = new HashMap<>();
+                normalMessage.put("firstMessage", true);
+
+                db.collection("iku_earth_messages")
+                        .add(docData)
+                        .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
+                                .addOnCompleteListener(task -> {
+                                    if (task.isSuccessful()) {
+                                        DocumentSnapshot document = task.getResult();
+                                        if (document.exists()) {
+                                            Boolean isFirstMessage = (Boolean) document.get("firstMessage");
+                                            if (!isFirstMessage) {
+                                                db.collection("users").document(user.getUid())
+                                                        .update(normalMessage)
+                                                        .addOnSuccessListener(aVoid -> {
                                                             editTextStatus = 0;
                                                             binding.viewConfetti.build()
                                                                     .addColors(Color.BLUE, Color.LTGRAY, getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent))
@@ -379,16 +482,17 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                             params.putString("type", "text");
                                                             params.putString("uid", user.getUid());
                                                             mFirebaseAnalytics.logEvent("first_message", params);
-                                                        }
-                                                    })
-                                                    .addOnFailureListener(e -> editTextStatus = 0);
+                                                        })
+                                                        .addOnFailureListener(e -> editTextStatus = 0);
+                                            }
                                         }
                                     }
-                                }
-                            }))
-                    .addOnFailureListener(e -> {
-                    });
+                                }))
+                        .addOnFailureListener(e -> {
+                        });
+            }
         }
+
     }
 
     public void userVote(String messageDocumentID, String emoji, int position) {
@@ -1060,5 +1164,19 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
             super.onLongPress(e);
         }
+    }
+
+    public static List<String> extractUrls(String text) {
+        List<String> containedUrls = new ArrayList<>();
+        String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+        Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
+        Matcher urlMatcher = pattern.matcher(text);
+
+        while (urlMatcher.find()) {
+            containedUrls.add(text.substring(urlMatcher.start(0), urlMatcher.end(0)));
+            if (containedUrls.size() == 1)
+                break;
+        }
+        return containedUrls;
     }
 }

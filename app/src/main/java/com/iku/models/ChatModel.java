@@ -53,11 +53,21 @@ public class ChatModel {
     private String topComment;
     @PropertyName("topCommenterImageUrl")
     private String topCommenterImageUrl;
+    @PropertyName("linkPreview")
+    private int linkPreview;
+    @PropertyName("linkPreviewUrl")
+    private String linkPreviewUrl;
+    @PropertyName("linkPreviewTitle")
+    private String linkPreviewTitle;
+    @PropertyName("linkPreviewDesc")
+    private String linkPreviewDesc;
+    @PropertyName("linkPreviewImageUrl")
+    private String linkPreviewImageUrl;
 
     private ChatModel() {
     }
 
-    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime, String topComment, String topCommenterImageUrl) {
+    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime, String topComment, String topCommenterImageUrl, int linkPreview, String linkPreviewUrl, String linkPreviewTitle, String linkPreviewDesc, String linkPreviewImageUrl) {
         this.message = message;
         this.UID = UID;
         this.userName = userName;
@@ -81,6 +91,11 @@ public class ChatModel {
         this.readableMessageUpdateTime = readableMessageUpdateTime;
         this.topComment = topComment;
         this.topCommenterImageUrl = topCommenterImageUrl;
+        this.linkPreview = linkPreview;
+        this.linkPreviewUrl = linkPreviewUrl;
+        this.linkPreviewTitle = linkPreviewTitle;
+        this.linkPreviewDesc = linkPreviewDesc;
+        this.linkPreviewImageUrl = linkPreviewImageUrl;
     }
 
     public String getMessage() {
@@ -173,5 +188,25 @@ public class ChatModel {
 
     public String getTopCommenterImageUrl() {
         return topCommenterImageUrl;
+    }
+
+    public int getLinkPreview() {
+        return linkPreview;
+    }
+
+    public String getLinkPreviewUrl() {
+        return linkPreviewUrl;
+    }
+
+    public String getLinkPreviewTitle() {
+        return linkPreviewTitle;
+    }
+
+    public String getLinkPreviewDesc() {
+        return linkPreviewDesc;
+    }
+
+    public String getLinkPreviewImageUrl() {
+        return linkPreviewImageUrl;
     }
 }

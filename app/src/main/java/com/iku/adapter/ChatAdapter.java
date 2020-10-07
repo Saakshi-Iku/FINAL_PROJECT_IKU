@@ -2,16 +2,18 @@ package com.iku.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -32,16 +34,9 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.github.ponnamkarthik.richlinkpreview.MetaData;
-import io.github.ponnamkarthik.richlinkpreview.ResponseListener;
-import io.github.ponnamkarthik.richlinkpreview.RichPreview;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerView.ViewHolder> {
@@ -159,7 +154,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount,linkTitle, linkDescription, linkSource;
+        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount, linkTitle, linkDescription, linkSource;
         private LinearLayout reportLayout;
         private ImageView linkPreviewImage;
         private ConstraintLayout linkPreviewLayout;
@@ -187,28 +182,12 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         void bindChat(ChatModel chatModel) {
             long timeStampLeft = chatModel.getTimestamp();
 
-            List<String> extractedUrls = extractUrls(chatModel.getMessage());
-            RichPreview richPreview = new RichPreview(new ResponseListener() {
-                @Override
-                public void onData(MetaData metaData) {
-                    if (metaData != null) {
-                        linkPreviewLayout.setVisibility(View.VISIBLE);
-                        String url = metaData.getImageurl();
-                        if (url.length() > 2)
-                            Picasso.get().load(url).noFade().into(linkPreviewImage);
-                        linkTitle.setText(metaData.getTitle());
-                        linkDescription.setText(metaData.getDescription());
-                        linkSource.setText(metaData.getUrl());
-                    }
-                }
-
-                @Override
-                public void onError(Exception e) {
-                    //handle error
-                }
-            });
-            if (!extractedUrls.isEmpty()) {
-                richPreview.getPreview(extractedUrls.get(0));
+            if (chatModel.getLinkPreview() == 1) {
+                linkPreviewLayout.setVisibility(View.VISIBLE);
+                Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
+                linkTitle.setText(chatModel.getLinkPreviewTitle());
+                linkDescription.setText(chatModel.getLinkPreviewDesc());
+                linkSource.setText(chatModel.getLinkPreviewUrl());
             }
             messageText.setText(chatModel.getMessage());
             messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
@@ -216,7 +195,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             BetterLinkMovementMethod
                     .linkify(Linkify.WEB_URLS, (Activity) mContext)
                     .setOnLinkLongClickListener(((textView, url) -> {
-
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("link", url);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
                         return true;
                     }))
                     .setOnLinkClickListener((textView, url) -> {
@@ -339,6 +321,13 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageText.setLinkTextColor(Color.parseColor("#1111b7"));
             BetterLinkMovementMethod
                     .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                    .setOnLinkLongClickListener(((textView, url) -> {
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("link", url);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }))
                     .setOnLinkClickListener((textView, url) -> {
                         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                         CustomTabsIntent customTabsIntent = builder.build();
@@ -496,6 +485,13 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageText.setLinkTextColor(Color.parseColor("#1111b7"));
             BetterLinkMovementMethod
                     .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                    .setOnLinkLongClickListener(((textView, url) -> {
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("link", url);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }))
                     .setOnLinkClickListener((textView, url) -> {
                         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                         CustomTabsIntent customTabsIntent = builder.build();
@@ -603,7 +599,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
         private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, spamCount, linkTitle, linkDescription, linkSource;
         private LinearLayout reportLayout;
-        private MetaData data;
         private ImageView linkPreviewImage;
         private ConstraintLayout linkPreviewLayout;
 
@@ -627,28 +622,14 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
         void bindChat(ChatModel chatModel) {
             long timeStampRight = chatModel.getTimestamp();
-            List<String> extractedUrls = extractUrls(chatModel.getMessage());
-            RichPreview richPreview = new RichPreview(new ResponseListener() {
-                @Override
-                public void onData(MetaData metaData) {
-                    if (metaData != null) {
-                        linkPreviewLayout.setVisibility(View.VISIBLE);
-                        String url = metaData.getImageurl();
-                        if (url.length() > 2)
-                            Picasso.get().load(url).noFade().into(linkPreviewImage);
-                        linkTitle.setText(metaData.getTitle());
-                        linkDescription.setText(metaData.getDescription());
-                        linkSource.setText(metaData.getUrl());
-                    }
-                }
 
-                @Override
-                public void onError(Exception e) {
-                    //handle error
-                }
-            });
-            if (!extractedUrls.isEmpty()) {
-                richPreview.getPreview(extractedUrls.get(0));
+            if (chatModel.getLinkPreview() == 1) {
+                linkPreviewLayout.setVisibility(View.VISIBLE);
+                if (!chatModel.getLinkPreviewImageUrl().equals(""))
+                    Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
+                linkTitle.setText(chatModel.getLinkPreviewTitle());
+                linkDescription.setText(chatModel.getLinkPreviewDesc());
+                linkSource.setText(chatModel.getLinkPreviewUrl());
             }
 
             if (chatModel.getUpvoteCount() > 0) {
@@ -687,6 +668,13 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageText.setLinkTextColor(Color.parseColor("#1111b7"));
             BetterLinkMovementMethod
                     .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                    .setOnLinkLongClickListener(((textView, url) -> {
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("link", url);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }))
                     .setOnLinkClickListener((textView, url) -> {
                         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                         CustomTabsIntent customTabsIntent = builder.build();
@@ -753,17 +741,4 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         }
     }
 
-    public static List<String> extractUrls(String text) {
-        List<String> containedUrls = new ArrayList<String>();
-        String urlRegex = "(?<protocol>(http|ftp|https|ftps):\\/\\/)?(?<site>[\\w\\-_\\.]+\\.(?<tld>([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|arpa|asia|coop|info|jobs|mobi|museum|name|travel))+(?<port>:[0-9]+)?\\/?)((?<resource>[\\w\\-\\.,@^%:/~\\+#]*[\\w\\-\\@^%/~\\+#])(?<queryString>(\\?[a-zA-Z0-9\\[\\]\\-\\._+%\\$#\\~',]*=[a-zA-Z0-9\\[\\]\\-\\._+%\\$#\\~',]*)+(&[a-zA-Z0-9\\[\\]\\-\\._+%\\$#\\~',]*=[a-zA-Z0-9\\[\\]\\-\\._+%\\$#\\~',]*)*)?)?";
-        Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
-        Matcher urlMatcher = pattern.matcher(text);
-
-        while (urlMatcher.find()) {
-            containedUrls.add(text.substring(urlMatcher.start(0),
-                    urlMatcher.end(0)));
-        }
-
-        return containedUrls;
-    }
 }
