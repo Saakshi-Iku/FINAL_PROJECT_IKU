@@ -40,66 +40,59 @@
             app:layout_constraintWidth_min="250dp">
 
             <!--link image is shown here-->
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/linkPreviewImage"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:src="@drawable/iku"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_max="70dp"
+                android:src="@drawable/ic_web_24"
                 app:layout_constraintWidth_min="40dp" />
 
             <!--link title is shown here-->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/linkTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:maxLines="1"
                 android:padding="1dp"
-                android:text="This Page Title"
-                android:textColor="@android:color/background_light"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/linkPreviewDescription"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!--link description is shown here-->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/linkPreviewDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:maxLines="2"
                 android:padding="1dp"
-                android:text="This is some description provided by page on the web"
-                android:textColor="@android:color/background_light"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/linkSourceDomain"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
                 app:layout_constraintTop_toBottomOf="@id/linkTitle" />
 
             <!--Link source domain-->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/linkSourceDomain"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:maxLines="1"
                 android:padding="1dp"
-                android:text="youtube.com/"
-                android:textColor="@android:color/background_light"
+                android:textColor="@android:color/white"
                 android:textSize="12sp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
@@ -203,9 +196,9 @@
                 android:id="@+id/profileImage"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:padding="2dp"
                 android:background="@drawable/commentor_profile_image_bg"
                 android:backgroundTint="#62B2B2"
+                android:padding="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

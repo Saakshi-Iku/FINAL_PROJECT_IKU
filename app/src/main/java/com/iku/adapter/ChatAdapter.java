@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,9 +32,16 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.github.ponnamkarthik.richlinkpreview.MetaData;
+import io.github.ponnamkarthik.richlinkpreview.ResponseListener;
+import io.github.ponnamkarthik.richlinkpreview.RichPreview;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 
 public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerView.ViewHolder> {
@@ -151,8 +159,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount;
+        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount,linkTitle, linkDescription, linkSource;
         private LinearLayout reportLayout;
+        private ImageView linkPreviewImage;
+        private ConstraintLayout linkPreviewLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftViewHolder(@NonNull View itemView) {
@@ -167,11 +177,39 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             edited = itemView.findViewById(R.id.editFlag);
             reportLayout = itemView.findViewById(R.id.flag_layout);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
+            linkTitle = itemView.findViewById(R.id.linkTitle);
+            linkDescription = itemView.findViewById(R.id.linkPreviewDescription);
+            linkSource = itemView.findViewById(R.id.linkSourceDomain);
+            linkPreviewImage = itemView.findViewById(R.id.linkPreviewImage);
+            linkPreviewLayout = itemView.findViewById(R.id.linkPreview);
         }
 
-        void bindChat(ChatModel chatModel){
+        void bindChat(ChatModel chatModel) {
             long timeStampLeft = chatModel.getTimestamp();
 
+            List<String> extractedUrls = extractUrls(chatModel.getMessage());
+            RichPreview richPreview = new RichPreview(new ResponseListener() {
+                @Override
+                public void onData(MetaData metaData) {
+                    if (metaData != null) {
+                        linkPreviewLayout.setVisibility(View.VISIBLE);
+                        String url = metaData.getImageurl();
+                        if (url.length() > 2)
+                            Picasso.get().load(url).noFade().into(linkPreviewImage);
+                        linkTitle.setText(metaData.getTitle());
+                        linkDescription.setText(metaData.getDescription());
+                        linkSource.setText(metaData.getUrl());
+                    }
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    //handle error
+                }
+            });
+            if (!extractedUrls.isEmpty()) {
+                richPreview.getPreview(extractedUrls.get(0));
+            }
             messageText.setText(chatModel.getMessage());
             messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
             messageText.setLinkTextColor(Color.parseColor("#1111b7"));
@@ -293,7 +331,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             });
         }
 
-        void bindChat(ChatModel chatModel){
+        void bindChat(ChatModel chatModel) {
             long timeStampImageLeft = chatModel.getTimestamp();
 
             messageText.setText(chatModel.getMessage());
@@ -450,7 +488,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             });
         }
 
-        void bindChat(ChatModel chatModel){
+        void bindChat(ChatModel chatModel) {
             long timeStampImageRight = chatModel.getTimestamp();
 
             messageText.setText(chatModel.getMessage());
@@ -563,8 +601,11 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, spamCount;
+        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, spamCount, linkTitle, linkDescription, linkSource;
         private LinearLayout reportLayout;
+        private MetaData data;
+        private ImageView linkPreviewImage;
+        private ConstraintLayout linkPreviewLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightViewHolder(@NonNull View itemView) {
@@ -577,11 +618,39 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             edited = itemView.findViewById(R.id.editFlag);
             reportLayout = itemView.findViewById(R.id.flag_layout);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
-
+            linkTitle = itemView.findViewById(R.id.linkTitle);
+            linkDescription = itemView.findViewById(R.id.linkPreviewDescription);
+            linkSource = itemView.findViewById(R.id.linkSourceDomain);
+            linkPreviewImage = itemView.findViewById(R.id.linkPreviewImage);
+            linkPreviewLayout = itemView.findViewById(R.id.linkPreview);
         }
 
         void bindChat(ChatModel chatModel) {
             long timeStampRight = chatModel.getTimestamp();
+            List<String> extractedUrls = extractUrls(chatModel.getMessage());
+            RichPreview richPreview = new RichPreview(new ResponseListener() {
+                @Override
+                public void onData(MetaData metaData) {
+                    if (metaData != null) {
+                        linkPreviewLayout.setVisibility(View.VISIBLE);
+                        String url = metaData.getImageurl();
+                        if (url.length() > 2)
+                            Picasso.get().load(url).noFade().into(linkPreviewImage);
+                        linkTitle.setText(metaData.getTitle());
+                        linkDescription.setText(metaData.getDescription());
+                        linkSource.setText(metaData.getUrl());
+                    }
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    //handle error
+                }
+            });
+            if (!extractedUrls.isEmpty()) {
+                richPreview.getPreview(extractedUrls.get(0));
+            }
+
             if (chatModel.getUpvoteCount() > 0) {
                 itemView.findViewById(R.id.upvotesLayout).setVisibility(View.VISIBLE);
                 upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
@@ -669,7 +738,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             senderName = itemView.findViewById(R.id.sender_name);
         }
 
-        void bindChat(ChatModel chatModel){
+        void bindChat(ChatModel chatModel) {
             long timeStampDeletedLeft = chatModel.getTimestamp();
             senderName.setText(chatModel.getUserName());
             messageTime.setText(sfd.format(new Date(timeStampDeletedLeft)));
@@ -682,5 +751,19 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 messageTime2.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    public static List<String> extractUrls(String text) {
+        List<String> containedUrls = new ArrayList<String>();
+        String urlRegex = "(?<protocol>(http|ftp|https|ftps):\\/\\/)?(?<site>[\\w\\-_\\.]+\\.(?<tld>([0-9]{1,3})|([a-zA-Z]{2,3})|(aero|arpa|asia|coop|info|jobs|mobi|museum|name|travel))+(?<port>:[0-9]+)?\\/?)((?<resource>[\\w\\-\\.,@^%:/~\\+#]*[\\w\\-\\@^%/~\\+#])(?<queryString>(\\?[a-zA-Z0-9\\[\\]\\-\\._+%\\$#\\~',]*=[a-zA-Z0-9\\[\\]\\-\\._+%\\$#\\~',]*)+(&[a-zA-Z0-9\\[\\]\\-\\._+%\\$#\\~',]*=[a-zA-Z0-9\\[\\]\\-\\._+%\\$#\\~',]*)*)?)?";
+        Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
+        Matcher urlMatcher = pattern.matcher(text);
+
+        while (urlMatcher.find()) {
+            containedUrls.add(text.substring(urlMatcher.start(0),
+                    urlMatcher.end(0)));
+        }
+
+        return containedUrls;
     }
 }

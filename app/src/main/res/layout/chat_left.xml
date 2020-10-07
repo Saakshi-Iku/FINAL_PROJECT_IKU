@@ -38,12 +38,11 @@
             app:layout_constraintWidth_min="250dp">
 
             <!--Link image-->
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/linkPreviewImage"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:src="@drawable/iku"
-                android:visibility="gone"
+                android:src="@drawable/ic_web_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
                 app:layout_constraintStart_toStartOf="parent"
@@ -52,35 +51,31 @@
                 app:layout_constraintWidth_min="40dp" />
 
             <!--Link title-->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/linkTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:maxLines="1"
                 android:padding="1dp"
-                android:text="Title of page"
                 android:textColor="#90000000"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/linkPreviewDescription"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <!--Link description-->
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/linkPreviewDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:maxLines="2"
                 android:padding="1dp"
-                android:text="This is some description provided by page on the web is for testing."
                 android:textColor="#80000000"
                 android:textSize="12sp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/linkSourceDomain"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
@@ -94,10 +89,8 @@
                 android:layout_marginStart="5dp"
                 android:maxLines="1"
                 android:padding="1dp"
-                android:text="youtube.com/"
                 android:textColor="#80000000"
                 android:textSize="12sp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
