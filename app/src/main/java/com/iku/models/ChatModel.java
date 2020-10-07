@@ -53,6 +53,8 @@ public class ChatModel {
     private String topComment;
     @PropertyName("topCommenterImageUrl")
     private String topCommenterImageUrl;
+    @PropertyName("topCommenterName")
+    private String topCommenterName;
     @PropertyName("linkPreview")
     private int linkPreview;
     @PropertyName("linkPreviewUrl")
@@ -67,7 +69,7 @@ public class ChatModel {
     private ChatModel() {
     }
 
-    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime, String topComment, String topCommenterImageUrl, int linkPreview, String linkPreviewUrl, String linkPreviewTitle, String linkPreviewDesc, String linkPreviewImageUrl) {
+    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime, String topComment, String topCommenterImageUrl, String topCommenterName, int linkPreview, String linkPreviewUrl, String linkPreviewTitle, String linkPreviewDesc, String linkPreviewImageUrl) {
         this.message = message;
         this.UID = UID;
         this.userName = userName;
@@ -91,6 +93,7 @@ public class ChatModel {
         this.readableMessageUpdateTime = readableMessageUpdateTime;
         this.topComment = topComment;
         this.topCommenterImageUrl = topCommenterImageUrl;
+        this.topCommenterName = topCommenterName;
         this.linkPreview = linkPreview;
         this.linkPreviewUrl = linkPreviewUrl;
         this.linkPreviewTitle = linkPreviewTitle;
@@ -184,6 +187,10 @@ public class ChatModel {
 
     public String getTopComment() {
         return topComment;
+    }
+
+    public String getTopCommenterName() {
+        return topCommenterName;
     }
 
     public String getTopCommenterImageUrl() {

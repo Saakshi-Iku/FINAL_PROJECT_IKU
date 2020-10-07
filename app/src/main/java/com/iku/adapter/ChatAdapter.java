@@ -20,6 +20,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.material.button.MaterialButton;
@@ -478,24 +479,31 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             if (chatModel.getTopComment() != null) {
                 commentsLayout.setVisibility(View.VISIBLE);
                 commentTextView.setText(chatModel.getTopComment());
-                Picasso.get()
-                        .load(chatModel.getTopCommenterImageUrl())
-                        .noFade()
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .into(commenterProfilePicture, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                            }
+                String url = chatModel.getTopCommenterImageUrl();
+                String firstLetter, secondLetter;
+                if (url != null && !url.equals("null")) {
+                    Picasso.get().load(url).noFade().networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(commenterProfilePicture, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                }
 
-                            @Override
-                            public void onError(Exception e) {
-                                Picasso.get()
-                                        .load(chatModel.getTopCommenterImageUrl())
-                                        .noFade()
-                                        .placeholder(R.drawable.ic_circle_account)
-                                        .into(commenterProfilePicture);
-                            }
-                        });
+                                @Override
+                                public void onError(Exception e) {
+                                    Picasso.get().load(url).noFade().into(commenterProfilePicture);
+                                }
+                            });
+                } else {
+                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                    TextDrawable drawable = TextDrawable.builder()
+                            .beginConfig()
+                            .width(200)
+                            .height(200)
+                            .endConfig()
+                            .buildRect(firstLetter + secondLetter, Color.LTGRAY);
+                    commenterProfilePicture.setImageDrawable(drawable);
+                }
             }
 
             messageTime.setText(sfd.format(new Date(timeStampImageLeft)));
@@ -650,24 +658,31 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             if (chatModel.getTopComment() != null) {
                 commentsLayout.setVisibility(View.VISIBLE);
                 commentTextView.setText(chatModel.getTopComment());
-                Picasso.get()
-                        .load(chatModel.getTopCommenterImageUrl())
-                        .noFade()
-                        .networkPolicy(NetworkPolicy.OFFLINE)
-                        .into(commenterProfilePicture, new Callback() {
-                            @Override
-                            public void onSuccess() {
-                            }
+                String url = chatModel.getTopCommenterImageUrl();
+                String firstLetter, secondLetter;
+                if (url != null && !url.equals("null")) {
+                    Picasso.get().load(url).noFade().networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(commenterProfilePicture, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                }
 
-                            @Override
-                            public void onError(Exception e) {
-                                Picasso.get()
-                                        .load(chatModel.getTopCommenterImageUrl())
-                                        .noFade()
-                                        .placeholder(R.drawable.ic_circle_account)
-                                        .into(commenterProfilePicture);
-                            }
-                        });
+                                @Override
+                                public void onError(Exception e) {
+                                    Picasso.get().load(url).noFade().into(commenterProfilePicture);
+                                }
+                            });
+                } else {
+                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                    TextDrawable drawable = TextDrawable.builder()
+                            .beginConfig()
+                            .width(200)
+                            .height(200)
+                            .endConfig()
+                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                    commenterProfilePicture.setImageDrawable(drawable);
+                }
             }
 
             if (chatModel.isEdited()) {
