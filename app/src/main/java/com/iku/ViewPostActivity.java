@@ -2,6 +2,7 @@ package com.iku;
 
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,6 +72,8 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private GestureDetectorCompat detector;
+
+    private GestureDetector swipeDetector;
 
     private int scrollStatus = 0;
 
@@ -180,6 +183,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         db = FirebaseFirestore.getInstance();
 
         detector = new GestureDetectorCompat(this, new RecyclerViewOnGestureListener());
+        swipeDetector = new GestureDetector(this, new SwipeListener());
         viewPostBinding.commentsView.addOnItemTouchListener(this);
 
         extras = this.getIntent().getExtras();
@@ -231,6 +235,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initButtons() {
         viewPostBinding.backButton.setOnClickListener(view -> onBackPressed());
         viewPostBinding.sendMessageButton.setOnClickListener(view -> {
@@ -241,30 +246,14 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                 viewPostBinding.messageTextField.clearFocus();
             }
         });
+
+        viewPostBinding.viewHandle.setOnTouchListener((view, e) -> {
+            swipeDetector.onTouchEvent(e);
+            return false;
+        });
+
         viewPostBinding.viewHandle.setOnClickListener(view -> {
-            if (scrollStatus == 0) {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
-                params.addRule(RelativeLayout.BELOW, R.id.appBar);
-                viewPostBinding.imageContainer.setLayoutParams(params);
-                slideView(viewPostBinding.imageContainer, viewPostBinding.imageContainer.getLayoutParams().height, 400);
-                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
-                viewPostBinding.seeIcon.setRotation(90);
-                viewPostBinding.seeType.setText(R.string.see_less);
-                viewPostBinding.messageArea.setVisibility(View.VISIBLE);
-                viewPostBinding.postDescriptionPreview.setVisibility(View.GONE);
-                scrollStatus = 1;
-            } else if (scrollStatus == 1) {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
-                params.removeRule(RelativeLayout.BELOW);
-                viewPostBinding.imageContainer.setLayoutParams(params);
-                slideView(viewPostBinding.imageContainer, viewPostBinding.imageContainer.getLayoutParams().height, ConstraintLayout.LayoutParams.MATCH_PARENT);
-                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
-                viewPostBinding.seeIcon.setRotation(-90);
-                viewPostBinding.seeType.setText(R.string.see_more);
-                viewPostBinding.messageArea.setVisibility(View.GONE);
-                viewPostBinding.postDescriptionPreview.setVisibility(View.VISIBLE);
-                scrollStatus = 0;
-            }
+
         });
         viewPostBinding.userName.setOnClickListener(view -> {
             String name = extras.getString("EXTRA_PERSON_NAME");
@@ -856,7 +845,6 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         }
     }
 
-
     private void deleteComment(String commentDocumentID) {
         db.collection("iku_earth_messages").document(messageId).collection("comments").document(commentDocumentID)
                 .delete()
@@ -867,5 +855,37 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                     delete_bundle.putString("Name", user.getDisplayName());
                     mFirebaseAnalytics.logEvent("deleted_message", delete_bundle);
                 });
+    }
+
+    private class SwipeListener extends GestureDetector.SimpleOnGestureListener{
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if (scrollStatus == 0) {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
+                params.addRule(RelativeLayout.BELOW, R.id.appBar);
+                viewPostBinding.imageContainer.setLayoutParams(params);
+                slideView(viewPostBinding.imageContainer, viewPostBinding.imageContainer.getLayoutParams().height, 400);
+                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
+                viewPostBinding.seeIcon.setRotation(90);
+                viewPostBinding.seeType.setText(R.string.see_less);
+                viewPostBinding.messageArea.setVisibility(View.VISIBLE);
+                viewPostBinding.postDescriptionPreview.setVisibility(View.GONE);
+                scrollStatus = 1;
+                return super.onFling(e1, e2, velocityX, velocityY);
+            } else if (scrollStatus == 1) {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
+                params.removeRule(RelativeLayout.BELOW);
+                viewPostBinding.imageContainer.setLayoutParams(params);
+                slideView(viewPostBinding.imageContainer, viewPostBinding.imageContainer.getLayoutParams().height, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
+                viewPostBinding.seeIcon.setRotation(-90);
+                viewPostBinding.seeType.setText(R.string.see_more);
+                viewPostBinding.messageArea.setVisibility(View.GONE);
+                viewPostBinding.postDescriptionPreview.setVisibility(View.VISIBLE);
+                scrollStatus = 0;
+                return super.onFling(e1, e2, velocityX, velocityY);
+            }
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
     }
 }
