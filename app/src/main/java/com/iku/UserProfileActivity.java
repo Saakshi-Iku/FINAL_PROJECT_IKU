@@ -137,26 +137,28 @@ public class UserProfileActivity extends AppCompatActivity {
                         return;
                     }
 
-                    for (DocumentChange change : querySnapshot.getDocumentChanges()) {
-                        if (change.getType() == DocumentChange.Type.ADDED) {
-                            long points = (long) change.getDocument().get("points");
-                            String link = (String) change.getDocument().get("userBioLink");
-                            String bio = (String) change.getDocument().get("userBio");
-                            if (bio!=null&& !bio.equals("")){
-                                userPofileBinding.userBio.setVisibility(View.VISIBLE);
-                                userPofileBinding.userBio.setText(bio);
-                            }
-                            if (link!=null&& !link.equals("")){
-                                userPofileBinding.linkInBio.setVisibility(View.VISIBLE);
-                                userPofileBinding.linkInBio.setText(link);
-                            }
+                    if (querySnapshot!=null){
+                        for (DocumentChange change : querySnapshot.getDocumentChanges()) {
+                            if (change.getType() == DocumentChange.Type.ADDED) {
+                                long points = (long) change.getDocument().get("points");
+                                String link = (String) change.getDocument().get("userBioLink");
+                                String bio = (String) change.getDocument().get("userBio");
+                                if (bio!=null&& !bio.equals("")){
+                                    userPofileBinding.userBio.setVisibility(View.VISIBLE);
+                                    userPofileBinding.userBio.setText(bio);
+                                }
+                                if (link!=null&& !link.equals("")){
+                                    userPofileBinding.linkInBio.setVisibility(View.VISIBLE);
+                                    userPofileBinding.linkInBio.setText(link);
+                                }
 
-                            if (points == 0) {
-                                userHeartsTextView.setVisibility(View.GONE);
-                                userHeartsAddnTextView.setText(R.string.yet_to_win_hearts);
+                                if (points == 0) {
+                                    userHeartsTextView.setVisibility(View.GONE);
+                                    userHeartsAddnTextView.setText(R.string.yet_to_win_hearts);
+                                }
+                                else
+                                    userHeartsTextView.setText(String.valueOf(change.getDocument().getLong("points")));
                             }
-                            else
-                                userHeartsTextView.setText((Integer) change.getDocument().get("points"));
                         }
                     }
                 });

@@ -70,7 +70,6 @@ public class ViewPostActivity extends AppCompatActivity {
         setContentView(viewPostBinding.getRoot());
 
         initItems();
-        setImage();
         setDetails();
         initButtons();
         initialEmoticons(messageId);
@@ -168,13 +167,50 @@ public class ViewPostActivity extends AppCompatActivity {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         db = FirebaseFirestore.getInstance();
+
         extras = this.getIntent().getExtras();
         if (extras != null)
             messageId = extras.getString("EXTRA_MESSAGE_ID");
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         String message = extras.getString("EXTRA_MESSAGE");
         viewPostBinding.postDescription.setText(message);
         viewPostBinding.postDescriptionPreview.setText(message);
+
+        String imageUrl = extras.getString("EXTRA_IMAGE_URL");
+        if (imageUrl != null) {
+            Picasso.get()
+                    .load(imageUrl)
+                    .noFade()
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .placeholder(R.drawable.progress_animation)
+                    .resize(5000, 5000)
+                    .onlyScaleDown()
+                    .into(viewPostBinding.viewedImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get()
+                                    .load(imageUrl)
+                                    .noFade()
+                                    .resize(5000, 5000)
+                                    .onlyScaleDown()
+                                    .placeholder(R.drawable.progress_animation)
+                                    .into(viewPostBinding.viewedImage);
+                        }
+                    });
+        } else {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.scrollView.getLayoutParams();
+            params.addRule(RelativeLayout.BELOW, R.id.appBar);
+            viewPostBinding.scrollView.setLayoutParams(params);
+            viewPostBinding.imageContainer.setVisibility(View.GONE);
+            viewPostBinding.messageArea.setVisibility(View.VISIBLE);
+            viewPostBinding.messageTextField.requestFocus();
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             viewPostBinding.postDescription.setJustificationMode(JUSTIFICATION_MODE_INTER_WORD);
@@ -216,6 +252,18 @@ public class ViewPostActivity extends AppCompatActivity {
                 scrollStatus = 0;
             }
         });
+        viewPostBinding.userName.setOnClickListener(view -> {
+            String name = extras.getString("EXTRA_PERSON_NAME");
+            String uid = extras.getString("EXTRA_USER_ID");
+            if (uid!=null){
+                if (!uid.equals(user.getUid())) {
+                    Intent userProfileIntent = new Intent(ViewPostActivity.this, UserProfileActivity.class);
+                    userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
+                    userProfileIntent.putExtra("EXTRA_PERSON_UID", uid);
+                    startActivity(userProfileIntent);
+                }
+            }
+        });
     }
 
     private void sendComment(String comment) {
@@ -248,42 +296,6 @@ public class ViewPostActivity extends AppCompatActivity {
 
         viewPostBinding.userName.setText(userName);
         viewPostBinding.postTime.setText(sfdMainDate.format(timestamp));
-    }
-
-    private void setImage() {
-        String imageUrl = extras.getString("EXTRA_IMAGE_URL");
-        if (imageUrl != null) {
-            Picasso.get()
-                    .load(imageUrl)
-                    .noFade()
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .placeholder(R.drawable.progress_animation)
-                    .resize(5000, 5000)
-                    .onlyScaleDown()
-                    .into(viewPostBinding.viewedImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
-                        }
-
-                        @Override
-                        public void onError(Exception e) {
-                            Picasso.get()
-                                    .load(imageUrl)
-                                    .noFade()
-                                    .resize(5000, 5000)
-                                    .onlyScaleDown()
-                                    .placeholder(R.drawable.progress_animation)
-                                    .into(viewPostBinding.viewedImage);
-                        }
-                    });
-        } else {
-            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.scrollView.getLayoutParams();
-            params.addRule(RelativeLayout.BELOW, R.id.appBar);
-            viewPostBinding.scrollView.setLayoutParams(params);
-            viewPostBinding.imageContainer.setVisibility(View.GONE);
-            viewPostBinding.messageArea.setVisibility(View.VISIBLE);
-            viewPostBinding.messageTextField.requestFocus();
-        }
     }
 
     private void initialEmoticons(String messageId) {
