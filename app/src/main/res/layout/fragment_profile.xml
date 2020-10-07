@@ -230,7 +230,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:text="25"
                         android:textSize="24sp"
                         android:visibility="visible" />
 
@@ -238,7 +237,7 @@
                         android:id="@+id/addnTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hearts won"
+                        android:text="@string/hearts_won"
                         android:textSize="13sp" />
 
                 </LinearLayout>
