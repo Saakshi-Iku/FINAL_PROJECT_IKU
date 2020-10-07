@@ -15,7 +15,7 @@
         android:layout_height="56dp"
         android:translationZ="1dp"
         app:contentInsetStart="0dp"
-        android:background="#10000000"
+        android:background="#30000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -89,7 +89,7 @@
             android:id="@+id/view_handle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#10000000"
+            android:background="#30000000"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="5dp"

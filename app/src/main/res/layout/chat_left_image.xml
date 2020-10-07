@@ -86,9 +86,8 @@
             android:id="@+id/linkPreview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginHorizontal="5dp"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="5dp"
             android:background="@drawable/url_preview_background"
             android:padding="5dp"
             android:visibility="gone"
@@ -104,7 +103,8 @@
                 android:id="@+id/linkPreviewImage"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:src="@drawable/iku"
+                android:background="#20000000"
+                android:scaleType="centerCrop"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
@@ -172,7 +172,7 @@
             android:id="@+id/constraintLayout2"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginEnd="5dp"
+            android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linkPreview">
@@ -180,11 +180,8 @@
             <!--Message body-->
             <TextView
                 android:id="@+id/message"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:background="#DCDCDC"
                 android:gravity="start"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -212,10 +209,13 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginBottom="5dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/constraintLayout2"
-            android:paddingHorizontal="5dp">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@id/constraintLayout2">
 
             <!--Tertiary view for message timestamp-->
             <TextView
@@ -226,8 +226,7 @@
                 android:text="12:34 PM"
                 android:textColor="#4A4A4A"
                 android:textSize="12sp"
-                android:visibility="gone"
-                android:layout_marginBottom="5dp"/>
+                android:visibility="gone" />
 
             <!--flag to show message is edited-->
             <TextView
@@ -238,74 +237,78 @@
                 android:text="• Edited"
                 android:textColor="#4A4A4A"
                 android:textSize="10sp"
-                android:visibility="gone"
-                android:layout_marginBottom="5dp"/>
+                android:visibility="gone" />
 
         </RelativeLayout>
 
         <!--Comments preview-->
-        <View
-            android:id="@+id/div"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginVertical="5dp"
-            android:background="#20000000"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/commentsPreview"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addnView" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/commentsPreview"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginBottom="5dp"
             android:layout_marginHorizontal="5dp"
-            android:background="@drawable/url_preview_background"
-            android:minWidth="250dp"
-            android:padding="4dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/constraintLayout"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/div">
+            app:layout_constraintTop_toBottomOf="@id/addnView">
 
-            <!--Profile image-->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profileImage"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:padding="2dp"
-                android:background="@drawable/commentor_profile_image_bg"
-                android:backgroundTint="#DCDCDC"
-                app:layout_constraintBottom_toBottomOf="parent"
+            <View
+                android:id="@+id/div"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:background="#20000000"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--comment-->
-            <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/comment"
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:maxLines="3"
-                android:textSize="12sp"
-                android:layout_marginHorizontal="5dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/viewCommentPreview"
-                app:layout_constraintStart_toEndOf="@id/profileImage"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:background="@drawable/url_preview_background"
+                app:layout_goneMarginTop="5dp"
+                android:minWidth="250dp"
+                android:padding="4dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/div">
 
-            <ImageView
-                android:id="@+id/viewCommentPreview"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:padding="2dp"
-                android:src="@drawable/ic_next_36"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <!--Profile image-->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/commentor_profile_image_bg"
+                    android:backgroundTint="#DCDCDC"
+                    android:padding="2dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!--comment-->
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/comment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:maxLines="3"
+                    android:textSize="12sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/viewCommentPreview"
+                    app:layout_constraintStart_toEndOf="@id/profileImage"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/viewCommentPreview"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:padding="2dp"
+                    android:src="@drawable/ic_next_36"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
