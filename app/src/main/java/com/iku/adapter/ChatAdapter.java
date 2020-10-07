@@ -892,7 +892,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
             messageText.setText(chatModel.getMessage());
             messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
-            messageText.setLinkTextColor(Color.parseColor("#1111b7"));
+            messageText.setLinkTextColor(Color.parseColor("#343493"));
             BetterLinkMovementMethod
                     .linkify(Linkify.WEB_URLS, (Activity) mContext)
                     .setOnLinkLongClickListener(((textView, url) -> {

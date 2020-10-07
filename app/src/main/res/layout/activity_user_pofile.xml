@@ -63,7 +63,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Profile"
+                        android:text="@string/profile"
                         android:textSize="18sp" />
 
                 </LinearLayout>
@@ -84,113 +84,121 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!--Profile image-->
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profileImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!--User name-->
-            <TextView
-                android:id="@+id/userName"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/profileDetailsLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="5dp"
-                android:maxLines="1"
-                android:paddingHorizontal="10dp"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/profileImage"
-                app:layout_constraintTop_toTopOf="@id/profileImage" />
-
-            <!--About user-->
-            <LinearLayout
-                android:id="@+id/userBioView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginTop="5dp"
-                android:gravity="center_vertical"
                 android:padding="5dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/profileImage"
-                app:layout_constraintTop_toBottomOf="@id/userName">
+                app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:id="@+id/userBioIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_baseline_about_24" />
+                <!--Profile image-->
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="5dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/userBio"
+                <!--User name-->
+                <TextView
+                    android:id="@+id/userName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
-                    android:maxLines="6"
-                    android:textAlignment="textStart"
-                    android:textSize="13sp"
-                    android:visibility="visible" />
+                    android:maxLines="1"
+                    android:paddingHorizontal="10dp"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/profileImage"
+                    app:layout_constraintTop_toTopOf="@id/profileImage" />
 
-            </LinearLayout>
-
-            <!--Link in bio-->
-            <LinearLayout
-                android:id="@+id/linkInBioView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="5dp"
-                android:gravity="center_vertical"
-                android:padding="5dp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@id/profileImage"
-                app:layout_constraintTop_toBottomOf="@id/userBioView">
-
-                <ImageView
-                    android:id="@+id/linkInBioIcon"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_baseline_insert_link_24"
-                    android:visibility="visible" />
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/linkInBio"
-                    android:layout_width="wrap_content"
+                <!--About user-->
+                <LinearLayout
+                    android:id="@+id/userBioView"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
-                    android:linksClickable="true"
-                    android:maxLines="2"
-                    android:textAlignment="textStart"
-                    android:textColorLink="@color/colorAccent"
-                    android:textSize="13sp"
-                    android:visibility="visible" />
+                    android:layout_marginTop="5dp"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/profileImage"
+                    app:layout_constraintTop_toBottomOf="@id/userName">
 
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/userBioIcon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_baseline_about_24" />
+
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/userBio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:maxLines="6"
+                        android:textAlignment="textStart"
+                        android:textSize="13sp"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+
+                <!--Link in bio-->
+                <LinearLayout
+                    android:id="@+id/linkInBioView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="5dp"
+                    android:gravity="center_vertical"
+                    android:padding="5dp"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toEndOf="@id/profileImage"
+                    app:layout_constraintTop_toBottomOf="@id/userBioView">
+
+                    <ImageView
+                        android:id="@+id/linkInBioIcon"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_baseline_insert_link_24"
+                        android:visibility="visible" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/linkInBio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="5dp"
+                        android:autoLink="all"
+                        android:linksClickable="true"
+                        android:maxLines="2"
+                        android:textAlignment="textStart"
+                        android:textColorLink="@color/colorAccent"
+                        android:textSize="13sp"
+                        android:visibility="visible" />
+
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--headline numbers-->
             <LinearLayout
                 android:id="@+id/headlineNumbers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:isScrollContainer="false"
-                android:layout_marginTop="25dp"
                 android:weightSum="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileImage">
+                app:layout_constraintTop_toBottomOf="@id/profileDetailsLayout">
 
                 <!--Hearts count-->
                 <LinearLayout
@@ -210,7 +218,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
-                        android:text="25"
                         android:textSize="24sp"
                         android:visibility="visible" />
 
@@ -218,7 +225,7 @@
                         android:id="@+id/addnTextView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hearts won"
+                        android:text="@string/hearts_won"
                         android:textSize="13sp" />
 
                 </LinearLayout>
@@ -323,7 +330,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/badgesRecyclerView"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
 
                     </LinearLayout>
 

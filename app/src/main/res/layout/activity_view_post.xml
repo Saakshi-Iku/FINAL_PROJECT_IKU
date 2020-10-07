@@ -73,17 +73,21 @@
     <!--Image-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/imageContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
 
         <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/viewed_image"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="centerCrop"
-            app:layout_constraintDimensionRatio="H,0.618:1"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="@android:color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <LinearLayout
             android:id="@+id/view_handle"
@@ -149,8 +153,7 @@
                 android:id="@+id/postDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="5dp"
+                android:padding="10dp"
                 android:autoLink="email|web|map"
                 android:textColor="@android:color/white"
                 android:textSize="12sp" />
@@ -163,7 +166,7 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="70dp"
+                    android:layout_height="60dp"
                     android:gravity="center"
                     android:weightSum="6"
                     app:layout_constraintBottom_toBottomOf="parent"

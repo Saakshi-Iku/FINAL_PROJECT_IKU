@@ -40,5 +40,6 @@
     <string name="delete_comment">Delete comment</string>
     <string name="delete_message">Delete message</string>
     <string name="view_profile">View profile</string>
+    <string name="profile">Profile</string>
 
 </resources>
