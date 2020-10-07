@@ -18,10 +18,13 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iku.databinding.ActivityHomeBinding;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +64,7 @@ public class HomeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
         verifyUser();
-
+        verifyAdmin();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -191,6 +194,34 @@ public class HomeActivity extends AppCompatActivity {
                     .addOnFailureListener(e -> {
                     });
         }
+    }
+
+    private void verifyAdmin() {
+        SharedPreferences prefs = getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+        DocumentReference docRef = db.collection("groups").document("iku_earth");
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    ArrayList<String> admins = (ArrayList) document.get("admins");
+                    boolean isAdmin = false;
+                    for (String element : admins) {
+                        if (element.contains(mAuth.getUid())) {
+                            isAdmin = true;
+                            SharedPreferences.Editor edit = prefs.edit();
+                            edit.putBoolean("isAdmin", true);
+                            edit.apply();
+                            break;
+                        }
+                    }
+                    if(!isAdmin){
+                        SharedPreferences.Editor edit = prefs.edit();
+                        edit.putBoolean("isAdmin", false);
+                        edit.apply();
+                    }
+                }
+            }
+        });
     }
 
     @Override

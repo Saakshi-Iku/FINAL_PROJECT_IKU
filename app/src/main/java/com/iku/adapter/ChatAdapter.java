@@ -5,8 +5,10 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,7 +77,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 long timeStampDeletedRight = chatModel.getTimestamp();
                 chatRightDeletedViewHolder.messageTime.setText(sfd.format(new Date(timeStampDeletedRight)));
                 if(chatModel.getDeletedBy().equals("admin"))
-                    chatRightDeletedViewHolder.messageText.setText("This message was reported by others and deleted by an admin.");
+                    chatRightDeletedViewHolder.messageText.setText("Mesaage reported by others and deleted by admin.");
                 else
                     chatRightDeletedViewHolder.messageText.setText("This message was deleted.");
                 break;
@@ -237,28 +239,37 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime3.setText(sfd.format(new Date(timeStampLeft)));
             senderName.setText(chatModel.getUserName());
 
-            DocumentReference docRef = db.collection("groups").document("iku_earth");
-            docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        ArrayList<String> admins = (ArrayList) document.get("admins");
-                        boolean isAdmin = false;
-                        for (String element : admins) {
-                            if (element.contains(user.getUid())) {
-                                isAdmin = true;
-                                break;
-                            }
-                        }
-                        if (isAdmin) {
-                            if (chatModel.getSpamCount() > 0) {
-                                reportLayout.setVisibility(View.VISIBLE);
-                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                            }
-                        }
-                    }
+            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+            boolean isAdmin = pref.getBoolean("isAdmin", false);
+            if (isAdmin) {
+                if (chatModel.getSpamCount() > 0) {
+                    reportLayout.setVisibility(View.VISIBLE);
+                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
                 }
-            });
+            }
+            //SharedPreferences pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
+//            DocumentReference docRef = db.collection("groups").document("iku_earth");
+//            docRef.get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        ArrayList<String> admins = (ArrayList) document.get("admins");
+//                        boolean isAdmin = false;
+//                        for (String element : admins) {
+//                            if (element.contains(user.getUid())) {
+//                                isAdmin = true;
+//                                break;
+//                            }
+//                        }
+//                        if (isAdmin) {
+//                            if (chatModel.getSpamCount() > 0) {
+//                                reportLayout.setVisibility(View.VISIBLE);
+//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+//                            }
+//                        }
+//                    }
+//                }
+//            });
 
             if (chatModel.isEdited())
                 edited.setVisibility(View.VISIBLE);
@@ -382,28 +393,37 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime3.setText(sfd.format(new Date(timeStampLeft)));
             senderName.setText(chatModel.getUserName());
 
-            DocumentReference docRef = db.collection("groups").document("iku_earth");
-            docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        ArrayList<String> admins = (ArrayList) document.get("admins");
-                        boolean isAdmin = false;
-                        for (String element : admins) {
-                            if (element.contains(user.getUid())) {
-                                isAdmin = true;
-                                break;
-                            }
-                        }
-                        if (isAdmin) {
-                            if (chatModel.getSpamCount() > 0) {
-                                reportLayout.setVisibility(View.VISIBLE);
-                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                            }
-                        }
-                    }
+            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+            boolean isAdmin = pref.getBoolean("isAdmin", false);
+            if (isAdmin) {
+                if (chatModel.getSpamCount() > 0) {
+                    reportLayout.setVisibility(View.VISIBLE);
+                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
                 }
-            });
+            }
+
+//            DocumentReference docRef = db.collection("groups").document("iku_earth");
+//            docRef.get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        ArrayList<String> admins = (ArrayList) document.get("admins");
+//                        boolean isAdmin = false;
+//                        for (String element : admins) {
+//                            if (element.contains(user.getUid())) {
+//                                isAdmin = true;
+//                                break;
+//                            }
+//                        }
+//                        if (isAdmin) {
+//                            if (chatModel.getSpamCount() > 0) {
+//                                reportLayout.setVisibility(View.VISIBLE);
+//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+//                            }
+//                        }
+//                    }
+//                }
+//            });
 
             if (chatModel.isEdited())
                 edited.setVisibility(View.VISIBLE);
@@ -559,28 +579,37 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime3.setText(sfd.format(new Date(timeStampImageLeft)));
             senderName.setText(chatModel.getUserName());
 
-            DocumentReference docRef = db.collection("groups").document("iku_earth");
-            docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        ArrayList<String> admins = (ArrayList) document.get("admins");
-                        boolean isAdmin = false;
-                        for (String element : admins) {
-                            if (element.contains(user.getUid())) {
-                                isAdmin = true;
-                                break;
-                            }
-                        }
-                        if (isAdmin) {
-                            if (chatModel.getSpamCount() > 0) {
-                                reportLayout.setVisibility(View.VISIBLE);
-                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                            }
-                        }
-                    }
+            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+            boolean isAdmin = pref.getBoolean("isAdmin", false);
+            if (isAdmin) {
+                if (chatModel.getSpamCount() > 0) {
+                    reportLayout.setVisibility(View.VISIBLE);
+                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
                 }
-            });
+            }
+
+//            DocumentReference docRef = db.collection("groups").document("iku_earth");
+//            docRef.get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        ArrayList<String> admins = (ArrayList) document.get("admins");
+//                        boolean isAdmin = false;
+//                        for (String element : admins) {
+//                            if (element.contains(user.getUid())) {
+//                                isAdmin = true;
+//                                break;
+//                            }
+//                        }
+//                        if (isAdmin) {
+//                            if (chatModel.getSpamCount() > 0) {
+//                                reportLayout.setVisibility(View.VISIBLE);
+//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+//                            }
+//                        }
+//                    }
+//                }
+//            });
 
             if (senderName.getVisibility() == View.VISIBLE) {
                 messageTime.setVisibility(View.VISIBLE);
@@ -717,28 +746,37 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime.setText(sfd.format(new Date(timeStampImageRight)));
             messageTime2.setText(sfd.format(new Date(timeStampImageRight)));
 
-            DocumentReference docRef = db.collection("groups").document("iku_earth");
-            docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        ArrayList<String> admins = (ArrayList) document.get("admins");
-                        boolean isAdmin = false;
-                        for (String element : admins) {
-                            if (element.contains(user.getUid())) {
-                                isAdmin = true;
-                                break;
-                            }
-                        }
-                        if (isAdmin) {
-                            if (chatModel.getSpamCount() > 0) {
-                                reportLayout.setVisibility(View.VISIBLE);
-                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                            }
-                        }
-                    }
+            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+            boolean isAdmin = pref.getBoolean("isAdmin", false);
+            if (isAdmin) {
+                if (chatModel.getSpamCount() > 0) {
+                    reportLayout.setVisibility(View.VISIBLE);
+                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
                 }
-            });
+            }
+
+//            DocumentReference docRef = db.collection("groups").document("iku_earth");
+//            docRef.get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        ArrayList<String> admins = (ArrayList) document.get("admins");
+//                        boolean isAdmin = false;
+//                        for (String element : admins) {
+//                            if (element.contains(user.getUid())) {
+//                                isAdmin = true;
+//                                break;
+//                            }
+//                        }
+//                        if (isAdmin) {
+//                            if (chatModel.getSpamCount() > 0) {
+//                                reportLayout.setVisibility(View.VISIBLE);
+//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+//                            }
+//                        }
+//                    }
+//                }
+//            });
 
             if (chatModel.getTopComment() != null) {
                 commentsLayout.setVisibility(View.VISIBLE);
@@ -917,28 +955,37 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampRight)));
             upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
 
-            DocumentReference docRef = db.collection("groups").document("iku_earth");
-            docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        ArrayList<String> admins = (ArrayList) document.get("admins");
-                        boolean isAdmin = false;
-                        for (String element : admins) {
-                            if (element.contains(user.getUid())) {
-                                isAdmin = true;
-                                break;
-                            }
-                        }
-                        if (isAdmin) {
-                            if (chatModel.getSpamCount() > 0) {
-                                reportLayout.setVisibility(View.VISIBLE);
-                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                            }
-                        }
-                    }
+            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+            boolean isAdmin = pref.getBoolean("isAdmin", false);
+            if (isAdmin) {
+                if (chatModel.getSpamCount() > 0) {
+                    reportLayout.setVisibility(View.VISIBLE);
+                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
                 }
-            });
+            }
+
+//            DocumentReference docRef = db.collection("groups").document("iku_earth");
+//            docRef.get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        ArrayList<String> admins = (ArrayList) document.get("admins");
+//                        boolean isAdmin = false;
+//                        for (String element : admins) {
+//                            if (element.contains(user.getUid())) {
+//                                isAdmin = true;
+//                                break;
+//                            }
+//                        }
+//                        if (isAdmin) {
+//                            if (chatModel.getSpamCount() > 0) {
+//                                reportLayout.setVisibility(View.VISIBLE);
+//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+//                            }
+//                        }
+//                    }
+//                }
+//            });
 
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
@@ -1048,28 +1095,37 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampRight)));
             upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
 
-            DocumentReference docRef = db.collection("groups").document("iku_earth");
-            docRef.get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        ArrayList<String> admins = (ArrayList) document.get("admins");
-                        boolean isAdmin = false;
-                        for (String element : admins) {
-                            if (element.contains(user.getUid())) {
-                                isAdmin = true;
-                                break;
-                            }
-                        }
-                        if (isAdmin) {
-                            if (chatModel.getSpamCount() > 0) {
-                                reportLayout.setVisibility(View.VISIBLE);
-                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                            }
-                        }
-                    }
+            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+            boolean isAdmin = pref.getBoolean("isAdmin", false);
+            if (isAdmin) {
+                if (chatModel.getSpamCount() > 0) {
+                    reportLayout.setVisibility(View.VISIBLE);
+                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
                 }
-            });
+            }
+
+//            DocumentReference docRef = db.collection("groups").document("iku_earth");
+//            docRef.get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//                        ArrayList<String> admins = (ArrayList) document.get("admins");
+//                        boolean isAdmin = false;
+//                        for (String element : admins) {
+//                            if (element.contains(user.getUid())) {
+//                                isAdmin = true;
+//                                break;
+//                            }
+//                        }
+//                        if (isAdmin) {
+//                            if (chatModel.getSpamCount() > 0) {
+//                                reportLayout.setVisibility(View.VISIBLE);
+//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+//                            }
+//                        }
+//                    }
+//                }
+//            });
 
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
@@ -1122,7 +1178,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 messageTime2.setVisibility(View.VISIBLE);
             }
             if(chatModel.getDeletedBy().equals("admin"))
-                messageText.setText("This message was reported by others and deleted by an admin.");
+                messageText.setText("Mesaage reported by others and deleted by admin.");
             else
                 messageText.setText("This message was deleted.");
         }
