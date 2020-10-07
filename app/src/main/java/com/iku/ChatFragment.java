@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -417,7 +416,6 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
         });
         if (!extractedUrls.isEmpty()) {
-            Log.i(TAG, "EXTRACT URLS NOT EMPTY RAN: ");
             richPreview.getPreview(extractedUrls.get(0));
         } else {
             if (user != null) {
@@ -962,6 +960,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                 RelativeLayout profileView = parentView.findViewById(R.id.profile_layout);
                 RelativeLayout updateMessageView = parentView.findViewById(R.id.edit_option_layout);
                 RelativeLayout deleteMessageView = parentView.findViewById(R.id.delete_layout);
+                RelativeLayout addCommentView = parentView.findViewById(R.id.comment_layout);
                 RelativeLayout reportView = parentView.findViewById(R.id.report_layout);
 
                 ImageButton heartUpView = parentView.findViewById(R.id.chooseHeart);
@@ -1046,8 +1045,31 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     userVote(documentID, "downvoters", position);
                     bottomSheetDialog.dismiss();
                 });
-
                 String UID = chatadapter.getItem(position).getUID();
+                addCommentView.setOnClickListener(view1 -> {
+                    Intent viewChatImageIntent = new Intent(getContext(), ViewPostActivity.class);
+                    String name = chatadapter.getItem(position).getUserName();
+                    String url = chatadapter.getItem(position).getimageUrl();
+                    String originalUrl = chatadapter.getItem(position).getOriginalImageUrl();
+                    String message = chatadapter.getItem(position).getMessage();
+                    long timestamp = chatadapter.getItem(position).getTimestamp();
+                    String userUid = chatadapter.getItem(position).getUID();
+                    if (name != null) {
+                        viewChatImageIntent.putExtra("EXTRA_PERSON_NAME", name);
+                        viewChatImageIntent.putExtra("EXTRA_MESSAGE", message);
+                        if (originalUrl != null) {
+                            viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", originalUrl);
+                            viewChatImageIntent.putExtra("EXTRA_IMAGE_SECOND_URL", url);
+                        } else
+                            viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
+                        viewChatImageIntent.putExtra("EXTRA_POST_TIMESTAMP", timestamp);
+                        viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", documentID);
+                        viewChatImageIntent.putExtra("EXTRA_USER_ID", userUid);
+                        bottomSheetDialog.dismiss();
+                        startActivity(viewChatImageIntent);
+                    }
+                });
+
                 if (UID.equals(user.getUid())) {
                     profileView.setVisibility(View.GONE);
                     reportView.setVisibility(View.GONE);

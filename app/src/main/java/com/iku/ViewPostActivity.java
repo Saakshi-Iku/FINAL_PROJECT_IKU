@@ -62,7 +62,6 @@ public class ViewPostActivity extends AppCompatActivity {
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private int scrollStatus = 0;
-    private int parentHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,8 +196,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
                 params.addRule(RelativeLayout.BELOW, R.id.appBar);
                 viewPostBinding.imageContainer.setLayoutParams(params);
-                parentHeight = viewPostBinding.imageContainer.getMaxHeight();
-                slideView(viewPostBinding.imageContainer,viewPostBinding.imageContainer.getLayoutParams().height,400);
+                slideView(viewPostBinding.imageContainer, viewPostBinding.imageContainer.getLayoutParams().height, 400);
                 viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
                 viewPostBinding.seeIcon.setRotation(90);
                 viewPostBinding.seeType.setText(R.string.see_less);
@@ -209,7 +207,7 @@ public class ViewPostActivity extends AppCompatActivity {
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
                 params.removeRule(RelativeLayout.BELOW);
                 viewPostBinding.imageContainer.setLayoutParams(params);
-                slideView(viewPostBinding.imageContainer,viewPostBinding.imageContainer.getLayoutParams().height, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                slideView(viewPostBinding.imageContainer, viewPostBinding.imageContainer.getLayoutParams().height, ConstraintLayout.LayoutParams.MATCH_PARENT);
                 viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
                 viewPostBinding.seeIcon.setRotation(-90);
                 viewPostBinding.seeType.setText(R.string.see_more);
@@ -278,8 +276,14 @@ public class ViewPostActivity extends AppCompatActivity {
                                     .into(viewPostBinding.viewedImage);
                         }
                     });
+        } else {
+            RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.scrollView.getLayoutParams();
+            params.addRule(RelativeLayout.BELOW, R.id.appBar);
+            viewPostBinding.scrollView.setLayoutParams(params);
+            viewPostBinding.imageContainer.setVisibility(View.GONE);
+            viewPostBinding.messageArea.setVisibility(View.VISIBLE);
+            viewPostBinding.messageTextField.requestFocus();
         }
-
     }
 
     private void initialEmoticons(String messageId) {
@@ -674,24 +678,17 @@ public class ViewPostActivity extends AppCompatActivity {
         viewPostBinding.choose6.setEnabled(status);
     }
 
-    public static void slideView(View view,
-                                 int currentHeight,
-                                 int newHeight) {
-
+    public static void slideView(View view, int currentHeight, int newHeight) {
         ValueAnimator slideAnimator = ValueAnimator
                 .ofInt(currentHeight, newHeight)
                 .setDuration(500);
-
         /* We use an update listener which listens to each tick
          * and manually updates the height of the view  */
-
         slideAnimator.addUpdateListener(animation1 -> {
             view.getLayoutParams().height = (Integer) animation1.getAnimatedValue();
             view.requestLayout();
         });
-
         /*  We use an animationSet to play the animation  */
-
         AnimatorSet animationSet = new AnimatorSet();
         animationSet.setInterpolator(new AccelerateDecelerateInterpolator());
         animationSet.play(slideAnimator);
