@@ -120,6 +120,7 @@
                 android:layout_marginTop="5dp"
                 android:gravity="center_vertical"
                 android:padding="5dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/profileImage"
@@ -152,6 +153,7 @@
                 android:layout_marginStart="5dp"
                 android:gravity="center_vertical"
                 android:padding="5dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@id/profileImage"
@@ -169,7 +171,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
-                    android:autoLink="all"
                     android:linksClickable="true"
                     android:maxLines="2"
                     android:textAlignment="textStart"
@@ -184,12 +185,12 @@
                 android:id="@+id/headlineNumbers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
                 android:isScrollContainer="false"
+                android:layout_marginTop="25dp"
                 android:weightSum="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linkInBioView">
+                app:layout_constraintTop_toBottomOf="@+id/profileImage">
 
                 <!--Hearts count-->
                 <LinearLayout
@@ -218,7 +219,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Hearts won"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -228,7 +229,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginVertical="5dp"
                     android:background="@android:color/darker_gray"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
                 <!--Habits count-->
                 <LinearLayout
@@ -240,7 +241,7 @@
                     android:gravity="center"
                     android:orientation="vertical"
                     android:paddingVertical="5dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/userHabits"
@@ -254,7 +255,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Habit streaks"
-                        android:textSize="13sp"/>
+                        android:textSize="13sp" />
 
                 </LinearLayout>
 
@@ -267,7 +268,7 @@
                 android:layout_height="45dp"
                 android:background="#66DCDCDC"
                 android:gravity="center"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/badgesView"
                 app:layout_constraintTop_toBottomOf="@id/headlineNumbers">
 
@@ -349,6 +350,7 @@
                 android:background="#66DCDCDC"
                 android:minHeight="20dp"
                 android:paddingHorizontal="8dp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/endOfListText"
                 app:layout_constraintTop_toBottomOf="@id/badgesView" />
 
@@ -362,7 +364,7 @@
                 android:paddingVertical="5dp"
                 android:text="That's All Folks!"
                 android:textSize="10sp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/recyclerView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

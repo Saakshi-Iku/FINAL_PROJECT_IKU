@@ -4,26 +4,15 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
 import com.amulyakhare.textdrawable.TextDrawable;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.MetadataChanges;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.iku.databinding.ActivityUserPofileBinding;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -31,9 +20,6 @@ import com.squareup.picasso.Picasso;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-
-    private ImageView profilePicture;
-    private TextView nameTextView, userHeartsTextView, userHeartsAddnTextView, userLinkTextView, linkHeaderTextView,bioHeaderTextView,bioTextView;
     private FirebaseFirestore db;
 
     private String userName;
@@ -58,21 +44,14 @@ public class UserProfileActivity extends AppCompatActivity {
 
         initButtons();
 
-        nameTextView = findViewById(R.id.userName);
-        nameTextView.setText(userName);
-        profilePicture = findViewById(R.id.profileImage);
-        userHeartsTextView = findViewById(R.id.userHearts);
-        userHeartsAddnTextView = findViewById(R.id.addnTextView1);
-        userLinkTextView = findViewById(R.id.linkInBio);
-        bioTextView=findViewById(R.id.userBio);
+
+        userPofileBinding.userName.setText(userName);
         getUserDetails(userUID);
         getPicture(userUID);
     }
 
     private void initButtons() {
-        userPofileBinding.backButton.setOnClickListener(view -> {
-            onBackPressed();
-        });
+        userPofileBinding.backButton.setOnClickListener(view -> onBackPressed());
         userPofileBinding.linkInBio.setOnClickListener(view -> {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             CustomTabsIntent customTabsIntent = builder.build();
@@ -82,48 +61,45 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private void getPicture(String uid) {
         db.collection("users").document(uid).get()
-                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if (task.isSuccessful()) {
-                            DocumentSnapshot document = task.getResult();
-                            if (document.exists()) {
-                                String firstLetter, secondLetter;
-                                String url = (String) document.get("imageUrl");
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            String firstLetter, secondLetter;
+                            String url = (String) document.get("imageUrl");
 
-                                if (url != null) {
-                                    Picasso.get()
-                                            .load(url)
-                                            .noFade()
-                                            .networkPolicy(NetworkPolicy.OFFLINE)
-                                            .into(profilePicture, new Callback() {
+                            if (url != null) {
+                                Picasso.get()
+                                        .load(url)
+                                        .noFade()
+                                        .networkPolicy(NetworkPolicy.OFFLINE)
+                                        .into(userPofileBinding.profileImage, new Callback() {
 
-                                                @Override
-                                                public void onSuccess() {
-                                                }
+                                            @Override
+                                            public void onSuccess() {
+                                            }
 
-                                                @Override
-                                                public void onError(Exception e) {
-                                                    Picasso.get()
-                                                            .load(url)
-                                                            .noFade()
-                                                            .into(profilePicture);
-                                                }
-                                            });
-                                } else {
+                                            @Override
+                                            public void onError(Exception e) {
+                                                Picasso.get()
+                                                        .load(url)
+                                                        .noFade()
+                                                        .into(userPofileBinding.profileImage);
+                                            }
+                                        });
+                            } else {
 
-                                    firstLetter = String.valueOf(userName.charAt(0));
-                                    secondLetter = userName.substring(userName.indexOf(' ') + 1, userName.indexOf(' ') + 2).trim();
+                                firstLetter = String.valueOf(userName.charAt(0));
+                                secondLetter = userName.substring(userName.indexOf(' ') + 1, userName.indexOf(' ') + 2).trim();
 
-                                    TextDrawable drawable = TextDrawable.builder()
-                                            .beginConfig()
-                                            .width(200)
-                                            .height(200)
-                                            .endConfig()
-                                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                                TextDrawable drawable = TextDrawable.builder()
+                                        .beginConfig()
+                                        .width(200)
+                                        .height(200)
+                                        .endConfig()
+                                        .buildRect(firstLetter + secondLetter, Color.DKGRAY);
 
-                                    profilePicture.setImageDrawable(drawable);
-                                }
+                                userPofileBinding.profileImage.setImageDrawable(drawable);
                             }
                         }
                     }
@@ -137,27 +113,26 @@ public class UserProfileActivity extends AppCompatActivity {
                         return;
                     }
 
-                    if (querySnapshot!=null){
+                    if (querySnapshot != null) {
                         for (DocumentChange change : querySnapshot.getDocumentChanges()) {
                             if (change.getType() == DocumentChange.Type.ADDED) {
                                 long points = (long) change.getDocument().get("points");
                                 String link = (String) change.getDocument().get("userBioLink");
                                 String bio = (String) change.getDocument().get("userBio");
-                                if (bio!=null&& !bio.equals("")){
-                                    userPofileBinding.userBio.setVisibility(View.VISIBLE);
+                                if (bio != null && !bio.equals("")) {
+                                    userPofileBinding.userBioView.setVisibility(View.VISIBLE);
                                     userPofileBinding.userBio.setText(bio);
                                 }
-                                if (link!=null&& !link.equals("")){
-                                    userPofileBinding.linkInBio.setVisibility(View.VISIBLE);
+                                if (link != null && !link.equals("")) {
+                                    userPofileBinding.linkInBioView.setVisibility(View.VISIBLE);
                                     userPofileBinding.linkInBio.setText(link);
                                 }
 
                                 if (points == 0) {
-                                    userHeartsTextView.setVisibility(View.GONE);
-                                    userHeartsAddnTextView.setText(R.string.yet_to_win_hearts);
-                                }
-                                else
-                                    userHeartsTextView.setText(String.valueOf(change.getDocument().getLong("points")));
+                                    userPofileBinding.userHearts.setVisibility(View.GONE);
+                                    userPofileBinding.userHearts.setText(R.string.yet_to_win_hearts);
+                                } else
+                                    userPofileBinding.userHearts.setText(String.valueOf(change.getDocument().getLong("points")));
                             }
                         }
                     }
