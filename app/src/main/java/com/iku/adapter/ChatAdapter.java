@@ -549,7 +549,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             .width(200)
                             .height(200)
                             .endConfig()
-                            .buildRect(firstLetter + secondLetter, Color.LTGRAY);
+                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
                     commenterProfilePicture.setImageDrawable(drawable);
                 }
             }
