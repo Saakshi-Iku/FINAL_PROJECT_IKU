@@ -170,6 +170,7 @@
             android:layout_marginHorizontal="40dp"
             android:layout_marginTop="20dp"
             android:hint="What's your story?"
+            android:inputType="textCapSentences"
             android:maxLength="140"
             android:maxLines="6"
             android:minLines="1"
@@ -186,7 +187,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="10dp"
-            android:text="23 characters left"
             android:textSize="10sp"
             app:layout_constraintBottom_toBottomOf="@id/userBio"
             app:layout_constraintEnd_toEndOf="@id/userBio" />

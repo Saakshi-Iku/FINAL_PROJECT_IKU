@@ -28,7 +28,7 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="25dp"
         android:gravity="center"
-        android:text="Check your inbox for verification email.\nClick the link to verify your email before proceeding"
+        android:text="@string/check_your_inbox_for_verification_email_nclick_the_link_to_verify_your_email_before_proceeding"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iku_earth" />

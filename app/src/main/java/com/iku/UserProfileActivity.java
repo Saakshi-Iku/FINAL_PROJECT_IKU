@@ -131,10 +131,10 @@ public class UserProfileActivity extends AppCompatActivity {
 
                                 if (points == 0) {
                                     userPofileBinding.userHearts.setVisibility(View.GONE);
-                                    userPofileBinding.userHearts.setText(R.string.yet_to_win_hearts);
-                                } else
+                                    userPofileBinding.addnTextView.setText(R.string.yet_to_win_hearts);
+                                } else{
                                     userPofileBinding.userHearts.setText(String.valueOf(change.getDocument().getLong("points")));
-                            }
+                            }}
                         }
                     }
                 });

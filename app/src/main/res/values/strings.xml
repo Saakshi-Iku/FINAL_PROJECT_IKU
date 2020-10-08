@@ -40,5 +40,6 @@
     <string name="delete_message">Delete message</string>
     <string name="view_profile">View profile</string>
     <string name="profile">Profile</string>
+    <string name="check_your_inbox_for_verification_email_nclick_the_link_to_verify_your_email_before_proceeding">Check your inbox for verification email.\nClick the link to verify your email before proceeding</string>
 
 </resources>
