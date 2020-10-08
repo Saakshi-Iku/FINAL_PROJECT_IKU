@@ -226,14 +226,16 @@ public class ChatImageActivity extends AppCompatActivity {
         super.onBackPressed();
         if (uploadTaskOriginal != null)
             uploadTaskOriginal.cancel();
-        mStorageRef.child(originalFileName).delete().addOnSuccessListener(aVoid -> {
-        }).addOnFailureListener(e -> {
-            //Log event
-            Bundle params = new Bundle();
-            params.putString("type", "image");
-            params.putString("message", "image deletion fail because not found.");
-            mFirebaseAnalytics.logEvent("image_delete_fail", params);
-        });
+        if (originalFileName != null) {
+            mStorageRef.child(originalFileName).delete().addOnSuccessListener(aVoid -> {
+            }).addOnFailureListener(e -> {
+                //Log event
+                Bundle params = new Bundle();
+                params.putString("type", "image");
+                params.putString("message", "image deletion fail because not found.");
+                mFirebaseAnalytics.logEvent("image_delete_fail", params);
+            });
+        }
     }
 
     @Override
