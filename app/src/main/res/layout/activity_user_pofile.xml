@@ -108,7 +108,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="5dp"
                     android:maxLines="1"
-                    android:paddingHorizontal="10dp"
+                    android:paddingHorizontal="5dp"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
