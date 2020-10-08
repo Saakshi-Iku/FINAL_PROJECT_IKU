@@ -1117,53 +1117,55 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         profileView.setVisibility(View.VISIBLE);
                         boolean isReported = false;
                         ArrayList<String> SpamReportedByArray = chatadapter.getItem(position).getSpamReportedBy();
-                        for (String element : SpamReportedByArray) {
-                            if (element.contains(user.getUid())) {
-                                isReported = true;
-                                break;
+                        if (SpamReportedByArray != null) {
+                            for (String element : SpamReportedByArray) {
+                                if (element.contains(user.getUid())) {
+                                    isReported = true;
+                                    break;
+                                }
                             }
-                        }
-                        if (!isReported) {
-                            reportView.setVisibility(View.VISIBLE);
-                            reportView.setOnClickListener(view13 -> {
-                                MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
-                                materialAlertDialogBuilder.setTitle("Report Spam");
-                                materialAlertDialogBuilder.setMessage("Are you sure?");
-                                materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
-                                    DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
-                                    docRef.get().addOnCompleteListener(task -> {
-                                        if (task.isSuccessful()) {
-                                            DocumentSnapshot document = task.getResult();
-                                            if (document.exists()) {
-                                                ArrayList<String> spamReportedArray = (ArrayList) document.get("spamReportedBy");
-                                                long spamCount = (long) document.get("spamCount");
-                                                if (spamReportedArray != null) {
-                                                    if (!spamReportedArray.contains(user.getUid())) {
-                                                        Map<String, Object> map = new HashMap<>();
-                                                        map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
-                                                        map.put("spamCount", spamCount + 1);
-                                                        if (spamCount >= 4) {
-                                                            map.put("spam", true);
-                                                            map.put("deleted", true);
-                                                            map.put("deletedBy", "users");
+                            if (!isReported) {
+                                reportView.setVisibility(View.VISIBLE);
+                                reportView.setOnClickListener(view13 -> {
+                                    MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
+                                    materialAlertDialogBuilder.setTitle("Report Spam");
+                                    materialAlertDialogBuilder.setMessage("Are you sure?");
+                                    materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
+                                        DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
+                                        docRef.get().addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    ArrayList<String> spamReportedArray = (ArrayList) document.get("spamReportedBy");
+                                                    long spamCount = (long) document.get("spamCount");
+                                                    if (spamReportedArray != null) {
+                                                        if (!spamReportedArray.contains(user.getUid())) {
+                                                            Map<String, Object> map = new HashMap<>();
+                                                            map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
+                                                            map.put("spamCount", spamCount + 1);
+                                                            if (spamCount >= 4) {
+                                                                map.put("spam", true);
+                                                                map.put("deleted", true);
+                                                                map.put("deletedBy", "users");
+                                                            }
+                                                            db.collection("iku_earth_messages").document(documentID)
+                                                                    .update(map)
+                                                                    .addOnSuccessListener(aVoid -> {
+                                                                    });
                                                         }
-                                                        db.collection("iku_earth_messages").document(documentID)
-                                                                .update(map)
-                                                                .addOnSuccessListener(aVoid -> {
-                                                                });
                                                     }
                                                 }
                                             }
-                                        }
-                                    });
-                                    bottomSheetDialog.dismiss();
-                                    //log event
-                                    Bundle spam_bundle = new Bundle();
-                                    spam_bundle.putString("uid", user.getUid());
-                                    mFirebaseAnalytics.logEvent("message_reported_spam", spam_bundle);
-                                }).setNegativeButton("Cancel", (dialogInterface, i) -> {
-                                }).show();
-                            });
+                                        });
+                                        bottomSheetDialog.dismiss();
+                                        //log event
+                                        Bundle spam_bundle = new Bundle();
+                                        spam_bundle.putString("uid", user.getUid());
+                                        mFirebaseAnalytics.logEvent("message_reported_spam", spam_bundle);
+                                    }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                    }).show();
+                                });
+                            }
                         }
 
                         profileView.setOnClickListener(view2 -> {
