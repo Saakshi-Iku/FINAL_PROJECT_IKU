@@ -394,6 +394,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 linkPreviewLayout.setVisibility(View.VISIBLE);
                 if (!chatModel.getLinkPreviewImageUrl().equals(""))
                     Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
+                else
+                    linkPreviewImage.setVisibility(View.GONE);
                 linkTitle.setText(chatModel.getLinkPreviewTitle());
                 linkDescription.setText(chatModel.getLinkPreviewDesc());
                 linkSource.setText(chatModel.getLinkPreviewUrl());
@@ -925,6 +927,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 linkPreviewLayout.setVisibility(View.VISIBLE);
                 if (!chatModel.getLinkPreviewImageUrl().equals(""))
                     Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
+                else
+                    linkPreviewImage.setVisibility(View.GONE);
                 linkTitle.setText(chatModel.getLinkPreviewTitle());
                 linkDescription.setText(chatModel.getLinkPreviewDesc());
                 linkSource.setText(chatModel.getLinkPreviewUrl());
@@ -1154,6 +1158,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 linkPreviewLayout.setVisibility(View.VISIBLE);
                 if (!chatModel.getLinkPreviewImageUrl().equals(""))
                     Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
+                else
+                    linkPreviewImage.setVisibility(View.GONE);
                 linkTitle.setText(chatModel.getLinkPreviewTitle());
                 linkDescription.setText(chatModel.getLinkPreviewDesc());
                 linkSource.setText(chatModel.getLinkPreviewUrl());
@@ -1709,6 +1715,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 linkPreviewLayout.setVisibility(View.VISIBLE);
                 if (!chatModel.getLinkPreviewImageUrl().equals(""))
                     Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
+                else
+                    linkPreviewImage.setVisibility(View.GONE);
                 linkTitle.setText(chatModel.getLinkPreviewTitle());
                 linkDescription.setText(chatModel.getLinkPreviewDesc());
                 linkSource.setText(chatModel.getLinkPreviewUrl());
