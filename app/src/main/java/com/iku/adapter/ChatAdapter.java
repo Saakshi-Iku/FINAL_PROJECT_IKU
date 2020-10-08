@@ -213,7 +213,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         } else {
             SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
             boolean isAdmin = pref.getBoolean("isAdmin", false);
-            if (isAdmin) {
+            if (isAdmin && getItem(position).getSpamCount() > 0) {
                 if (getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("text") && getItem(position).getLinkPreview() == 0)
                     return MSG_TYPE_RIGHT_SPAM;
                 else if (!getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("text") && getItem(position).getLinkPreview() == 0)
@@ -1056,14 +1056,9 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime3.setText(sfd.format(new Date(timeStampLeft)));
             senderName.setText(chatModel.getUserName());
 
-            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
-            boolean isAdmin = pref.getBoolean("isAdmin", false);
-            if (isAdmin) {
-                if (chatModel.getSpamCount() > 0) {
-                    reportLayout.setVisibility(View.VISIBLE);
-                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
-            }
+            reportLayout.setVisibility(View.VISIBLE);
+            spamCount.setText(String.valueOf(chatModel.getSpamCount()));
+
 
             if (chatModel.isEdited())
                 edited.setVisibility(View.VISIBLE);
@@ -1187,14 +1182,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime3.setText(sfd.format(new Date(timeStampLeft)));
             senderName.setText(chatModel.getUserName());
 
-            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
-            boolean isAdmin = pref.getBoolean("isAdmin", false);
-            if (isAdmin) {
-                if (chatModel.getSpamCount() > 0) {
-                    reportLayout.setVisibility(View.VISIBLE);
-                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
-            }
+            reportLayout.setVisibility(View.VISIBLE);
+            spamCount.setText(String.valueOf(chatModel.getSpamCount()));
 
             if (chatModel.isEdited())
                 edited.setVisibility(View.VISIBLE);
@@ -1350,14 +1339,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime3.setText(sfd.format(new Date(timeStampImageLeft)));
             senderName.setText(chatModel.getUserName());
 
-            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
-            boolean isAdmin = pref.getBoolean("isAdmin", false);
-            if (isAdmin) {
-                if (chatModel.getSpamCount() > 0) {
-                    reportLayout.setVisibility(View.VISIBLE);
-                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
-            }
+            reportLayout.setVisibility(View.VISIBLE);
+            spamCount.setText(String.valueOf(chatModel.getSpamCount()));
 
             if (senderName.getVisibility() == View.VISIBLE) {
                 messageTime.setVisibility(View.VISIBLE);
@@ -1494,15 +1477,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime.setText(sfd.format(new Date(timeStampImageRight)));
             messageTime2.setText(sfd.format(new Date(timeStampImageRight)));
 
-            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
-            boolean isAdmin = pref.getBoolean("isAdmin", false);
-            if (isAdmin) {
-                if (chatModel.getSpamCount() > 0) {
-                    reportLayout.setVisibility(View.VISIBLE);
-                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
-            }
-
+            reportLayout.setVisibility(View.VISIBLE);
+            spamCount.setText(String.valueOf(chatModel.getSpamCount()));
 
             if (chatModel.getTopComment() != null) {
                 commentsLayout.setVisibility(View.VISIBLE);
@@ -1681,14 +1657,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampRight)));
             upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
 
-            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
-            boolean isAdmin = pref.getBoolean("isAdmin", false);
-            if (isAdmin) {
-                if (chatModel.getSpamCount() > 0) {
-                    reportLayout.setVisibility(View.VISIBLE);
-                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
-            }
+            reportLayout.setVisibility(View.VISIBLE);
+            spamCount.setText(String.valueOf(chatModel.getSpamCount()));
 
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
@@ -1798,14 +1768,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampRight)));
             upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
 
-            SharedPreferences pref = mContext.getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
-            boolean isAdmin = pref.getBoolean("isAdmin", false);
-            if (isAdmin) {
-                if (chatModel.getSpamCount() > 0) {
-                    reportLayout.setVisibility(View.VISIBLE);
-                    spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-                }
-            }
+            reportLayout.setVisibility(View.VISIBLE);
+            spamCount.setText(String.valueOf(chatModel.getSpamCount()));
 
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
