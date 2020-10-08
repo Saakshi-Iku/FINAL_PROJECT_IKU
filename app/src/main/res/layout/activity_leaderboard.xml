@@ -57,7 +57,7 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:text="Leaderboard"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     tools:layout_editor_absoluteX="152dp"
                     tools:layout_editor_absoluteY="16dp" />
             </LinearLayout>

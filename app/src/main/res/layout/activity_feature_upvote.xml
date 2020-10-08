@@ -52,8 +52,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="@string/upcoming_features"
-                    android:textSize="18sp"
+                    android:text="@string/feature_upvote"
+                    android:textSize="16sp"
                     tools:layout_editor_absoluteX="152dp"
                     tools:layout_editor_absoluteY="16dp" />
             </LinearLayout>
@@ -76,34 +76,68 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/filters"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/mostRequested"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/most_requested" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.chip.Chip
-            android:id="@+id/recentlyAdded"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/recently_added" />
+            <!--page description-->
+            <TextView
+                android:id="@+id/pageDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#10000000"
+                android:paddingHorizontal="25dp"
+                android:paddingVertical="10dp"
+                android:text="Upvote for your favourite feature ideas:"
+                android:textAlignment="center"
+                android:textSize="12sp"
+                android:textColor="@android:color/black"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </com.google.android.material.chip.ChipGroup>
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/filters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pageDescription">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
-        android:layout_width="match_parent"
-        android:overScrollMode="never"
-        android:layout_height="match_parent"
-        android:layout_marginTop="106dp" />
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/mostRequested"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipBackgroundColor="#10000000"
+                    android:textSize="12sp"
+                    android:text="@string/most_requested" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/recentlyAdded"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipBackgroundColor="#10000000"
+                    android:textSize="12sp"
+                    android:text="@string/recently_added" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:overScrollMode="never"
+                app:layout_constraintTop_toBottomOf="@id/filters" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

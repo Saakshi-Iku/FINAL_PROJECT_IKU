@@ -66,6 +66,7 @@
         android:textColor="@color/white"
         android:textSize="12sp"
         android:autoLink="web|email|map"
+        android:textColorLink="@color/linkColorDarkBG"
         app:layout_constraintEnd_toStartOf="@id/commentsHearts"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/profileImage"

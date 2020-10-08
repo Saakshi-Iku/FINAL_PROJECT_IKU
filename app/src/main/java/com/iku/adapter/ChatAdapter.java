@@ -77,7 +77,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 long timeStampDeletedRight = chatModel.getTimestamp();
                 chatRightDeletedViewHolder.messageTime.setText(sfd.format(new Date(timeStampDeletedRight)));
                 if(chatModel.getDeletedBy().equals("admin"))
-                    chatRightDeletedViewHolder.messageText.setText("Mesaage reported by others and deleted by admin.");
+                    chatRightDeletedViewHolder.messageText.setText("Mesaage reported by others and/or deleted by admin.");
                 else
                     chatRightDeletedViewHolder.messageText.setText("This message was deleted.");
                 break;
@@ -1178,7 +1178,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 messageTime2.setVisibility(View.VISIBLE);
             }
             if(chatModel.getDeletedBy().equals("admin"))
-                messageText.setText("Mesaage reported by others and deleted by admin.");
+                messageText.setText("Message reported by others and/or deleted by admin.");
             else
                 messageText.setText("This message was deleted.");
         }

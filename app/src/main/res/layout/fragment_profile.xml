@@ -27,55 +27,66 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <!--For reference
-            <RelativeLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
-                app:layout_constraintTop_toTopOf="@+id/topAppBar">
-            </RelativeLayout>
-            -->
-
             <!--Settings button-->
-            <ImageView
-                android:id="@+id/settingsButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="7dp"
-                android:layout_marginBottom="5dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_baseline_settings_24"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/settingsButtonLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
                 app:layout_constraintEnd_toEndOf="@+id/topAppBar"
-                app:layout_constraintTop_toTopOf="@+id/topAppBar" />
+                app:layout_constraintTop_toTopOf="@+id/topAppBar">
+
+                <ImageView
+                    android:id="@+id/settingsButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginBottom="5dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_settings_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--Notifications button-->
-            <ImageView
-                android:id="@+id/notificationsButton"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:padding="8dp"
-                android:src="@drawable/ic_baseline_notifications_36"
-                android:visibility="gone"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/notificationsButtonLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
-                app:layout_constraintEnd_toStartOf="@+id/settingsButton"
-                app:layout_constraintTop_toTopOf="@+id/topAppBar" />
+                app:layout_constraintEnd_toStartOf="@id/settingsButtonLayout"
+                app:layout_constraintTop_toTopOf="@+id/topAppBar">
 
-            <!--new notification indicator-->
-            <ImageView
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:layout_margin="12dp"
-                android:background="@drawable/hearts_button_background"
-                android:backgroundTint="@android:color/holo_red_light"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="@id/notificationsButton"
-                app:layout_constraintTop_toTopOf="@id/notificationsButton" />
+                <ImageView
+                    android:id="@+id/notificationsButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_baseline_notifications_36"
+                    android:visibility="invisible"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+
+                <!--new notification indicator-->
+                <ImageView
+                    android:layout_width="8dp"
+                    android:layout_height="8dp"
+                    android:layout_margin="13dp"
+                    android:background="@drawable/hearts_button_background"
+                    android:backgroundTint="@android:color/holo_red_light"
+                    android:visibility="gone"
+                    app:layout_constraintEnd_toEndOf="@id/notificationsButton"
+                    app:layout_constraintTop_toTopOf="@id/notificationsButton" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

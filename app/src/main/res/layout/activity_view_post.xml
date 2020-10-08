@@ -13,9 +13,9 @@
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:background="#50000000"
         android:translationZ="1dp"
         app:contentInsetStart="0dp"
-        android:background="#30000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -46,7 +46,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/postTime"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/sharePostButton"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/back_button"
                 app:layout_constraintTop_toTopOf="parent"
@@ -61,10 +61,40 @@
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/sharePostButton"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/back_button"
                 app:layout_constraintTop_toBottomOf="@id/user_name" />
+
+            <ImageView
+                android:id="@+id/moreOptionsButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@string/back_button_content_desc"
+                android:elevation="0dp"
+                android:padding="16dp"
+                android:src="@drawable/ic_baseline_more_vert_24"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@android:color/white" />
+
+            <ImageView
+                android:id="@+id/sharePostButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:contentDescription="@string/back_button_content_desc"
+                android:elevation="-1dp"
+                android:padding="16dp"
+                android:rotation="-45"
+                android:src="@drawable/ic_send"
+                android:translationX="10dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/moreOptionsButton"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -83,17 +113,63 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
-            android:scaleType="centerCrop"
             android:background="@android:color/black"
-            app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="61dp"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/locationChipView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/flairChipView"
+                app:layout_constraintHorizontal_bias="0.0"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:chipIcon="@drawable/ic_baseline_location_24"
+                app:chipIconTint="@color/white"
+                app:chipIconSize="16dp"
+                app:chipSurfaceColor="#50000000"
+                app:chipStrokeColor="@android:color/darker_gray"
+                app:chipStrokeWidth="1dp"
+                app:chipStartPadding="9dp"
+                android:visibility="gone"/>
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/flairChipView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:chipIcon="@drawable/ic_baseline_settings_24"
+                app:chipIconTint="@color/white"
+                app:chipIconSize="16dp"
+                app:chipSurfaceColor="#50000000"
+                app:chipStrokeColor="@android:color/darker_gray"
+                app:chipStrokeWidth="1dp"
+                app:chipStartPadding="9dp"
+                android:visibility="gone"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/view_handle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#30000000"
+            android:background="#50000000"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="5dp"
@@ -128,6 +204,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="@android:color/white"
+                android:textColorLink="@color/linkColorDarkBG"
                 android:textSize="12sp" />
 
         </LinearLayout>
@@ -153,9 +230,10 @@
                 android:id="@+id/postDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
                 android:autoLink="email|web|map"
+                android:padding="10dp"
                 android:textColor="@android:color/white"
+                android:textColorLink="@color/linkColorDarkBG"
                 android:textSize="12sp" />
 
             <!--To upvote or downvote-->

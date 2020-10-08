@@ -65,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Notifications"
-                        android:textSize="18sp"/>
+                        android:textSize="16sp"/>
 
                 </LinearLayout>
 
@@ -84,7 +84,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
                 app:layout_constraintEnd_toEndOf="@+id/topAppBar"
                 app:layout_constraintTop_toTopOf="@+id/topAppBar"
-                android:visibility="gone"/>
+                android:visibility="invisible"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -115,7 +115,7 @@
                android:paddingVertical="5dp"
                android:text="That's All Folks!"
                android:textSize="12dp"
-               android:visibility="visible"
+               android:visibility="gone"
                app:layout_constraintTop_toBottomOf="@id/notificationRecyclerView" />
 
        </LinearLayout>
