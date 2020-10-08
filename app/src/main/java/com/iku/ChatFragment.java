@@ -1,7 +1,6 @@
 package com.iku;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,10 +31,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -130,7 +127,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         Map<String, Object> map = new HashMap<>();
         map.put("deleted", true);
         map.put("deletedBy", deletedBy);
-        if(deletedBy.equals("admin"))
+        if (deletedBy.equals("admin"))
             map.put("spam", true);
         db.collection("iku_earth_messages").document(messageDocumentID)
                 .update(map)
@@ -964,7 +961,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             View view = mChatRecyclerview.findChildViewUnder(e.getX(), e.getY());
             if (view != null) {
                 int position = mChatRecyclerview.getChildAdapterPosition(view);
-                if(!chatadapter.getItem(position).isDeleted()){
+                if (!chatadapter.getItem(position).isDeleted()) {
                     DocumentSnapshot snapshot = chatadapter.getSnapshots().getSnapshot(position);
                     String documentID = snapshot.getId();
                     BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(view.getContext());
@@ -1144,20 +1141,18 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         reportView.setVisibility(View.VISIBLE);
                         bottomSheetDialog.setContentView(parentView);
                         bottomSheetDialog.show();
-
-                    reportView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
-                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        reportView.setOnClickListener(view13 -> {
+                            MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
+                            materialAlertDialogBuilder.setTitle("Report Spam");
+                            materialAlertDialogBuilder.setMessage("Are you sure?");
+                            materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
+                                DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
+                                docRef.get().addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
                                             ArrayList<String> spamReportedArray = (ArrayList) document.get("spamReportedBy");
                                             long spamCount = (long) document.get("spamCount");
-                                            boolean spam = (boolean) document.get("spam");
                                             if (!spamReportedArray.contains(user.getUid())) {
                                                 Map<String, Object> map = new HashMap<>();
                                                 map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
@@ -1169,20 +1164,20 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                 }
                                                 db.collection("iku_earth_messages").document(documentID)
                                                         .update(map)
-                                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-
-                                                            }
+                                                        .addOnSuccessListener(aVoid -> {
                                                         });
                                             }
                                         }
                                     }
-                                }
-                            });
-                            bottomSheetDialog.dismiss();
-                        }
-                    });
+                                });
+                                bottomSheetDialog.dismiss();
+                                //log event
+                                Bundle spam_bundle = new Bundle();
+                                spam_bundle.putString("uid", user.getUid());
+                                mFirebaseAnalytics.logEvent("message_reported_spam", spam_bundle);
+                            }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                            }).show();
+                        });
 
                         profileView.setOnClickListener(view2 -> {
                             Intent userProfileIntent = new Intent(ChatFragment.this.getContext(), UserProfileActivity.class);
