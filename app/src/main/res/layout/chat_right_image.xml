@@ -55,92 +55,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!--Link preview container-->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linkPreview"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:background="@drawable/url_preview_background"
-            android:backgroundTint="#11a4a4"
-            android:padding="5dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/constraintLayout2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sentImage"
-            app:layout_constraintVertical_bias="0.0"
-            app:layout_constraintWidth_min="250dp">
-
-            <!--Link image-->
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/linkPreviewImage"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:background="#10000000"
-                android:scaleType="centerCrop"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_max="70dp"
-                app:layout_constraintWidth_min="40dp" />
-
-            <!--Link title-->
-            <TextView
-                android:id="@+id/linkTitle"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:maxLines="1"
-                android:padding="1dp"
-                android:text="Title of page"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:textStyle="bold"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/linkPreviewDescription"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <!--Link description-->
-            <TextView
-                android:id="@+id/linkPreviewDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:maxLines="2"
-                android:padding="1dp"
-                android:text="This is some description provided by page hosted on the web for testing purpose."
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/linkSourceDomain"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
-                app:layout_constraintTop_toBottomOf="@id/linkTitle" />
-
-            <!--Link source domain-->
-            <TextView
-                android:id="@+id/linkSourceDomain"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:maxLines="1"
-                android:padding="1dp"
-                android:text="youtube.com/"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
-                app:layout_constraintTop_toBottomOf="@id/linkPreviewDescription" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
         <!--Message container-->
         <RelativeLayout
             android:id="@+id/constraintLayout2"
@@ -149,7 +63,7 @@
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linkPreview">
+            app:layout_constraintTop_toBottomOf="@id/viewPostButton">
 
             <!--Message body-->
             <TextView
@@ -238,7 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/url_preview_background"
-                android:backgroundTint="#11a4a4"
+                android:backgroundTint="#25a4a4"
                 android:minWidth="250dp"
                 android:padding="4dp"
                 android:layout_marginTop="5dp"

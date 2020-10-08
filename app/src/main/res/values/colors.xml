@@ -12,6 +12,8 @@
     <color name="linkColor">#343493</color>
     <color name="linkColorDarkBG">#11b7b7</color>
 
+    <color name="urlPreviewBG">#DADADA</color>
+
     <!--light theme colours-->
 
     <!--dark theme colours-->
