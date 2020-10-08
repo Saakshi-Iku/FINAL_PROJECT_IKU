@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iku.R;
@@ -39,7 +37,6 @@ import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -242,29 +239,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     spamCount.setText(String.valueOf(chatModel.getSpamCount()));
                 }
             }
-            //SharedPreferences pref = getSharedPreferences("pref", Context.MODE_PRIVATE);
-//            DocumentReference docRef = db.collection("groups").document("iku_earth");
-//            docRef.get().addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        ArrayList<String> admins = (ArrayList) document.get("admins");
-//                        boolean isAdmin = false;
-//                        for (String element : admins) {
-//                            if (element.contains(user.getUid())) {
-//                                isAdmin = true;
-//                                break;
-//                            }
-//                        }
-//                        if (isAdmin) {
-//                            if (chatModel.getSpamCount() > 0) {
-//                                reportLayout.setVisibility(View.VISIBLE);
-//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-//                            }
-//                        }
-//                    }
-//                }
-//            });
 
             if (chatModel.isEdited())
                 edited.setVisibility(View.VISIBLE);
@@ -272,7 +246,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 edited.setVisibility(View.GONE);
 
             //Change the visibilty according to the visibility of the sender's name.
-
             if (senderName.getVisibility() == View.VISIBLE) {
                 messageTime.setVisibility(View.VISIBLE);
                 messageTime2.setVisibility(View.GONE);
@@ -396,29 +369,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     spamCount.setText(String.valueOf(chatModel.getSpamCount()));
                 }
             }
-
-//            DocumentReference docRef = db.collection("groups").document("iku_earth");
-//            docRef.get().addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        ArrayList<String> admins = (ArrayList) document.get("admins");
-//                        boolean isAdmin = false;
-//                        for (String element : admins) {
-//                            if (element.contains(user.getUid())) {
-//                                isAdmin = true;
-//                                break;
-//                            }
-//                        }
-//                        if (isAdmin) {
-//                            if (chatModel.getSpamCount() > 0) {
-//                                reportLayout.setVisibility(View.VISIBLE);
-//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-//                            }
-//                        }
-//                    }
-//                }
-//            });
 
             if (chatModel.isEdited())
                 edited.setVisibility(View.VISIBLE);
@@ -583,29 +533,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 }
             }
 
-//            DocumentReference docRef = db.collection("groups").document("iku_earth");
-//            docRef.get().addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        ArrayList<String> admins = (ArrayList) document.get("admins");
-//                        boolean isAdmin = false;
-//                        for (String element : admins) {
-//                            if (element.contains(user.getUid())) {
-//                                isAdmin = true;
-//                                break;
-//                            }
-//                        }
-//                        if (isAdmin) {
-//                            if (chatModel.getSpamCount() > 0) {
-//                                reportLayout.setVisibility(View.VISIBLE);
-//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-//                            }
-//                        }
-//                    }
-//                }
-//            });
-
             if (senderName.getVisibility() == View.VISIBLE) {
                 messageTime.setVisibility(View.VISIBLE);
                 messageTime2.setVisibility(View.GONE);
@@ -750,28 +677,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 }
             }
 
-//            DocumentReference docRef = db.collection("groups").document("iku_earth");
-//            docRef.get().addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        ArrayList<String> admins = (ArrayList) document.get("admins");
-//                        boolean isAdmin = false;
-//                        for (String element : admins) {
-//                            if (element.contains(user.getUid())) {
-//                                isAdmin = true;
-//                                break;
-//                            }
-//                        }
-//                        if (isAdmin) {
-//                            if (chatModel.getSpamCount() > 0) {
-//                                reportLayout.setVisibility(View.VISIBLE);
-//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-//                            }
-//                        }
-//                    }
-//                }
-//            });
 
             if (chatModel.getTopComment() != null) {
                 commentsLayout.setVisibility(View.VISIBLE);
@@ -959,29 +864,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 }
             }
 
-//            DocumentReference docRef = db.collection("groups").document("iku_earth");
-//            docRef.get().addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        ArrayList<String> admins = (ArrayList) document.get("admins");
-//                        boolean isAdmin = false;
-//                        for (String element : admins) {
-//                            if (element.contains(user.getUid())) {
-//                                isAdmin = true;
-//                                break;
-//                            }
-//                        }
-//                        if (isAdmin) {
-//                            if (chatModel.getSpamCount() > 0) {
-//                                reportLayout.setVisibility(View.VISIBLE);
-//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-//                            }
-//                        }
-//                    }
-//                }
-//            });
-
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
                 messageTime2.setVisibility(View.VISIBLE);
@@ -1099,29 +981,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 }
             }
 
-//            DocumentReference docRef = db.collection("groups").document("iku_earth");
-//            docRef.get().addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//                        ArrayList<String> admins = (ArrayList) document.get("admins");
-//                        boolean isAdmin = false;
-//                        for (String element : admins) {
-//                            if (element.contains(user.getUid())) {
-//                                isAdmin = true;
-//                                break;
-//                            }
-//                        }
-//                        if (isAdmin) {
-//                            if (chatModel.getSpamCount() > 0) {
-//                                reportLayout.setVisibility(View.VISIBLE);
-//                                spamCount.setText(String.valueOf(chatModel.getSpamCount()));
-//                            }
-//                        }
-//                    }
-//                }
-//            });
-
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
                 messageTime2.setVisibility(View.VISIBLE);
@@ -1140,7 +999,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     }
 
     private class ChatRightDeletedViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView messageTime,messageTime2, messageText;
+        private MaterialTextView messageTime, messageTime2, messageText;
 
         public ChatRightDeletedViewHolder(View itemView) {
             super(itemView);
@@ -1155,7 +1014,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime.setText(sfd.format(new Date(timeStampDeletedRight)));
             messageTime2.setText(sfd.format(new Date(timeStampDeletedRight)));
 
-            if(chatModel.getDeletedBy().equals("admin"))
+            if (chatModel.getDeletedBy().equals("admin"))
                 messageText.setText("Message reported by others and deleted by admin.");
             else
                 messageText.setText("This message was deleted.");
@@ -1189,7 +1048,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampDeletedLeft)));
             messageTime3.setText(sfd.format(new Date(timeStampDeletedLeft)));
 
-            if(chatModel.getDeletedBy().equals("admin"))
+            if (chatModel.getDeletedBy().equals("admin"))
                 messageText.setText("Message reported by others and deleted by admin.");
             else
                 messageText.setText("This message was deleted.");
@@ -1199,15 +1058,15 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 messageTime2.setVisibility(View.GONE);
                 messageTime3.setVisibility(View.GONE);
             } else {
-                    if (messageText.getText().length() <= 25) {
-                        messageTime2.setVisibility(View.VISIBLE);
-                        messageTime.setVisibility(View.GONE);
-                        messageTime3.setVisibility(View.GONE);
-                    } else {
-                        messageTime3.setVisibility(View.VISIBLE);
-                        messageTime.setVisibility(View.GONE);
-                        messageTime2.setVisibility(View.GONE);
-                    }
+                if (messageText.getText().length() <= 25) {
+                    messageTime2.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                    messageTime3.setVisibility(View.GONE);
+                } else {
+                    messageTime3.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                    messageTime2.setVisibility(View.GONE);
+                }
 
             }
         }
