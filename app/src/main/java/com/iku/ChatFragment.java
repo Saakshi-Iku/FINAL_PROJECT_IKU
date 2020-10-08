@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -54,6 +55,7 @@ import com.iku.adapter.ChatAdapter;
 import com.iku.databinding.FragmentChatBinding;
 import com.iku.models.ChatModel;
 import com.iku.models.UserModel;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -103,6 +105,13 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     // 0 means normal send, 1 means update an old message
     private int editTextStatus = 0;
     private int STORAGE_PERMISSION_CODE = 10;
+    // 0 means false, 1 is link preview message
+    private int linkPreviewedMessageStatus = 0;
+
+    private String linkPreviewImageUrl = "";
+    private String linkPreviewTitle = "";
+    private String linkPreviewDesc = "";
+    private String linkPreviewUrl = "";
 
     public ChatFragment() {
         // Required empty public constructor
@@ -190,6 +199,15 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
         binding.jumpToBottom.setOnClickListener(view -> mChatRecyclerview.scrollToPosition(0));
 
+        binding.close.setOnClickListener(view -> {
+            binding.chatboxLinkPreview.setVisibility(View.GONE);
+            linkPreviewImageUrl = "";
+            linkPreviewTitle = "";
+            linkPreviewDesc = "";
+            linkPreviewUrl = "";
+            linkPreviewedMessageStatus = 0;
+        });
+
         initSendButton();
 
     }
@@ -197,6 +215,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     private void initSendButton() {
         binding.sendMessageButton.setOnClickListener(view -> {
             final String message = binding.messageTextField.getText().toString().trim();
+            binding.chatboxLinkPreview.setVisibility(View.GONE);
             if (!message.isEmpty()) {
                 sendTheMessage(message);
                 binding.messageTextField.setText("");
@@ -316,6 +335,41 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                List<String> extractedUrls = extractUrls("" + charSequence);
+                RichPreview richPreview = new RichPreview(new ResponseListener() {
+                    @Override
+                    public void onData(MetaData metaData) {
+                        if (!metaData.getTitle().equals("") && !metaData.getDescription().equals("")) {
+                            linkPreviewedMessageStatus = 1;
+                            binding.chatboxLinkPreview.setVisibility(View.VISIBLE);
+                            binding.linkTitle.setText(metaData.getTitle());
+                            binding.linkPreviewDescription.setText(metaData.getDescription());
+                            if (!metaData.getImageurl().equals("")) {
+                                binding.linkPreviewImage.setVisibility(View.VISIBLE);
+                                Picasso.get().load(metaData.getImageurl()).noFade().into(binding.linkPreviewImage);
+                            } else
+                                binding.linkPreviewImage.setVisibility(View.GONE);
+                            linkPreviewImageUrl = metaData.getImageurl();
+                            linkPreviewTitle = metaData.getTitle();
+                            linkPreviewDesc = metaData.getDescription();
+                            linkPreviewUrl = metaData.getUrl();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        getActivity().runOnUiThread(() -> binding.chatboxLinkPreview.setVisibility(View.GONE));
+                        linkPreviewImageUrl = "";
+                        linkPreviewTitle = "";
+                        linkPreviewDesc = "";
+                        linkPreviewUrl = "";
+                        linkPreviewedMessageStatus = 0;
+                    }
+                });
+                if (!extractedUrls.isEmpty())
+                    if (URLUtil.isValidUrl(extractedUrls.get(0)))
+                        richPreview.getPreview(extractedUrls.get(0));
+
                 if (charSequence.toString().isEmpty()) {
                     binding.choose.setVisibility(View.VISIBLE);
                 } else {
@@ -325,7 +379,6 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
     }
@@ -333,179 +386,84 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     private void sendTheMessage(String message) {
         Date d = new Date();
         long timestamp = d.getTime();
-        List<String> extractedUrls = extractUrls(message);
-        RichPreview richPreview = new RichPreview(new ResponseListener() {
-            @Override
-            public void onData(MetaData metaData) {
-                if (metaData != null) {
-                    String linkImageUrl = metaData.getImageurl();
-                    String title = metaData.getTitle();
-                    String description = metaData.getDescription();
-                    String url = metaData.getUrl();
-                    if (user != null) {
-                        Map<String, Object> docData = new HashMap<>();
-                        docData.put("message", message);
-                        docData.put("timestamp", timestamp);
-                        docData.put("uid", user.getUid());
-                        docData.put("type", "text");
-                        docData.put("userName", user.getDisplayName());
-                        docData.put("upvoteCount", 0);
+        if (user != null) {
+            Map<String, Object> docData = new HashMap<>();
+            docData.put("message", message);
+            docData.put("timestamp", timestamp);
+            docData.put("uid", user.getUid());
+            docData.put("type", "text");
+            docData.put("userName", user.getDisplayName());
+            docData.put("upvoteCount", 0);
 
-                        docData.put("linkPreview", 1);
-                        docData.put("linkPreviewImageUrl", linkImageUrl);
-                        docData.put("linkPreviewTitle", title);
-                        docData.put("linkPreviewDesc", description);
-                        docData.put("linkPreviewUrl", url);
+            docData.put("linkPreview", linkPreviewedMessageStatus);
+            docData.put("linkPreviewImageUrl", linkPreviewImageUrl);
+            docData.put("linkPreviewTitle", linkPreviewTitle);
+            docData.put("linkPreviewDesc", linkPreviewDesc);
+            docData.put("linkPreviewUrl", linkPreviewUrl);
 
-                        ArrayList<Object> upvotersArray = new ArrayList<>();
-                        docData.put("upvoters", upvotersArray);
-                        ArrayList<Object> thumbsUpArray = new ArrayList<>();
-                        docData.put("emoji1", thumbsUpArray);
-                        ArrayList<Object> clapsArray = new ArrayList<>();
-                        docData.put("emoji2", clapsArray);
-                        ArrayList<Object> thinkArray = new ArrayList<>();
-                        docData.put("emoji3", thinkArray);
-                        ArrayList<Object> ideaArray = new ArrayList<>();
-                        docData.put("emoji4", ideaArray);
-                        ArrayList<Object> dounvotersArray = new ArrayList<>();
-                        docData.put("downvoters", dounvotersArray);
-                        docData.put("downvoteCount", 0);
-                        docData.put("edited", false);
-                        ArrayList<Object> spamArray = new ArrayList<>();
-                        docData.put("spamReportedBy", spamArray);
-                        docData.put("spamCount", 0);
-                        docData.put("spam", false);
-                        docData.put("deleted", false);
+            ArrayList<Object> upvotersArray = new ArrayList<>();
+            docData.put("upvoters", upvotersArray);
+            ArrayList<Object> thumbsUpArray = new ArrayList<>();
+            docData.put("emoji1", thumbsUpArray);
+            ArrayList<Object> clapsArray = new ArrayList<>();
+            docData.put("emoji2", clapsArray);
+            ArrayList<Object> thinkArray = new ArrayList<>();
+            docData.put("emoji3", thinkArray);
+            ArrayList<Object> ideaArray = new ArrayList<>();
+            docData.put("emoji4", ideaArray);
+            ArrayList<Object> dounvotersArray = new ArrayList<>();
+            docData.put("downvoters", dounvotersArray);
+            docData.put("downvoteCount", 0);
+            docData.put("edited", false);
+            ArrayList<Object> spamArray = new ArrayList<>();
+            docData.put("spamReportedBy", spamArray);
+            docData.put("spamCount", 0);
+            docData.put("spam", false);
+            docData.put("deleted", false);
 
-                        docData.put("postCommentCount", 0);
+            docData.put("postCommentCount", 0);
 
-                        Map<String, Object> normalMessage = new HashMap<>();
-                        normalMessage.put("firstMessage", true);
+            Map<String, Object> normalMessage = new HashMap<>();
+            normalMessage.put("firstMessage", true);
 
-                        db.collection("iku_earth_messages")
-                                .add(docData)
-                                .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
-                                        .addOnCompleteListener(task -> {
-                                            if (task.isSuccessful()) {
-                                                mChatRecyclerview.scrollToPosition(0);
-                                                DocumentSnapshot document = task.getResult();
-                                                if (document.exists()) {
-                                                    Boolean isFirstMessage = (Boolean) document.get("firstMessage");
-                                                    if (!isFirstMessage) {
-                                                        db.collection("users").document(user.getUid())
-                                                                .update(normalMessage)
-                                                                .addOnSuccessListener(aVoid -> {
-                                                                    editTextStatus = 0;
-                                                                    binding.viewConfetti.build()
-                                                                            .addColors(Color.BLUE, Color.LTGRAY, getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent))
-                                                                            .setDirection(0.0, 359.0)
-                                                                            .setSpeed(1f, 8f)
-                                                                            .setFadeOutEnabled(true)
-                                                                            .setTimeToLive(2000L)
-                                                                            .addShapes(Shape.Square.INSTANCE, Shape.Circle.INSTANCE)
-                                                                            .addSizes(new Size(10, 10f))
-                                                                            .setPosition(-50f, binding.viewConfetti.getWidth() + 50f, -50f, -50f)
-                                                                            .streamFor(300, 5000L);
+            db.collection("iku_earth_messages")
+                    .add(docData)
+                    .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    mChatRecyclerview.scrollToPosition(0);
+                                    DocumentSnapshot document = task.getResult();
+                                    if (document.exists()) {
+                                        Boolean isFirstMessage = (Boolean) document.get("firstMessage");
+                                        if (!isFirstMessage) {
+                                            db.collection("users").document(user.getUid())
+                                                    .update(normalMessage)
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        editTextStatus = 0;
+                                                        binding.viewConfetti.build()
+                                                                .addColors(Color.BLUE, Color.LTGRAY, getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent))
+                                                                .setDirection(0.0, 359.0)
+                                                                .setSpeed(1f, 8f)
+                                                                .setFadeOutEnabled(true)
+                                                                .setTimeToLive(2000L)
+                                                                .addShapes(Shape.Square.INSTANCE, Shape.Circle.INSTANCE)
+                                                                .addSizes(new Size(10, 10f))
+                                                                .setPosition(-50f, binding.viewConfetti.getWidth() + 50f, -50f, -50f)
+                                                                .streamFor(300, 5000L);
 
-                                                                    //Log event
-                                                                    Bundle params = new Bundle();
-                                                                    params.putString("type", "text");
-                                                                    params.putString("uid", user.getUid());
-                                                                    mFirebaseAnalytics.logEvent("first_message", params);
-                                                                })
-                                                                .addOnFailureListener(e -> editTextStatus = 0);
-                                                    }
-                                                }
-                                            }
-                                        }))
-                                .addOnFailureListener(e -> {
-                                });
-                    }
-                }
-            }
-
-            @Override
-            public void onError(Exception e) {
-                //handle error
-            }
-        });
-        if (!extractedUrls.isEmpty()) {
-            richPreview.getPreview(extractedUrls.get(0));
-        } else {
-            if (user != null) {
-                Map<String, Object> docData = new HashMap<>();
-                docData.put("message", message);
-                docData.put("timestamp", timestamp);
-                docData.put("uid", user.getUid());
-                docData.put("type", "text");
-                docData.put("userName", user.getDisplayName());
-                docData.put("upvoteCount", 0);
-
-                docData.put("linkPreview", 0);
-
-                ArrayList<Object> upvotersArray = new ArrayList<>();
-                docData.put("upvoters", upvotersArray);
-                ArrayList<Object> thumbsUpArray = new ArrayList<>();
-                docData.put("emoji1", thumbsUpArray);
-                ArrayList<Object> clapsArray = new ArrayList<>();
-                docData.put("emoji2", clapsArray);
-                ArrayList<Object> thinkArray = new ArrayList<>();
-                docData.put("emoji3", thinkArray);
-                ArrayList<Object> ideaArray = new ArrayList<>();
-                docData.put("emoji4", ideaArray);
-                ArrayList<Object> dounvotersArray = new ArrayList<>();
-                docData.put("downvoters", dounvotersArray);
-                docData.put("downvoteCount", 0);
-                docData.put("edited", false);
-                ArrayList<Object> spamArray = new ArrayList<>();
-                docData.put("spamReportedBy", spamArray);
-                docData.put("spamCount", 0);
-                docData.put("spam", false);
-
-                docData.put("postCommentCount", 0);
-
-                Map<String, Object> normalMessage = new HashMap<>();
-                normalMessage.put("firstMessage", true);
-
-                db.collection("iku_earth_messages")
-                        .add(docData)
-                        .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        mChatRecyclerview.scrollToPosition(0);
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            Boolean isFirstMessage = (Boolean) document.get("firstMessage");
-                                            if (!isFirstMessage) {
-                                                db.collection("users").document(user.getUid())
-                                                        .update(normalMessage)
-                                                        .addOnSuccessListener(aVoid -> {
-                                                            editTextStatus = 0;
-                                                            binding.viewConfetti.build()
-                                                                    .addColors(Color.BLUE, Color.LTGRAY, getResources().getColor(R.color.colorPrimary), getResources().getColor(R.color.colorAccent))
-                                                                    .setDirection(0.0, 359.0)
-                                                                    .setSpeed(1f, 8f)
-                                                                    .setFadeOutEnabled(true)
-                                                                    .setTimeToLive(2000L)
-                                                                    .addShapes(Shape.Square.INSTANCE, Shape.Circle.INSTANCE)
-                                                                    .addSizes(new Size(10, 10f))
-                                                                    .setPosition(-50f, binding.viewConfetti.getWidth() + 50f, -50f, -50f)
-                                                                    .streamFor(300, 5000L);
-
-                                                            //Log event
-                                                            Bundle params = new Bundle();
-                                                            params.putString("type", "text");
-                                                            params.putString("uid", user.getUid());
-                                                            mFirebaseAnalytics.logEvent("first_message", params);
-                                                        })
-                                                        .addOnFailureListener(e -> editTextStatus = 0);
-                                            }
+                                                        //Log event
+                                                        Bundle params = new Bundle();
+                                                        params.putString("type", "text");
+                                                        params.putString("uid", user.getUid());
+                                                        mFirebaseAnalytics.logEvent("first_message", params);
+                                                    })
+                                                    .addOnFailureListener(e -> editTextStatus = 0);
                                         }
                                     }
-                                }))
-                        .addOnFailureListener(e -> {
-                        });
-            }
+                                }
+                            }))
+                    .addOnFailureListener(e -> {
+                    });
         }
     }
 
@@ -1213,6 +1171,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
             super.onLongPress(e);
         }
+
     }
 
     public static List<String> extractUrls(String text) {
