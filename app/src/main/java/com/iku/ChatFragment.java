@@ -591,32 +591,26 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             if (currentEmoji.equals("upvoters") || currentEmoji.equals("emoji1") || currentEmoji.equals("emoji2") || currentEmoji.equals("emoji3") || currentEmoji.equals("emoji4")) {
                 if (!authorOfMessage.equals(user.getUid())) {
                     db.collection("users").document(authorOfMessage).get()
-                            .addOnSuccessListener(documentSnapshot -> {
-                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
-                                db.collection("users").document(authorOfMessage)
-                                        .update("points", usersData.getPoints() - 1)
-                                        .addOnSuccessListener(aVoid -> {
-                                        });
-                            });
+                            .addOnSuccessListener(documentSnapshot -> db.collection("users").document(authorOfMessage)
+                                    .update("points", FieldValue.increment(-1))
+                                    .addOnSuccessListener(aVoid -> {
+                                    }));
                 }
                 db.collection("iku_earth_messages").document(messageDocumentID)
-                        .update("upvoteCount", upvotesCount - 1,
+                        .update("upvoteCount", FieldValue.increment(-1),
                                 currentEmoji, FieldValue.arrayRemove(user.getUid()))
                         .addOnSuccessListener(aVoid -> {
                         });
             } else if (currentEmoji.equals("downvoters")) {
                 if (!authorOfMessage.equals(user.getUid())) {
                     db.collection("users").document(authorOfMessage).get()
-                            .addOnSuccessListener(documentSnapshot -> {
-                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
-                                db.collection("users").document(authorOfMessage)
-                                        .update("points", usersData.getPoints() + 1)
-                                        .addOnSuccessListener(aVoid -> {
-                                        });
-                            });
+                            .addOnSuccessListener(documentSnapshot -> db.collection("users").document(authorOfMessage)
+                                    .update("points", FieldValue.increment(1))
+                                    .addOnSuccessListener(aVoid -> {
+                                    }));
                 }
                 db.collection("iku_earth_messages").document(messageDocumentID)
-                        .update("downvoteCount", downvotesCount - 1,
+                        .update("downvoteCount", FieldValue.increment(-1),
                                 currentEmoji, FieldValue.arrayRemove(user.getUid()))
                         .addOnSuccessListener(aVoid -> {
                         });
@@ -625,13 +619,10 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         } else if ((currentEmoji != previousEmoji) && (currentEmoji.equals("downvoters"))) {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
-                        .addOnSuccessListener(documentSnapshot -> {
-                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
-                            db.collection("users").document(authorOfMessage)
-                                    .update("points", usersData.getPoints() - 2)
-                                    .addOnSuccessListener(aVoid -> {
-                                    });
-                        });
+                        .addOnSuccessListener(documentSnapshot -> db.collection("users").document(authorOfMessage)
+                                .update("points", FieldValue.increment(-2))
+                                .addOnSuccessListener(aVoid -> {
+                                }));
             }
             db.collection("iku_earth_messages").document(messageDocumentID)
                     .update(previousEmoji, FieldValue.arrayRemove(user.getUid()),
@@ -678,53 +669,34 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
-                                db.collection("users").document(authorOfMessage)
-                                        .update("points", usersData.getPoints() - 1)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-
-                                            }
-                                        });
-                            }
+                        .addOnSuccessListener(documentSnapshot -> {
+                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
+                            db.collection("users").document(authorOfMessage)
+                                    .update("points", usersData.getPoints() - 1)
+                                    .addOnSuccessListener(aVoid -> {
+                                    });
                         });
             }
             db.collection("iku_earth_messages").document(messageDocumentID)
                     .update(emoji, FieldValue.arrayUnion(user.getUid()),
                             "downvoteCount", DownvotesCount + 1)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                        }
+                    .addOnSuccessListener(aVoid -> {
                     });
         } else {
             if (!authorOfMessage.equals(user.getUid())) {
                 db.collection("users").document(authorOfMessage).get()
-                        .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                final UserModel usersData = documentSnapshot.toObject(UserModel.class);
-                                db.collection("users").document(authorOfMessage)
-                                        .update("points", usersData.getPoints() + 1)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                            }
-                                        });
-                            }
+                        .addOnSuccessListener(documentSnapshot -> {
+                            final UserModel usersData = documentSnapshot.toObject(UserModel.class);
+                            db.collection("users").document(authorOfMessage)
+                                    .update("points", usersData.getPoints() + 1)
+                                    .addOnSuccessListener(aVoid -> {
+                                    });
                         });
             }
             db.collection("iku_earth_messages").document(messageDocumentID)
                     .update(emoji, FieldValue.arrayUnion(user.getUid()),
                             "upvoteCount", UpvotesCount + 1)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                        }
+                    .addOnSuccessListener(aVoid -> {
                     });
         }
         chatadapter.notifyItemChanged(position);
@@ -754,10 +726,12 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                             return;
                         }
 
-                        for (DocumentChange change : querySnapshot.getDocumentChanges()) {
-                            if (change.getType() == DocumentChange.Type.ADDED) {
-                                ArrayList<String> group = (ArrayList<String>) change.getDocument().get("members");
-                                memberCount.setText("Ikulogists: " + group.size());
+                        if (querySnapshot!=null){
+                            for (DocumentChange change : querySnapshot.getDocumentChanges()) {
+                                if (change.getType() == DocumentChange.Type.ADDED) {
+                                    ArrayList<String> group = (ArrayList<String>) change.getDocument().get("members");
+                                    memberCount.setText("Ikulogists: " + group.size());
+                                }
                             }
                         }
                     }
@@ -1138,46 +1112,56 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         bottomSheetDialog.show();
                     } else {
                         profileView.setVisibility(View.VISIBLE);
-                        reportView.setVisibility(View.VISIBLE);
-                        bottomSheetDialog.setContentView(parentView);
-                        bottomSheetDialog.show();
-                        reportView.setOnClickListener(view13 -> {
-                            MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
-                            materialAlertDialogBuilder.setTitle("Report Spam");
-                            materialAlertDialogBuilder.setMessage("Are you sure?");
-                            materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
-                                DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
-                                docRef.get().addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        DocumentSnapshot document = task.getResult();
-                                        if (document.exists()) {
-                                            ArrayList<String> spamReportedArray = (ArrayList) document.get("spamReportedBy");
-                                            long spamCount = (long) document.get("spamCount");
-                                            if (!spamReportedArray.contains(user.getUid())) {
-                                                Map<String, Object> map = new HashMap<>();
-                                                map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
-                                                map.put("spamCount", spamCount + 1);
-                                                if (spamCount >= 4) {
-                                                    map.put("spam", true);
-                                                    map.put("deleted", true);
-                                                    map.put("deletedBy", "users");
+                        boolean isReported = false;
+                        ArrayList<String> SpamReportedByArray = chatadapter.getItem(position).getSpamReportedBy();
+                        for (String element : SpamReportedByArray) {
+                            if (element.contains(user.getUid())) {
+                                isReported = true;
+                                break;
+                            }
+                        }
+                        if(!isReported) {
+                            reportView.setVisibility(View.VISIBLE);
+                            reportView.setOnClickListener(view13 -> {
+                                MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
+                                materialAlertDialogBuilder.setTitle("Report Spam");
+                                materialAlertDialogBuilder.setMessage("Are you sure?");
+                                materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
+                                    DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
+                                    docRef.get().addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            DocumentSnapshot document = task.getResult();
+                                            if (document.exists()) {
+                                                ArrayList<String> spamReportedArray = (ArrayList) document.get("spamReportedBy");
+                                                long spamCount = (long) document.get("spamCount");
+                                                if (spamReportedArray!=null){
+                                                    if (!spamReportedArray.contains(user.getUid())) {
+                                                        Map<String, Object> map = new HashMap<>();
+                                                        map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
+                                                        map.put("spamCount", spamCount + 1);
+                                                        if (spamCount >= 4) {
+                                                            map.put("spam", true);
+                                                            map.put("deleted", true);
+                                                            map.put("deletedBy", "users");
+                                                        }
+                                                        db.collection("iku_earth_messages").document(documentID)
+                                                                .update(map)
+                                                                .addOnSuccessListener(aVoid -> {
+                                                                });
+                                                    }
                                                 }
-                                                db.collection("iku_earth_messages").document(documentID)
-                                                        .update(map)
-                                                        .addOnSuccessListener(aVoid -> {
-                                                        });
                                             }
                                         }
-                                    }
-                                });
-                                bottomSheetDialog.dismiss();
-                                //log event
-                                Bundle spam_bundle = new Bundle();
-                                spam_bundle.putString("uid", user.getUid());
-                                mFirebaseAnalytics.logEvent("message_reported_spam", spam_bundle);
-                            }).setNegativeButton("Cancel", (dialogInterface, i) -> {
-                            }).show();
-                        });
+                                    });
+                                    bottomSheetDialog.dismiss();
+                                    //log event
+                                    Bundle spam_bundle = new Bundle();
+                                    spam_bundle.putString("uid", user.getUid());
+                                    mFirebaseAnalytics.logEvent("message_reported_spam", spam_bundle);
+                                }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                }).show();
+                            });
+                        }
 
                         profileView.setOnClickListener(view2 -> {
                             Intent userProfileIntent = new Intent(ChatFragment.this.getContext(), UserProfileActivity.class);
@@ -1193,7 +1177,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                             bottomSheetDialog.dismiss();
                         });
 
-                        SharedPreferences pref = getActivity().getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+                        SharedPreferences pref = view.getContext().getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
                         boolean isAdmin = pref.getBoolean("isAdmin", false);
                         if (isAdmin) {
                             deleteMessageView.setVisibility(View.VISIBLE);
@@ -1211,44 +1195,9 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                 }).setNegativeButton("Cancel", (dialogInterface, i) -> {
                                 }).show();
                             });
-                            bottomSheetDialog.setContentView(parentView);
-                            bottomSheetDialog.show();
                         }
-//                        DocumentReference docRef = db.collection("groups").document("iku_earth");
-//                        docRef.get().addOnCompleteListener(task -> {
-//                            if (task.isSuccessful()) {
-//                                DocumentSnapshot document = task.getResult();
-//                                if (document.exists()) {
-//                                    ArrayList<String> admins = (ArrayList) document.get("admins");
-//                                    boolean isAdmin = false;
-//                                    for (String element : admins) {
-//                                        if (element.contains(user.getUid())) {
-//                                            isAdmin = true;
-//                                            break;
-//                                        }
-//                                    }
-//                                    if (isAdmin) {
-//                                        deleteMessageView.setVisibility(View.VISIBLE);
-//                                        deleteMessageView.setOnClickListener(view1 -> {
-//                                            MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
-//                                            materialAlertDialogBuilder.setTitle("Delete Message");
-//                                            materialAlertDialogBuilder.setMessage("Delete for everyone?");
-//                                            materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
-//                                                deleteMessage(documentID, "admin");
-//                                                bottomSheetDialog.dismiss();
-//                                                //log event
-//                                                Bundle delete_bundle = new Bundle();
-//                                                delete_bundle.putString("uid", user.getUid());
-//                                                mFirebaseAnalytics.logEvent("message_deleted", delete_bundle);
-//                                            }).setNegativeButton("Cancel", (dialogInterface, i) -> {
-//                                            }).show();
-//                                        });
-//                                        bottomSheetDialog.setContentView(parentView);
-//                                        bottomSheetDialog.show();
-//                                    }
-//                                }
-//                            }
-//                        });
+                        bottomSheetDialog.setContentView(parentView);
+                        bottomSheetDialog.show();
                     }
                 }
             }
