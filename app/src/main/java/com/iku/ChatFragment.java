@@ -377,6 +377,8 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         docData.put("spam", false);
                         docData.put("deleted", false);
 
+                        docData.put("postCommentCount", 0);
+
                         Map<String, Object> normalMessage = new HashMap<>();
                         normalMessage.put("firstMessage", true);
 
@@ -385,6 +387,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                 .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
                                         .addOnCompleteListener(task -> {
                                             if (task.isSuccessful()) {
+                                                mChatRecyclerview.smoothScrollToPosition(0);
                                                 DocumentSnapshot document = task.getResult();
                                                 if (document.exists()) {
                                                     Boolean isFirstMessage = (Boolean) document.get("firstMessage");
@@ -459,6 +462,8 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                 docData.put("spamCount", 0);
                 docData.put("spam", false);
 
+                docData.put("postCommentCount", 0);
+
                 Map<String, Object> normalMessage = new HashMap<>();
                 normalMessage.put("firstMessage", true);
 
@@ -467,6 +472,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
+                                        mChatRecyclerview.smoothScrollToPosition(0);
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
                                             Boolean isFirstMessage = (Boolean) document.get("firstMessage");
@@ -501,7 +507,6 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         });
             }
         }
-
     }
 
     public void userVote(String messageDocumentID, String emoji, int position) {
