@@ -1,6 +1,7 @@
 package com.iku.adapter;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
 
     public interface OnItemClickListener {
         void onItemClick(int pos, DocumentSnapshot snapshot);
+
         void onHeartClick(int pos, DocumentSnapshot snapshot);
     }
 
@@ -63,24 +65,15 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
         commentViewHolder.commentHeartCountTextView.setText(String.valueOf(commentModel.getHeartsCount()));
         commentViewHolder.setImage(commentModel);
         ArrayList<String> heartsList = commentModel.getHeartsArray();
-        if (commentModel.getHeartsCount() > 0) {
-            for (String element : heartsList) {
-                if (element.contains(user.getUid())) {
-                    commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart);
-                    break;
-                }
-            }
-        }
         if (commentModel.getHeartsCount() == 0) {
             commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart_unfilled);
         }
-        if (commentModel.getHeartsCount() > 0) {
-            for (String element : heartsList) {
-                if (!element.contains(user.getUid())) {
-                    commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart_unfilled);
-                    break;
-                }
-            }
+        for (String element : heartsList) {
+            if (element.contains(user.getUid())) {
+                commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart);
+                break;
+            } else
+                commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart_unfilled);
         }
     }
 

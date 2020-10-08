@@ -173,7 +173,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void verifyUser() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
         if (mAuth.getUid() != null) {
             Map<String, Object> userDevInfo = new HashMap<>();
             userDevInfo.put("Device", Build.MANUFACTURER);
@@ -181,8 +181,8 @@ public class HomeActivity extends AppCompatActivity {
             userDevInfo.put("Android", Build.VERSION.SDK_INT);
             userDevInfo.put("Release", Build.VERSION.RELEASE);
             userDevInfo.put("Kernel", System.getProperty("os.version"));
-            userDevInfo.put("Version Name",BuildConfig.VERSION_NAME);
-            userDevInfo.put("Version Code",BuildConfig.VERSION_CODE);
+            userDevInfo.put("Version Name", BuildConfig.VERSION_NAME);
+            userDevInfo.put("Version Code", BuildConfig.VERSION_CODE);
             userDevInfo.put("infoTime", FieldValue.serverTimestamp());
             db.collection("usersVerifiedInfo").document(mAuth.getUid())
                     .set(userDevInfo)
@@ -199,29 +199,33 @@ public class HomeActivity extends AppCompatActivity {
     private void verifyAdmin() {
         SharedPreferences prefs = getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
         DocumentReference docRef = db.collection("groups").document("iku_earth");
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    ArrayList<String> admins = (ArrayList) document.get("admins");
-                    boolean isAdmin = false;
-                    for (String element : admins) {
-                        if (element.contains(mAuth.getUid())) {
-                            isAdmin = true;
-                            SharedPreferences.Editor edit = prefs.edit();
-                            edit.putBoolean("isAdmin", true);
-                            edit.apply();
-                            break;
+        if (mAuth.getUid() != null) {
+            docRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        ArrayList<String> admins = (ArrayList) document.get("admins");
+                        boolean isAdmin = false;
+                        if (admins != null) {
+                            for (String element : admins) {
+                                if (element.contains(mAuth.getUid())) {
+                                    isAdmin = true;
+                                    SharedPreferences.Editor edit = prefs.edit();
+                                    edit.putBoolean("isAdmin", true);
+                                    edit.apply();
+                                    break;
+                                }
+                            }
+                            if (!isAdmin) {
+                                SharedPreferences.Editor edit = prefs.edit();
+                                edit.putBoolean("isAdmin", false);
+                                edit.apply();
+                            }
                         }
                     }
-                    if(!isAdmin){
-                        SharedPreferences.Editor edit = prefs.edit();
-                        edit.putBoolean("isAdmin", false);
-                        edit.apply();
-                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     @Override
