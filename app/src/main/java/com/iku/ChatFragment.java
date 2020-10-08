@@ -188,7 +188,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
         });
 
-        binding.jumpToBottom.setOnClickListener(view -> mChatRecyclerview.smoothScrollToPosition(0));
+        binding.jumpToBottom.setOnClickListener(view -> mChatRecyclerview.scrollToPosition(0));
 
         initSendButton();
 
@@ -387,7 +387,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                 .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
                                         .addOnCompleteListener(task -> {
                                             if (task.isSuccessful()) {
-                                                mChatRecyclerview.smoothScrollToPosition(0);
+                                                mChatRecyclerview.scrollToPosition(0);
                                                 DocumentSnapshot document = task.getResult();
                                                 if (document.exists()) {
                                                     Boolean isFirstMessage = (Boolean) document.get("firstMessage");
@@ -472,7 +472,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
                                 .addOnCompleteListener(task -> {
                                     if (task.isSuccessful()) {
-                                        mChatRecyclerview.smoothScrollToPosition(0);
+                                        mChatRecyclerview.scrollToPosition(0);
                                         DocumentSnapshot document = task.getResult();
                                         if (document.exists()) {
                                             Boolean isFirstMessage = (Boolean) document.get("firstMessage");
