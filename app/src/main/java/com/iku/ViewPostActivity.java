@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -287,7 +286,12 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
 
         db.collection("iku_earth_messages").document(messageId)
                 .collection("comments").add(data)
-                .addOnSuccessListener(documentReference -> adapter.notifyDataSetChanged())
+                .addOnSuccessListener(documentReference -> {
+                    db.collection("iku_earth_messages").document(messageId)
+                            .update("postCommentCount", FieldValue.increment(1))
+                            .addOnSuccessListener(documentReferenceObj -> {
+                            });
+                })
                 .addOnFailureListener(e -> {
                 });
     }
@@ -849,6 +853,10 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         db.collection("iku_earth_messages").document(messageId).collection("comments").document(commentDocumentID)
                 .delete()
                 .addOnSuccessListener(aVoid -> {
+                    db.collection("iku_earth_messages").document(messageId)
+                            .update("postCommentCount", FieldValue.increment(-1))
+                            .addOnSuccessListener(documentReferenceObj -> {
+                            });
                     //Log event
                     Bundle delete_bundle = new Bundle();
                     delete_bundle.putString("UID", user.getUid());
@@ -857,7 +865,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                 });
     }
 
-    private class SwipeListener extends GestureDetector.SimpleOnGestureListener{
+    private class SwipeListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
             animateHeight();
@@ -871,7 +879,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         }
     }
 
-    private void animateHeight(){
+    private void animateHeight() {
         if (scrollStatus == 0) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
             params.addRule(RelativeLayout.BELOW, R.id.appBar);
