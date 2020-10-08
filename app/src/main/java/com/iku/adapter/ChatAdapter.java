@@ -74,12 +74,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
             case MSG_TYPE_DELETED_RIGHT:
                 ChatRightDeletedViewHolder chatRightDeletedViewHolder = (ChatRightDeletedViewHolder) viewHolder;
-                long timeStampDeletedRight = chatModel.getTimestamp();
-                chatRightDeletedViewHolder.messageTime.setText(sfd.format(new Date(timeStampDeletedRight)));
-                if(chatModel.getDeletedBy().equals("admin"))
-                    chatRightDeletedViewHolder.messageText.setText("Mesaage reported by others and/or deleted by admin.");
-                else
-                    chatRightDeletedViewHolder.messageText.setText("This message was deleted.");
+                chatRightDeletedViewHolder.bindChat(chatModel);
                 break;
 
             case MSG_TYPE_DELETED_LEFT:
@@ -1145,22 +1140,44 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     }
 
     private class ChatRightDeletedViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView messageTime, messageText;
+        private MaterialTextView messageTime,messageTime2, messageText;
 
         public ChatRightDeletedViewHolder(View itemView) {
             super(itemView);
             messageTime = itemView.findViewById(R.id.message_time);
+            messageTime2 = itemView.findViewById(R.id.message_time2);
             messageText = itemView.findViewById(R.id.message);
+        }
+
+        void bindChat(ChatModel chatModel) {
+
+            long timeStampDeletedRight = chatModel.getTimestamp();
+            messageTime.setText(sfd.format(new Date(timeStampDeletedRight)));
+            messageTime2.setText(sfd.format(new Date(timeStampDeletedRight)));
+
+            if(chatModel.getDeletedBy().equals("admin"))
+                messageText.setText("Message reported by others and deleted by admin.");
+            else
+                messageText.setText("This message was deleted.");
+
+            if (messageText.getText().length() <= 25) {
+                messageTime.setVisibility(View.VISIBLE);
+                messageTime2.setVisibility(View.GONE);
+            } else {
+                messageTime2.setVisibility(View.VISIBLE);
+                messageTime.setVisibility(View.GONE);
+            }
         }
     }
 
     private class ChatLeftDeletedViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView messageTime, messageTime2, senderName, messageText;
+        private MaterialTextView messageTime, messageTime2, messageTime3, senderName, messageText;
 
         public ChatLeftDeletedViewHolder(View itemView) {
             super(itemView);
             messageTime = itemView.findViewById(R.id.message_time);
             messageTime2 = itemView.findViewById(R.id.message_time2);
+            messageTime3 = itemView.findViewById(R.id.message_time3);
             senderName = itemView.findViewById(R.id.sender_name);
             messageText = itemView.findViewById(R.id.message);
         }
@@ -1170,17 +1187,29 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             senderName.setText(chatModel.getUserName());
             messageTime.setText(sfd.format(new Date(timeStampDeletedLeft)));
             messageTime2.setText(sfd.format(new Date(timeStampDeletedLeft)));
+            messageTime3.setText(sfd.format(new Date(timeStampDeletedLeft)));
+
+            if(chatModel.getDeletedBy().equals("admin"))
+                messageText.setText("Message reported by others and deleted by admin.");
+            else
+                messageText.setText("This message was deleted.");
+
             if (senderName.getVisibility() == View.VISIBLE) {
                 messageTime.setVisibility(View.VISIBLE);
                 messageTime2.setVisibility(View.GONE);
+                messageTime3.setVisibility(View.GONE);
             } else {
-                messageTime.setVisibility(View.GONE);
-                messageTime2.setVisibility(View.VISIBLE);
+                    if (messageText.getText().length() <= 25) {
+                        messageTime2.setVisibility(View.VISIBLE);
+                        messageTime.setVisibility(View.GONE);
+                        messageTime3.setVisibility(View.GONE);
+                    } else {
+                        messageTime3.setVisibility(View.VISIBLE);
+                        messageTime.setVisibility(View.GONE);
+                        messageTime2.setVisibility(View.GONE);
+                    }
+
             }
-            if(chatModel.getDeletedBy().equals("admin"))
-                messageText.setText("Message reported by others and/or deleted by admin.");
-            else
-                messageText.setText("This message was deleted.");
         }
     }
 
