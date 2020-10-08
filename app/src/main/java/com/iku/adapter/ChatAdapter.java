@@ -392,7 +392,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
             if (chatModel.getLinkPreview() == 1) {
                 linkPreviewLayout.setVisibility(View.VISIBLE);
-                Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
+                if (!chatModel.getLinkPreviewImageUrl().equals(""))
+                    Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
                 linkTitle.setText(chatModel.getLinkPreviewTitle());
                 linkDescription.setText(chatModel.getLinkPreviewDesc());
                 linkSource.setText(chatModel.getLinkPreviewUrl());
@@ -1156,7 +1157,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
             if (chatModel.getLinkPreview() == 1) {
                 linkPreviewLayout.setVisibility(View.VISIBLE);
-                Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
+                if (!chatModel.getLinkPreviewImageUrl().equals(""))
+                    Picasso.get().load(chatModel.getLinkPreviewImageUrl()).noFade().into(linkPreviewImage);
                 linkTitle.setText(chatModel.getLinkPreviewTitle());
                 linkDescription.setText(chatModel.getLinkPreviewDesc());
                 linkSource.setText(chatModel.getLinkPreviewUrl());
