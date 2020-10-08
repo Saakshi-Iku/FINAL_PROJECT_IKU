@@ -24,8 +24,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private String userName;
 
-    private String userUID;
-
     private ActivityUserPofileBinding userPofileBinding;
 
     private String TAG = UserProfileActivity.class.getSimpleName();
@@ -37,25 +35,28 @@ public class UserProfileActivity extends AppCompatActivity {
         setContentView(userPofileBinding.getRoot());
 
         db = FirebaseFirestore.getInstance();
-
         Bundle extras = this.getIntent().getExtras();
-        userName = extras.getString("EXTRA_PERSON_NAME");
-        userUID = extras.getString("EXTRA_PERSON_UID");
-
-        initButtons();
-
-
-        userPofileBinding.userName.setText(userName);
-        getUserDetails(userUID);
-        getPicture(userUID);
+        if (extras != null) {
+            userName = extras.getString("EXTRA_PERSON_NAME");
+            String userUID = extras.getString("EXTRA_PERSON_UID");
+            initButtons();
+            userPofileBinding.userName.setText(userName);
+            getUserDetails(userUID);
+            getPicture(userUID);
+        }
     }
 
     private void initButtons() {
         userPofileBinding.backButton.setOnClickListener(view -> onBackPressed());
         userPofileBinding.linkInBio.setOnClickListener(view -> {
+            Uri page;
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.launchUrl(this, Uri.parse(userPofileBinding.linkInBio.getText().toString().trim()));
+            if (!userPofileBinding.linkInBio.getText().toString().trim().startsWith("http://") && !userPofileBinding.linkInBio.getText().toString().trim().startsWith("https://")) {
+                page = Uri.parse("http://" + userPofileBinding.linkInBio.getText().toString().trim());
+                customTabsIntent.launchUrl(view.getContext(), page);
+            } else
+                customTabsIntent.launchUrl(view.getContext(), Uri.parse(userPofileBinding.linkInBio.getText().toString().trim()));
         });
     }
 

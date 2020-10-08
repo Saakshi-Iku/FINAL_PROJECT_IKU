@@ -62,7 +62,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun saveUserDetails(user: FirebaseUser, name: String) {
         val bio = userBio.text.toString().trim()
-        val optionalLink = "https://" + linkInBio.text.toString().trim()
+        val optionalLink = linkInBio.text.toString().trim()
         val parts = name.split(" ").toMutableList()
         val firstName = parts.firstOrNull()?.capitalize(Locale.ROOT)
         parts.removeAt(0)

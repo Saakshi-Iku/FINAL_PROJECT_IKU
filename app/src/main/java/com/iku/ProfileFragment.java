@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
@@ -40,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private FirebaseAnalytics mFirebaseAnalytics;
     private String photoUrl;
     private MaterialTextView userHeartsTextView, userHeartsAddnTextView, userBioTextView, userLinkTextView;
-    private LinearLayout userBioView,userLinkView;
+    private LinearLayout userBioView, userLinkView;
     private FragmentProfileBinding profileBinding;
 
     public ProfileFragment() {
@@ -89,16 +88,20 @@ public class ProfileFragment extends Fragment {
         });
 
         profileBinding.linkInBio.setOnClickListener(view -> {
+            Uri page;
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.launchUrl(view.getContext(), Uri.parse(profileBinding.linkInBio.getText().toString().trim()));
+            if (!profileBinding.linkInBio.getText().toString().trim().startsWith("http://") && !profileBinding.linkInBio.getText().toString().trim().startsWith("https://")) {
+                page = Uri.parse("http://" + profileBinding.linkInBio.getText().toString().trim());
+                customTabsIntent.launchUrl(view.getContext(), page);
+            } else
+                customTabsIntent.launchUrl(view.getContext(), Uri.parse(profileBinding.linkInBio.getText().toString().trim()));
         });
 
         profileBinding.addHabitButton.setOnClickListener(view -> {
             Intent goToHabitsPage = new Intent(getActivity(), HabitsActivity.class);
             startActivity(goToHabitsPage);
         });
-
     }
 
     private void getProfileDetails() {
