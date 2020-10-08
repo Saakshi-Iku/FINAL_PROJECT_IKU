@@ -188,6 +188,8 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
         });
 
+        binding.jumpToBottom.setOnClickListener(view -> mChatRecyclerview.smoothScrollToPosition(0));
+
         initSendButton();
 
     }
@@ -222,7 +224,6 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         chatadapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                mChatRecyclerview.smoothScrollToPosition(0);
             }
         });
 
@@ -234,6 +235,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                 super.onScrolled(recyclerView, dx, dy);
                 int firstVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
                 if (dy < 0) {
+                    binding.scrollToBottomButton.setVisibility(View.VISIBLE);
                     binding.chatDate.setVisibility(View.VISIBLE);
                     if (sfdMainDate.format(new Date(chatadapter.getItem(firstVisiblePosition).getTimestamp())).equals(sfdMainDate.format(new Date().getTime())))
                         binding.chatDate.setText(R.string.today_text);
@@ -242,6 +244,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     } else
                         binding.chatDate.setText(sfdMainDate.format(chatadapter.getItem(firstVisiblePosition).getTimestamp()));
                 } else if (dy > 0) {
+                    binding.scrollToBottomButton.setVisibility(View.GONE);
                     binding.chatDate.setVisibility(View.GONE);
                 }
             }
@@ -726,7 +729,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                             return;
                         }
 
-                        if (querySnapshot!=null){
+                        if (querySnapshot != null) {
                             for (DocumentChange change : querySnapshot.getDocumentChanges()) {
                                 if (change.getType() == DocumentChange.Type.ADDED) {
                                     ArrayList<String> group = (ArrayList<String>) change.getDocument().get("members");
@@ -1120,7 +1123,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                 break;
                             }
                         }
-                        if(!isReported) {
+                        if (!isReported) {
                             reportView.setVisibility(View.VISIBLE);
                             reportView.setOnClickListener(view13 -> {
                                 MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
@@ -1134,7 +1137,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                             if (document.exists()) {
                                                 ArrayList<String> spamReportedArray = (ArrayList) document.get("spamReportedBy");
                                                 long spamCount = (long) document.get("spamCount");
-                                                if (spamReportedArray!=null){
+                                                if (spamReportedArray != null) {
                                                     if (!spamReportedArray.contains(user.getUid())) {
                                                         Map<String, Object> map = new HashMap<>();
                                                         map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
