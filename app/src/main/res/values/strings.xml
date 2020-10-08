@@ -41,5 +41,7 @@
     <string name="view_profile">View profile</string>
     <string name="profile">Profile</string>
     <string name="check_your_inbox_for_verification_email_nclick_the_link_to_verify_your_email_before_proceeding">Check your inbox for verification email.\nClick the link to verify your email before proceeding</string>
+    <string name="reported_spam_and_deleted">Message reported by others and deleted by admin.</string>
+    <string name="message_deleted">This message was deleted.</string>
 
 </resources>

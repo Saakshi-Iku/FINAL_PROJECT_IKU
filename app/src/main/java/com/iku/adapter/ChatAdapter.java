@@ -1813,9 +1813,9 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampDeletedRight)));
 
             if (chatModel.getDeletedBy().equals("admin"))
-                messageText.setText("Message reported by others and deleted by admin.");
+                messageText.setText(R.string.reported_spam_and_deleted);
             else
-                messageText.setText("This message was deleted.");
+                messageText.setText(R.string.message_deleted);
 
             if (messageText.getText().length() <= 25) {
                 messageTime.setVisibility(View.VISIBLE);
