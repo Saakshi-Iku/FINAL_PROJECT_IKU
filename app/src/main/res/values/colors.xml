@@ -13,6 +13,7 @@
     <color name="linkColorDarkBG">#11b7b7</color>
 
     <color name="urlPreviewBG">#DADADA</color>
+    <color name="scrollViewBG">#EBEBEB</color>
 
     <!--light theme colours-->
 
