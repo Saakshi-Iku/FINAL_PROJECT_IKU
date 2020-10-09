@@ -22,7 +22,7 @@
     <string name="today_text">Today</string>
     <string name="yesterday_text">Yesterday</string>
     <string name="recently_added">Recently added</string>
-    <string name="most_requested">Most requested</string>
+    <string name="most_requested">Most upvoted</string>
     <string name="feature_upvote">Feature Upvote</string>
     <string name="logout">Logout</string>
     <string name="report_a_bug">Report a bug</string>
