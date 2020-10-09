@@ -21,6 +21,8 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
@@ -113,6 +115,8 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     private String linkPreviewDesc = "";
     private String linkPreviewUrl = "";
 
+    private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+
     public ChatFragment() {
         // Required empty public constructor
     }
@@ -185,15 +189,13 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
 
         binding.choose.setOnClickListener(view -> {
-            if (ContextCompat.checkSelfPermission(view.getContext(),
-                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(view.getContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermission();
-            } else {
+            if (checkAllPermissions(view.getContext())) {
                 Intent goToImageSend = new Intent(getActivity(), ChatImageActivity.class);
                 goToImageSend.putExtra("documentId", "default");
                 startActivity(goToImageSend);
+
+            } else {
+                requestMultiplePermissionLauncher.launch(perms);
             }
         });
 
@@ -669,20 +671,6 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     });
         }
         chatadapter.notifyItemChanged(position);
-    }
-
-    private void requestPermission() {
-        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == STORAGE_PERMISSION_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(getActivity(), "Permission Granted!", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(getActivity(), ChatImageActivity.class);
-            i.putExtra("documentId", "default");
-            startActivity(i);
-        }
     }
 
     private void getGroupMemberCount() {
@@ -1196,5 +1184,31 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                 break;
         }
         return containedUrls;
+    }
+
+    private ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permsGranted -> {
+        if (permsGranted.containsValue(false)) {
+            //user denied one or more permissions
+            Toast.makeText(getActivity(), "PERMISSIONS NOT GRANTED", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Permission Granted!", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getActivity(), ChatImageActivity.class);
+            i.putExtra("documentId", "default");
+            startActivity(i);
+        }
+    });
+
+    /**
+     * Compares all permissions in the provided array with the permissions granted to the application.
+     *
+     * @return true if all listed permissions are held by the application, otherwise false.
+     */
+    private boolean checkAllPermissions(Context context) {
+        for (String p : ChatFragment.perms) {
+            if (ContextCompat.checkSelfPermission(context, p) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 }
