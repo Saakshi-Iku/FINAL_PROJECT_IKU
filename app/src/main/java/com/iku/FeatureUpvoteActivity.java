@@ -54,7 +54,6 @@ public class FeatureUpvoteActivity extends AppCompatActivity {
     }
 
     private void queryDB(Query query) {
-
         FirestoreRecyclerOptions<FeatureUpvoteModel> options = new FirestoreRecyclerOptions.Builder<FeatureUpvoteModel>()
                 .setQuery(query, FeatureUpvoteModel.class)
                 .build();
@@ -80,6 +79,7 @@ public class FeatureUpvoteActivity extends AppCompatActivity {
                 data.put("uid", mAuth.getUid());
                 data.put("timestamp", timestamp);
                 data.put("sequence", present_upvote_count + 1);
+                data.put("row", FeatureUpvoteModel.getRow());
                 firebaseFirestore.collection("feature_upvote_users").add(data)
                         .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override

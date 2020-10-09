@@ -14,16 +14,19 @@ public class FeatureUpvoteModel {
     private long timestamp;
     @PropertyName("upvote_count")
     private long upvote_count;
+    @PropertyName("row")
+    private long row;
 
     public FeatureUpvoteModel() {
     }
 
-    public FeatureUpvoteModel(String title, String description, String image, long timestamp, long upvote_count) {
+    public FeatureUpvoteModel(String title, String description, String image, long timestamp, long upvote_count, long row) {
         this.title = title;
         this.description = description;
         this.image = image;
         this.timestamp = timestamp;
         this.upvote_count = upvote_count;
+        this.row = row;
     }
 
     public String getTitle() {
@@ -44,5 +47,13 @@ public class FeatureUpvoteModel {
 
     public long getUpvote_count() {
         return upvote_count;
+    }
+
+    public long getRow() {
+        return row;
+    }
+
+    public void setRow(long row) {
+        this.row = row;
     }
 }
