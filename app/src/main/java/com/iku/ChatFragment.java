@@ -1064,17 +1064,20 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         }
                         deleteMessageView.setVisibility(View.VISIBLE);
                         deleteMessageView.setOnClickListener(view1 -> {
+                            bottomSheetDialog.dismiss();
                             MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
                             materialAlertDialogBuilder.setTitle("Delete Message");
                             materialAlertDialogBuilder.setMessage("Delete for everyone?");
                             materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
                                 deleteMessage(documentID, "author");
-                                bottomSheetDialog.dismiss();
+//                                bottomSheetDialog.dismiss();
                                 //log event
                                 Bundle delete_bundle = new Bundle();
                                 delete_bundle.putString("uid", user.getUid());
                                 mFirebaseAnalytics.logEvent("message_deleted", delete_bundle);
                             }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                bottomSheetDialog.setContentView(parentView);
+                                bottomSheetDialog.show();
                             }).show();
                         });
                         bottomSheetDialog.setContentView(parentView);
@@ -1093,6 +1096,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                             if (!isReported) {
                                 reportView.setVisibility(View.VISIBLE);
                                 reportView.setOnClickListener(view13 -> {
+                                    bottomSheetDialog.dismiss();
                                     MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
                                     materialAlertDialogBuilder.setTitle("Report Spam");
                                     materialAlertDialogBuilder.setMessage("Are you sure?");
@@ -1123,12 +1127,13 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                 }
                                             }
                                         });
-                                        bottomSheetDialog.dismiss();
                                         //log event
                                         Bundle spam_bundle = new Bundle();
                                         spam_bundle.putString("uid", user.getUid());
                                         mFirebaseAnalytics.logEvent("message_reported_spam", spam_bundle);
                                     }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                        bottomSheetDialog.setContentView(parentView);
+                                        bottomSheetDialog.show();
                                     }).show();
                                 });
                             }
@@ -1153,17 +1158,19 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         if (isAdmin) {
                             deleteMessageView.setVisibility(View.VISIBLE);
                             deleteMessageView.setOnClickListener(view1 -> {
+                                bottomSheetDialog.dismiss();
                                 MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
                                 materialAlertDialogBuilder.setTitle("Delete Message");
                                 materialAlertDialogBuilder.setMessage("Delete for everyone?");
                                 materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
                                     deleteMessage(documentID, "admin");
-                                    bottomSheetDialog.dismiss();
                                     //log event
                                     Bundle delete_bundle = new Bundle();
                                     delete_bundle.putString("uid", user.getUid());
                                     mFirebaseAnalytics.logEvent("message_deleted", delete_bundle);
                                 }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                    bottomSheetDialog.setContentView(parentView);
+                                    bottomSheetDialog.show();
                                 }).show();
                             });
                         }
