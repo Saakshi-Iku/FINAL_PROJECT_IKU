@@ -197,7 +197,10 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
         });
 
-        binding.jumpToBottom.setOnClickListener(view -> mChatRecyclerview.scrollToPosition(0));
+        binding.jumpToBottom.setOnClickListener(view -> {
+            mChatRecyclerview.scrollToPosition(0);
+            binding.jumpToBottom.setVisibility(View.GONE);
+        });
 
         binding.close.setOnClickListener(view -> {
             binding.chatboxLinkPreview.setVisibility(View.GONE);
