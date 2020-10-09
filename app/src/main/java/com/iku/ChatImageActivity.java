@@ -163,6 +163,7 @@ public class ChatImageActivity extends AppCompatActivity {
                     docData.put("spamCount", 0);
                     docData.put("spam", false);
                     docData.put("deleted", false);
+                    docData.put("postCommentCount", 0);
 
                     Map<String, Object> normalMessage = new HashMap<>();
                     normalMessage.put("firstImage", true);
