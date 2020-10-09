@@ -2,12 +2,7 @@ package com.iku
 
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.WindowInsets
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -18,16 +13,6 @@ class SplashActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
-        @Suppress("DEPRECATION")
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
-        } else {
-            window.setFlags(
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                    WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-        }
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
         val user = mAuth.currentUser
@@ -42,9 +27,7 @@ class SplashActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val document = task.result
                     if (document.exists()) {
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            startActivity(Intent(this@SplashActivity, HomeActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) })
-                        }, 2000)
+                        startActivity(Intent(this@SplashActivity, HomeActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) })
                     } else
                         startActivity(Intent(this@SplashActivity, NameInputActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) })
                 }
@@ -54,13 +37,9 @@ class SplashActivity : AppCompatActivity() {
                 putBoolean(getString(R.string.prev_started), true)
                 apply()
             }
-            Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this@SplashActivity, OnboardingActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) })
-            }, 2000)
+            startActivity(Intent(this@SplashActivity, OnboardingActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) })
         } else {
-            Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) })
-            }, 2000)
+            startActivity(Intent(this@SplashActivity, WelcomeActivity::class.java).apply { addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK) })
         }
     }
 }
