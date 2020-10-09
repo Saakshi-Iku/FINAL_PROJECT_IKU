@@ -25,6 +25,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -138,6 +139,7 @@ public class ChatImageActivity extends AppCompatActivity {
                     Map<String, Object> docData = new HashMap<>();
                     docData.put("message", message.trim());
                     docData.put("timestamp", timestamp);
+                    docData.put("serverTime", FieldValue.serverTimestamp());
                     docData.put("uid", user.getUid());
                     docData.put("type", "image");
                     docData.put("imageUrl", uri.toString());
@@ -286,9 +288,13 @@ public class ChatImageActivity extends AppCompatActivity {
     }
 
     private void updateMessage(String messageDocumentID, String message) {
+        Date d = new Date();
+        long timestamp = d.getTime();
         Map<String, Object> map = new HashMap<>();
         map.put("message", message);
         map.put("edited", true);
+        map.put("messageUpdateTime", timestamp);
+        map.put("readableMessageUpdateTime", FieldValue.serverTimestamp());
         db.collection("iku_earth_messages").document(messageDocumentID)
                 .update(map)
                 .addOnSuccessListener(aVoid -> {
