@@ -3,7 +3,9 @@ package com.iku;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SimpleItemAnimator;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
@@ -283,6 +289,11 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         data.put("timestamp", timestamp);
         data.put("commenterImageUrl", String.valueOf(user.getPhotoUrl()));
         data.put("readableTimestamp", FieldValue.serverTimestamp());
+        ArrayList<Object> spamArray = new ArrayList<>();
+        data.put("spamReportedBy", spamArray);
+        data.put("spamCount", 0);
+        data.put("spam", false);
+        data.put("deleted", false);
 
         db.collection("iku_earth_messages").document(messageId)
                 .collection("comments").add(data)
@@ -773,63 +784,111 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                     reportView.setVisibility(View.GONE);
                     deleteMessageView.setVisibility(View.VISIBLE);
                     deleteMessageView.setOnClickListener(view1 -> {
+                        bottomSheetDialog.dismiss();
                         MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
                         materialAlertDialogBuilder.setTitle("Delete Comment");
                         materialAlertDialogBuilder.setMessage("Are you sure?");
                         materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
-                            deleteComment(documentID);
-                            bottomSheetDialog.dismiss();
+                            deleteComment(documentID, "author");
                             //log event
                             Bundle delete_bundle = new Bundle();
                             delete_bundle.putString("uid", user.getUid());
                             mFirebaseAnalytics.logEvent("message_deleted", delete_bundle);
                         }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                            bottomSheetDialog.setContentView(parentView);
+                            bottomSheetDialog.show();
                         }).show();
                     });
                     bottomSheetDialog.setContentView(parentView);
                     bottomSheetDialog.show();
                 } else {
                     profileView.setVisibility(View.VISIBLE);
-                    // reportView.setVisibility(View.VISIBLE);
+                    SharedPreferences pref = view.getContext().getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+                    boolean isAdmin = pref.getBoolean("isAdmin", false);
+                    if (isAdmin) {
+                        deleteMessageView.setVisibility(View.VISIBLE);
+                    }
                     bottomSheetDialog.setContentView(parentView);
                     bottomSheetDialog.show();
 
-                /*reportView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        DocumentReference docRef = db.collection("iku_earth_messages").document(documentSnapshot.getId());
-                        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    DocumentSnapshot document = task.getResult();
-                                    if (document.exists()) {
-                                        ArrayList<String> spamReportedArray = (ArrayList) document.get("spamReportedBy");
-                                        long spamCount = (long) document.get("spamCount");
-                                        boolean spam = (boolean) document.get("spam");
-                                        if (!spamReportedArray.contains(user.getUid())) {
-                                            Map<String, Object> map = new HashMap<>();
-                                            map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
-                                            map.put("spamCount", spamCount + 1);
-                                            if (spamCount >= 4)
-                                                map.put("spam", true);
-                                            db.collection("iku_earth_messages").document(documentSnapshot.getId())
-                                                    .update(map)
-                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                        @Override
-                                                        public void onSuccess(Void aVoid) {
-
-                                                        }
-                                                    });
-                                        }
-                                    }
-                                }
-                            }
-                        });
+                    deleteMessageView.setOnClickListener(view1 -> {
                         bottomSheetDialog.dismiss();
-                    }
-                });*/
+                        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
+                        materialAlertDialogBuilder.setTitle("Delete Comment");
+                        materialAlertDialogBuilder.setMessage("Are you sure?");
+                        materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
+                            deleteComment(documentID, "admin");
+                            //log event
+                            Bundle delete_bundle = new Bundle();
+                            delete_bundle.putString("uid", user.getUid());
+                            mFirebaseAnalytics.logEvent("message_deleted", delete_bundle);
+                        }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                            bottomSheetDialog.setContentView(parentView);
+                            bottomSheetDialog.show();
+                        }).show();
+                    });
 
+                    boolean isReported = false;
+                    ArrayList<String> SpamReportedByArray = adapter.getItem(position).getSpamReportedBy();
+                    if (SpamReportedByArray != null) {
+                        for (String element : SpamReportedByArray) {
+                            if (element.contains(user.getUid())) {
+                                isReported = true;
+                                break;
+                            }
+                        }
+                        if (!isReported) {
+                            reportView.setVisibility(View.VISIBLE);
+                            reportView.setOnClickListener(view13 -> {
+                                bottomSheetDialog.dismiss();
+                                MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
+                                materialAlertDialogBuilder.setTitle("Report Spam");
+                                materialAlertDialogBuilder.setMessage("Are you sure?");
+                                materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
+                                    DocumentReference docRef = db.collection("iku_earth_messages").document(messageId).collection("comments").document(documentID);
+                                    docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                DocumentSnapshot document = task.getResult();
+                                                if (document.exists()) {
+                                                    ArrayList<String> spamReportedArray = (ArrayList) document.get("spamReportedBy");
+                                                    long spamCount = (long) document.get("spamCount");
+                                                    boolean spam = (boolean) document.get("spam");
+                                                    if (!spamReportedArray.contains(user.getUid())) {
+                                                        Map<String, Object> map = new HashMap<>();
+                                                        map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
+                                                        map.put("spamCount", spamCount + 1);
+                                                        if (spamCount >= 4) {
+                                                            map.put("spam", true);
+                                                            map.put("deleted", true);
+                                                            map.put("deletedBy", "users");
+                                                            deleteComment(documentID, "users");
+                                                        }
+                                                        db.collection("iku_earth_messages").document(messageId).collection("comments").document(documentID)
+                                                                .update(map)
+                                                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+
+                                                                    }
+                                                                });
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                    //log event
+                                    Bundle spam_bundle = new Bundle();
+                                    spam_bundle.putString("uid", user.getUid());
+                                    mFirebaseAnalytics.logEvent("message_reported_spam", spam_bundle);
+                                }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                    bottomSheetDialog.setContentView(parentView);
+                                    bottomSheetDialog.show();
+                                }).show();
+                            });
+                        }
+                    }
                     profileView.setOnClickListener(view2 -> {
                         Intent userProfileIntent = new Intent(ViewPostActivity.this, UserProfileActivity.class);
 
@@ -849,19 +908,32 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         }
     }
 
-    private void deleteComment(String commentDocumentID) {
+    private void deleteComment(String commentDocumentID, String deletedBy) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("deleted", true);
+        map.put("deletedBy", deletedBy);
+        if (deletedBy.equals("admin"))
+            map.put("spam", true);
         db.collection("iku_earth_messages").document(messageId).collection("comments").document(commentDocumentID)
-                .delete()
-                .addOnSuccessListener(aVoid -> {
-                    db.collection("iku_earth_messages").document(messageId)
-                            .update("postCommentCount", FieldValue.increment(-1))
-                            .addOnSuccessListener(documentReferenceObj -> {
-                            });
-                    //Log event
-                    Bundle delete_bundle = new Bundle();
-                    delete_bundle.putString("UID", user.getUid());
-                    delete_bundle.putString("Name", user.getDisplayName());
-                    mFirebaseAnalytics.logEvent("deleted_message", delete_bundle);
+                .update(map)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        db.collection("iku_earth_messages").document(messageId)
+                                .update("postCommentCount", FieldValue.increment(-1))
+                                .addOnSuccessListener(documentReferenceObj -> {
+                                });
+                        //Log event
+                        Bundle delete_bundle = new Bundle();
+                        delete_bundle.putString("UID", user.getUid());
+                        delete_bundle.putString("Name", user.getDisplayName());
+                        mFirebaseAnalytics.logEvent("deleted_comment", delete_bundle);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
                 });
     }
 

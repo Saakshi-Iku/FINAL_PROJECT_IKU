@@ -1,6 +1,7 @@
 package com.iku.adapter;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,7 +60,16 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
     @Override
     protected void onBindViewHolder(@NonNull CommentViewHolder commentViewHolder, int position, @NonNull CommentModel commentModel) {
         long timeStamp = commentModel.getTimestamp();
-        commentViewHolder.commentTextView.setText(commentModel.getComment());
+        if(commentModel.isSpam() || commentModel.isDeleted()) {
+            commentViewHolder.commentTextView.setTypeface(commentViewHolder.commentTextView.getTypeface(), Typeface.ITALIC);
+            if(commentModel.getDeletedBy().equals("author"))
+                commentViewHolder.commentTextView.setText("Comment was deleted.");
+            else
+                commentViewHolder.commentTextView.setText("Comment was reported and/or deleted by admin");
+        }else {
+            commentViewHolder.commentTextView.setTypeface(commentViewHolder.commentTextView.getTypeface(), Typeface.NORMAL);
+            commentViewHolder.commentTextView.setText(commentModel.getComment());
+        }
         commentViewHolder.commenterNameTextView.setText(commentModel.getCommenterName());
         commentViewHolder.timestampTextView.setText(getTimeAgo(timeStamp));
         commentViewHolder.commentHeartCountTextView.setText(String.valueOf(commentModel.getHeartsCount()));

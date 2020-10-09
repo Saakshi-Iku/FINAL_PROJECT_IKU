@@ -21,12 +21,22 @@ public class CommentModel {
     private ArrayList<String> heartsArray;
     @PropertyName("readableTimestamp")
     private Timestamp readableTimestamp;
+    @PropertyName("spam")
+    private boolean spam;
+    @PropertyName("spamCount")
+    private int spamCount;
+    @PropertyName("spamReportedBy")
+    private ArrayList<String> spamReportedBy;
+    @PropertyName("deleted")
+    private boolean deleted;
+    @PropertyName("deletedBy")
+    private String deletedBy;
 
     private CommentModel() {
 
     }
 
-    public CommentModel(String comment, String uid, String commenterName, long timestamp, int heartsCount, ArrayList<String> heartsArray, Timestamp readableTimestamp) {
+    public CommentModel(String comment, String uid, String commenterName, long timestamp, int heartsCount, ArrayList<String> heartsArray, Timestamp readableTimestamp, boolean spam, int spamCount, ArrayList<String> spamReportedBy, boolean deleted, String deletedBy ) {
         this.comment = comment;
         this.uid = uid;
         this.commenterName = commenterName;
@@ -34,6 +44,11 @@ public class CommentModel {
         this.heartsCount = heartsCount;
         this.heartsArray = heartsArray;
         this.readableTimestamp = readableTimestamp;
+        this.spam = spam;
+        this.spamCount = spamCount;
+        this.spamReportedBy = spamReportedBy;
+        this.deleted = deleted;
+        this.deletedBy = deletedBy;
     }
 
     public String getComment() {
@@ -62,6 +77,46 @@ public class CommentModel {
 
     public Timestamp getReadableTimestamp() {
         return readableTimestamp;
+    }
+
+    public boolean isSpam() {
+        return spam;
+    }
+
+    public void setSpam(boolean spam) {
+        this.spam = spam;
+    }
+
+    public int getSpamCount() {
+        return spamCount;
+    }
+
+    public void setSpamCount(int spamCount) {
+        this.spamCount = spamCount;
+    }
+
+    public ArrayList<String> getSpamReportedBy() {
+        return spamReportedBy;
+    }
+
+    public void setSpamReportedBy(ArrayList<String> spamReportedBy) {
+        this.spamReportedBy = spamReportedBy;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getDeletedBy() {
+        return deletedBy;
+    }
+
+    public void setDeletedBy(String deletedBy) {
+        this.deletedBy = deletedBy;
     }
 
 }
