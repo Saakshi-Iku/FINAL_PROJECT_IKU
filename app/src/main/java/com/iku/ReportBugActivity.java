@@ -18,10 +18,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -77,6 +78,7 @@ public class ReportBugActivity extends AppCompatActivity {
     private ImageView img1, img2, img3, img4;
     private int counter = 0;
     private Date d;
+    private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
     private ActivityReportBugBinding reportBugBinding;
 
@@ -154,15 +156,13 @@ public class ReportBugActivity extends AppCompatActivity {
         img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(ReportBugActivity.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestStoragePermission(0);
-                } else {
+                if (checkAllPermissions()) {
                     Intent i = new Intent();
                     i.setType("image/*");
                     i.setAction(Intent.ACTION_GET_CONTENT);
-
-                    startActivityForResult(i, 0);
+                    startActivityForResult(i, 2);
+                } else {
+                    requestMultiplePermissionLauncher.launch(perms);
                 }
             }
         });
@@ -170,15 +170,13 @@ public class ReportBugActivity extends AppCompatActivity {
         img2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(ReportBugActivity.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestStoragePermission(1);
-                } else {
+                if (checkAllPermissions()) {
                     Intent i = new Intent();
                     i.setType("image/*");
                     i.setAction(Intent.ACTION_GET_CONTENT);
-
-                    startActivityForResult(i, 1);
+                    startActivityForResult(i, 2);
+                } else {
+                    requestMultiplePermissionLauncher.launch(perms);
                 }
             }
         });
@@ -186,15 +184,13 @@ public class ReportBugActivity extends AppCompatActivity {
         img3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (ContextCompat.checkSelfPermission(ReportBugActivity.this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                    requestStoragePermission(2);
-                } else {
+                if (checkAllPermissions()) {
                     Intent i = new Intent();
                     i.setType("image/*");
                     i.setAction(Intent.ACTION_GET_CONTENT);
-
                     startActivityForResult(i, 2);
+                } else {
+                    requestMultiplePermissionLauncher.launch(perms);
                 }
             }
         });
@@ -305,7 +301,6 @@ public class ReportBugActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     @Override
@@ -354,7 +349,6 @@ public class ReportBugActivity extends AppCompatActivity {
         if (path != null) return Uri.parse(path);
         else return null;
     }
-
 
     private void uploadToStorage() {
         if (myList.size() == 0 && finalUrl.size() == 0) {
@@ -474,54 +468,38 @@ public class ReportBugActivity extends AppCompatActivity {
 
     }
 
-    private void requestStoragePermission(int code) {
-
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, code);
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == 0) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent();
-                i.setType("image/*");
-                i.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(i, 0);
-            } else {
-                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent();
-                i.setType("image/*");
-                i.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(i, 1);
-            } else {
-                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == 2) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permission GRANTED", Toast.LENGTH_SHORT).show();
-                Intent i = new Intent();
-                i.setType("image/*");
-                i.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(i, 2);
-            } else {
-                Toast.makeText(this, "Permission DENIED", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-
     private void initProgressDialog() {
         mProgress = new ProgressDialog(this);
         mProgress.setTitle("Uploading bug report");
         mProgress.setMessage("We will fix this ASAP!");
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
+    }
+
+    private ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permsGranted -> {
+        if (permsGranted.containsValue(false)) {
+            //user denied one or more permissions
+            Toast.makeText(this, "PERMISSIONS NOT GRANTED", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent i = new Intent();
+            i.setType("image/*");
+            i.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(i, 2);
+        }
+    });
+
+    /**
+     * Compares all permissions in the provided array with the permissions granted to the application.
+     *
+     * @return true if all listed permissions are held by the application, otherwise false.
+     */
+    private boolean checkAllPermissions() {
+        for (String p : ReportBugActivity.perms) {
+            if (ContextCompat.checkSelfPermission(this, p) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
