@@ -94,8 +94,8 @@ dependencies {
     implementation 'nl.dionsegijn:konfetti:1.2.2'
     implementation 'com.github.chrisbanes:PhotoView:2.0.0'
     implementation 'me.saket:better-link-movement-method:2.2.0'
-    implementation 'io.github.ponnamkarthik:richlinkpreview:1.0.9'
-    implementation 'org.jsoup:jsoup:1.8.3'
+    implementation 'com.github.muthukrishnan-suresh:soul-surfer-android:1.0.0'
+    implementation 'org.jsoup:jsoup:1.13.1'
 
     // Life cycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

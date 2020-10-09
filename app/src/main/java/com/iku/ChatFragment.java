@@ -10,12 +10,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateUtils;
+import android.util.Patterns;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.URLUtil;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -57,6 +57,10 @@ import com.iku.adapter.ChatAdapter;
 import com.iku.databinding.FragmentChatBinding;
 import com.iku.models.ChatModel;
 import com.iku.models.UserModel;
+import com.soulsurfer.android.PageInfo;
+import com.soulsurfer.android.PageInfoListener;
+import com.soulsurfer.android.SoulSurfer;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
@@ -68,57 +72,64 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.github.ponnamkarthik.richlinkpreview.MetaData;
-import io.github.ponnamkarthik.richlinkpreview.ResponseListener;
-import io.github.ponnamkarthik.richlinkpreview.RichPreview;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
 
 public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchListener {
 
     private static final String TAG = ChatFragment.class.getSimpleName();
-
+    private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private SimpleDateFormat sfdMainDate = new SimpleDateFormat("MMMM dd, yyyy");
-
     private FirebaseUser user;
-
     private MaterialTextView memberCount;
-
     private FirebaseFirestore db;
-
     private FragmentChatBinding binding;
-
     private RecyclerView mChatRecyclerview;
-
     private ChatAdapter chatadapter;
-
     private long upvotesCount;
     private long downvotesCount;
-
     private String authorOfMessage;
-
     private boolean isLiked;
     private boolean isDisliked;
-
     private FirebaseAnalytics mFirebaseAnalytics;
-
     private GestureDetectorCompat detector;
-
     // 0 means normal send, 1 means update an old message
     private int editTextStatus = 0;
     private int STORAGE_PERMISSION_CODE = 10;
     // 0 means false, 1 is link preview message
     private int linkPreviewedMessageStatus = 0;
-
     private String linkPreviewImageUrl = "";
     private String linkPreviewTitle = "";
     private String linkPreviewDesc = "";
     private String linkPreviewUrl = "";
-
-    private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permsGranted -> {
+        if (permsGranted.containsValue(false)) {
+            //user denied one or more permissions
+            Toast.makeText(getActivity(), "PERMISSIONS NOT GRANTED", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Permission Granted!", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getActivity(), ChatImageActivity.class);
+            i.putExtra("documentId", "default");
+            startActivity(i);
+        }
+    });
 
     public ChatFragment() {
         // Required empty public constructor
+    }
+
+    public static List<String> extractUrls(String text) {
+        List<String> containedUrls = new ArrayList<>();
+        String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+        Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
+        Matcher urlMatcher = pattern.matcher(text);
+
+        while (urlMatcher.find()) {
+            containedUrls.add(text.substring(urlMatcher.start(0), urlMatcher.end(0)));
+            if (containedUrls.size() == 1)
+                break;
+        }
+        return containedUrls;
     }
 
     @Override
@@ -260,6 +271,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                 int firstVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
                 if (dy < 0) {
                     binding.scrollToBottomButton.setVisibility(View.VISIBLE);
+                    binding.jumpToBottom.setVisibility(View.VISIBLE);
                     binding.chatDate.setVisibility(View.VISIBLE);
                     if (sfdMainDate.format(new Date(chatadapter.getItem(firstVisiblePosition).getTimestamp())).equals(sfdMainDate.format(new Date().getTime())))
                         binding.chatDate.setText(R.string.today_text);
@@ -269,6 +281,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                         binding.chatDate.setText(sfdMainDate.format(chatadapter.getItem(firstVisiblePosition).getTimestamp()));
                 } else if (dy > 0) {
                     binding.scrollToBottomButton.setVisibility(View.GONE);
+                    binding.jumpToBottom.setVisibility(View.GONE);
                     binding.chatDate.setVisibility(View.GONE);
                 }
             }
@@ -331,7 +344,20 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                 });
     }
 
+    /**
+     * This is used to check the given URL is valid or not.
+     *
+     * @param url
+     * @return true if url is valid, false otherwise.
+     */
+    private boolean isValidUrl(String url) {
+        Pattern p = Patterns.WEB_URL;
+        Matcher m = p.matcher(url.toLowerCase());
+        return m.matches();
+    }
+
     private void watchTextBox() {
+
         binding.messageTextField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -340,40 +366,53 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                List<String> extractedUrls = extractUrls("" + charSequence);
-                RichPreview richPreview = new RichPreview(new ResponseListener() {
-                    @Override
-                    public void onData(MetaData metaData) {
-                        if (!metaData.getTitle().equals("") && !metaData.getDescription().equals("")) {
-                            linkPreviewedMessageStatus = 1;
-                            binding.chatboxLinkPreview.setVisibility(View.VISIBLE);
-                            binding.linkTitle.setText(metaData.getTitle());
-                            binding.linkPreviewDescription.setText(metaData.getDescription());
-                            if (!metaData.getImageurl().equals("")) {
-                                binding.linkPreviewImage.setVisibility(View.VISIBLE);
-                                Picasso.get().load(metaData.getImageurl()).noFade().into(binding.linkPreviewImage);
-                            } else
-                                binding.linkPreviewImage.setVisibility(View.GONE);
-                            linkPreviewImageUrl = metaData.getImageurl();
-                            linkPreviewTitle = metaData.getTitle();
-                            linkPreviewDesc = metaData.getDescription();
-                            linkPreviewUrl = metaData.getUrl();
-                        }
-                    }
 
-                    @Override
-                    public void onError(Exception e) {
-                        getActivity().runOnUiThread(() -> binding.chatboxLinkPreview.setVisibility(View.GONE));
-                        linkPreviewImageUrl = "";
-                        linkPreviewTitle = "";
-                        linkPreviewDesc = "";
-                        linkPreviewUrl = "";
-                        linkPreviewedMessageStatus = 0;
+                List<String> extractedUrls = extractUrls(charSequence.toString());
+                if (!extractedUrls.isEmpty()) {
+                    if (isValidUrl(extractedUrls.get(0))) {
+                        SoulSurfer.get(extractedUrls.get(0))
+                                .load(new PageInfoListener() {
+                                    @Override
+                                    public void onPageInfoLoaded(PageInfo pageInfo) {
+                                        if (pageInfo != null) {
+                                            if (pageInfo.getTitle() != null && pageInfo.getDescription() != null) {
+                                                linkPreviewedMessageStatus = 1;
+                                                binding.chatboxLinkPreview.setVisibility(View.VISIBLE);
+                                                binding.linkTitle.setText(pageInfo.getTitle());
+                                                binding.linkPreviewDescription.setText(pageInfo.getDescription());
+                                                linkPreviewTitle = pageInfo.getTitle();
+                                                linkPreviewDesc = pageInfo.getDescription();
+                                                linkPreviewUrl = pageInfo.getUrl();
+                                                if (pageInfo.getImageUrl() != null) {
+                                                    binding.linkPreviewImage.setVisibility(View.VISIBLE);
+                                                    linkPreviewImageUrl = pageInfo.getImageUrl();
+                                                    Picasso.get().load(pageInfo.getImageUrl()).noFade().into(binding.linkPreviewImage, new Callback() {
+                                                        @Override
+                                                        public void onSuccess() {
+                                                        }
+
+                                                        @Override
+                                                        public void onError(Exception e) {
+                                                            binding.linkPreviewImage.setVisibility(View.GONE);
+                                                        }
+                                                    });
+                                                } else
+                                                    binding.linkPreviewImage.setVisibility(View.GONE);
+                                            } else {
+                                                setLinkPreviewOff();
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onError(String url) {
+                                        setLinkPreviewOff();
+                                    }
+                                });
                     }
-                });
-                if (!extractedUrls.isEmpty())
-                    if (URLUtil.isValidUrl(extractedUrls.get(0)))
-                        richPreview.getPreview(extractedUrls.get(0));
+                } else {
+                    setLinkPreviewOff();
+                }
 
                 if (charSequence.toString().isEmpty()) {
                     binding.choose.setVisibility(View.VISIBLE);
@@ -388,6 +427,15 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         });
     }
 
+    private void setLinkPreviewOff() {
+        binding.chatboxLinkPreview.setVisibility(View.GONE);
+        linkPreviewImageUrl = "";
+        linkPreviewTitle = "";
+        linkPreviewDesc = "";
+        linkPreviewUrl = "";
+        linkPreviewedMessageStatus = 0;
+    }
+
     private void sendTheMessage(String message) {
         Date d = new Date();
         long timestamp = d.getTime();
@@ -395,6 +443,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             Map<String, Object> docData = new HashMap<>();
             docData.put("message", message);
             docData.put("timestamp", timestamp);
+            docData.put("serverTime", FieldValue.serverTimestamp());
             docData.put("uid", user.getUid());
             docData.put("type", "text");
             docData.put("userName", user.getDisplayName());
@@ -436,6 +485,16 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
+                                    new java.util.Timer().schedule(
+                                            new java.util.TimerTask() {
+                                                @Override
+                                                public void run() {
+                                                    if (binding.chatboxLinkPreview.getVisibility()==View.VISIBLE)
+                                                        getActivity().runOnUiThread(() -> setLinkPreviewOff());
+                                                }
+                                            },
+                                            500
+                                    );
                                     mChatRecyclerview.scrollToPosition(0);
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
@@ -462,9 +521,11 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                         params.putString("uid", user.getUid());
                                                         mFirebaseAnalytics.logEvent("first_message", params);
                                                     })
-                                                    .addOnFailureListener(e -> editTextStatus = 0);
+                                                    .addOnFailureListener(e -> {
+                                                    });
                                         }
                                     }
+                                    editTextStatus = 0;
                                 }
                             }))
                     .addOnFailureListener(e -> {
@@ -714,6 +775,20 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     @Override
     public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
+    }
+
+    /**
+     * Compares all permissions in the provided array with the permissions granted to the application.
+     *
+     * @return true if all listed permissions are held by the application, otherwise false.
+     */
+    private boolean checkAllPermissions(Context context) {
+        for (String p : ChatFragment.perms) {
+            if (ContextCompat.checkSelfPermission(context, p) != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private class RecyclerViewOnGestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -1170,45 +1245,5 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             super.onLongPress(e);
         }
 
-    }
-
-    public static List<String> extractUrls(String text) {
-        List<String> containedUrls = new ArrayList<>();
-        String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
-        Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
-        Matcher urlMatcher = pattern.matcher(text);
-
-        while (urlMatcher.find()) {
-            containedUrls.add(text.substring(urlMatcher.start(0), urlMatcher.end(0)));
-            if (containedUrls.size() == 1)
-                break;
-        }
-        return containedUrls;
-    }
-
-    private ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permsGranted -> {
-        if (permsGranted.containsValue(false)) {
-            //user denied one or more permissions
-            Toast.makeText(getActivity(), "PERMISSIONS NOT GRANTED", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getActivity(), "Permission Granted!", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(getActivity(), ChatImageActivity.class);
-            i.putExtra("documentId", "default");
-            startActivity(i);
-        }
-    });
-
-    /**
-     * Compares all permissions in the provided array with the permissions granted to the application.
-     *
-     * @return true if all listed permissions are held by the application, otherwise false.
-     */
-    private boolean checkAllPermissions(Context context) {
-        for (String p : ChatFragment.perms) {
-            if (ContextCompat.checkSelfPermission(context, p) != PackageManager.PERMISSION_GRANTED) {
-                return false;
-            }
-        }
-        return true;
     }
 }
