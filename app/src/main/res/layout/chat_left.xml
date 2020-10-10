@@ -128,7 +128,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#4A4A4A"
+            android:textColor="@color/chatLeftText"
             android:textSize="14sp"
             android:autoLink="web"
             app:layout_constraintBottom_toTopOf="@id/message_time"

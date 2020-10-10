@@ -123,7 +123,7 @@
             android:layout_height="wrap_content"
             android:autoLink="web"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/white"
+            android:textColor="@color/chatRightText"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@id/addnView"
             app:layout_constraintEnd_toStartOf="@id/message_time"

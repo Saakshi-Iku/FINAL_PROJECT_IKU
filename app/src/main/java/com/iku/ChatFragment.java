@@ -1132,7 +1132,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                             bottomSheetDialog.dismiss();
                             MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
                             materialAlertDialogBuilder.setTitle("Delete Message");
-                            materialAlertDialogBuilder.setMessage("Delete for everyone?");
+                            materialAlertDialogBuilder.setMessage("You are about to delete this message for everyone. Are you sure?");
                             materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
                                 deleteMessage(documentID, "admin");
                                 //log event
@@ -1198,8 +1198,8 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                     reportView.setOnClickListener(view13 -> {
                                         bottomSheetDialog.dismiss();
                                         MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
-                                        materialAlertDialogBuilder.setTitle("Report Spam");
-                                        materialAlertDialogBuilder.setMessage("Are you sure?");
+                                        materialAlertDialogBuilder.setTitle("Report Message");
+                                        materialAlertDialogBuilder.setMessage("You are about to report this message. The community chiefs will be notified to take action as needed. Are you sure?");
                                         materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
                                             DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
                                             docRef.get().addOnCompleteListener(task -> {
@@ -1320,7 +1320,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                     bottomSheetDialog.dismiss();
                                     MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
                                     materialAlertDialogBuilder.setTitle("Delete Message");
-                                    materialAlertDialogBuilder.setMessage("Delete for everyone?");
+                                    materialAlertDialogBuilder.setMessage("You are about to delete this message for everyone. Are you sure?");
                                     materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
                                         deleteMessage(documentID, "author");
                                         //log event
@@ -1349,8 +1349,8 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                     reportView.setOnClickListener(view13 -> {
                                         bottomSheetDialog.dismiss();
                                         MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
-                                        materialAlertDialogBuilder.setTitle("Report Spam");
-                                        materialAlertDialogBuilder.setMessage("Are you sure?");
+                                        materialAlertDialogBuilder.setTitle("Report Message");
+                                        materialAlertDialogBuilder.setMessage("You are about to report this message. The community chiefs will be notified to take action as needed. Are you sure?");
                                         materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
                                             DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
                                             docRef.get().addOnCompleteListener(task -> {

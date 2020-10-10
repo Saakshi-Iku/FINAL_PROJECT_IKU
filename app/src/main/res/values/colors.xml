@@ -9,9 +9,14 @@
     <color name="colorTextSecondary">#757575</color>
     <color name="colorBackground">#FFFFFF</color>
 
+    <!--text colours-->
+    <color name="chatLeftText">#4A4A4A</color>
+    <color name="chatRightText">#FFFFFF</color>
     <color name="linkColor">#343493</color>
     <color name="linkColorDarkBG">#11b7b7</color>
+    <color name="deletedTextLight">#D8D8D8</color>
 
+    <!--Container colours-->
     <color name="urlPreviewBG">#DADADA</color>
     <color name="scrollViewBG">#EBEBEB</color>
 

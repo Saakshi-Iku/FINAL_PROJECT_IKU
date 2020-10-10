@@ -815,7 +815,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                         bottomSheetDialog.dismiss();
                         MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
                         materialAlertDialogBuilder.setTitle("Delete Comment");
-                        materialAlertDialogBuilder.setMessage("Are you sure?");
+                        materialAlertDialogBuilder.setMessage("You are about to delete this comment. Are you sure?");
                         materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
                             deleteComment(documentID, "admin");
                             //log event
@@ -842,8 +842,8 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                             reportView.setOnClickListener(view13 -> {
                                 bottomSheetDialog.dismiss();
                                 MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
-                                materialAlertDialogBuilder.setTitle("Report Spam");
-                                materialAlertDialogBuilder.setMessage("Are you sure?");
+                                materialAlertDialogBuilder.setTitle("Report Comment");
+                                materialAlertDialogBuilder.setMessage("You are about to report this comment. Are you sure?");
                                 materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
                                     DocumentReference docRef = db.collection("iku_earth_messages").document(messageId).collection("comments").document(documentID);
                                     docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

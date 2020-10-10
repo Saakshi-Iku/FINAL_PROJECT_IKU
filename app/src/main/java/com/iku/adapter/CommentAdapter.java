@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -62,10 +63,13 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
         long timeStamp = commentModel.getTimestamp();
         if(commentModel.isSpam() || commentModel.isDeleted()) {
             commentViewHolder.commentTextView.setTypeface(commentViewHolder.commentTextView.getTypeface(), Typeface.ITALIC);
+/*
+            commentViewHolder.commentTextView.setTextColor(ContextCompat.getColor(mContext(R.color.deletedTextLight));
+*/
             if(commentModel.getDeletedBy().equals("author"))
-                commentViewHolder.commentTextView.setText("Comment was deleted.");
+                commentViewHolder.commentTextView.setText(R.string.comment_deleted);
             else
-                commentViewHolder.commentTextView.setText("Comment was reported and/or deleted by admin");
+                commentViewHolder.commentTextView.setText(R.string.reported_and_deleted_comment);
         }else {
             commentViewHolder.commentTextView.setTypeface(commentViewHolder.commentTextView.getTypeface(), Typeface.NORMAL);
             commentViewHolder.commentTextView.setText(commentModel.getComment());

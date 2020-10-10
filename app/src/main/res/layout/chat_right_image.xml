@@ -30,11 +30,11 @@
             android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
             app:layout_constraintDimensionRatio="1"
-            android:background="#30000000"
+            android:elevation="0dp"
             app:layout_constraintEnd_toEndOf="@id/constraintLayout"
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
             app:layout_constraintTop_toTopOf="@id/constraintLayout"
-            app:layout_constraintWidth_min="260dp" />
+            app:layout_constraintWidth_min="35dp" />
 
         <!--View post button-->
         <com.google.android.material.button.MaterialButton
@@ -51,6 +51,7 @@
             app:iconGravity="textEnd"
             app:iconPadding="10dp"
             app:iconSize="15dp"
+            android:elevation="1dp"
             app:layout_constraintBottom_toBottomOf="@id/sentImage"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -73,7 +74,7 @@
                 android:gravity="start"
                 android:autoLink="web"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/white"
+                android:textColor="@color/chatRightText"
                 android:textSize="14sp" />
 
             <!--Primary view for timestamp-->
