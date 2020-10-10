@@ -261,6 +261,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         chatadapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
+                mChatRecyclerview.scrollToPosition(0);
             }
         });
 
@@ -530,7 +531,6 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                 2000
                                         );
                                     }
-                                    mChatRecyclerview.scrollToPosition(0);
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
                                         Boolean isFirstMessage = (Boolean) document.get("firstMessage");
