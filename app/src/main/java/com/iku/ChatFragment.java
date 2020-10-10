@@ -262,6 +262,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 mChatRecyclerview.scrollToPosition(0);
+                binding.jumpToBottom.setVisibility(View.GONE);
             }
         });
 
@@ -387,18 +388,20 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                 linkPreviewDesc = pageInfo.getDescription();
                                                 linkPreviewUrl = pageInfo.getUrl();
                                                 if (pageInfo.getImageUrl() != null) {
-                                                    binding.linkPreviewImage.setVisibility(View.VISIBLE);
-                                                    linkPreviewImageUrl = pageInfo.getImageUrl();
-                                                    Picasso.get().load(pageInfo.getImageUrl()).noFade().into(binding.linkPreviewImage, new Callback() {
-                                                        @Override
-                                                        public void onSuccess() {
-                                                        }
+                                                    if (isValidUrl(pageInfo.getImageUrl())) {
+                                                        binding.linkPreviewImage.setVisibility(View.VISIBLE);
+                                                        linkPreviewImageUrl = pageInfo.getImageUrl();
+                                                        Picasso.get().load(pageInfo.getImageUrl()).noFade().into(binding.linkPreviewImage, new Callback() {
+                                                            @Override
+                                                            public void onSuccess() {
+                                                            }
 
-                                                        @Override
-                                                        public void onError(Exception e) {
-                                                            binding.linkPreviewImage.setVisibility(View.GONE);
-                                                        }
-                                                    });
+                                                            @Override
+                                                            public void onError(Exception e) {
+                                                                binding.linkPreviewImage.setVisibility(View.GONE);
+                                                            }
+                                                        });
+                                                    }
                                                 } else
                                                     binding.linkPreviewImage.setVisibility(View.GONE);
                                             } else {
