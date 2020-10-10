@@ -1,6 +1,7 @@
 package com.iku;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -68,6 +69,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -79,7 +81,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
     private static final String TAG = ChatFragment.class.getSimpleName();
     private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-    private SimpleDateFormat sfdMainDate = new SimpleDateFormat("MMMM dd, yyyy");
+    private SimpleDateFormat sfdMainDate = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
     private FirebaseUser user;
     private MaterialTextView memberCount;
     private FirebaseFirestore db;
@@ -485,16 +487,49 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
-                                    new java.util.Timer().schedule(
-                                            new java.util.TimerTask() {
-                                                @Override
-                                                public void run() {
-                                                    if (binding.chatboxLinkPreview.getVisibility()==View.VISIBLE)
-                                                        getActivity().runOnUiThread(() -> setLinkPreviewOff());
-                                                }
-                                            },
-                                            500
-                                    );
+                                    Activity temp = getActivity();
+                                    if (temp != null) {
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (binding.chatboxLinkPreview.getVisibility() == View.VISIBLE)
+                                                            temp.runOnUiThread(() -> setLinkPreviewOff());
+                                                    }
+                                                },
+                                                500
+                                        );
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (binding.chatboxLinkPreview.getVisibility() == View.VISIBLE)
+                                                            temp.runOnUiThread(() -> setLinkPreviewOff());
+                                                    }
+                                                },
+                                                1000
+                                        );
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (binding.chatboxLinkPreview.getVisibility() == View.VISIBLE)
+                                                            temp.runOnUiThread(() -> setLinkPreviewOff());
+                                                    }
+                                                },
+                                                1500
+                                        );
+                                        new java.util.Timer().schedule(
+                                                new java.util.TimerTask() {
+                                                    @Override
+                                                    public void run() {
+                                                        if (binding.chatboxLinkPreview.getVisibility() == View.VISIBLE)
+                                                            temp.runOnUiThread(() -> setLinkPreviewOff());
+                                                    }
+                                                },
+                                                2000
+                                        );
+                                    }
                                     mChatRecyclerview.scrollToPosition(0);
                                     DocumentSnapshot document = task.getResult();
                                     if (document.exists()) {
