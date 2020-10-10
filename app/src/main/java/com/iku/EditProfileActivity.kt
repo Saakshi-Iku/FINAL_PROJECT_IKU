@@ -4,7 +4,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Patterns
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.amulyakhare.textdrawable.TextDrawable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -54,9 +56,12 @@ class EditProfileActivity : AppCompatActivity() {
         back_button.setOnClickListener { onBackPressed() }
         save_button.setOnClickListener {
             val name = editUserNameField.text.toString().trim().capitalize(Locale.ROOT)
-            if (name.isNotEmpty() && user != null) {
-                saveUserDetails(user, name)
+            if (!isValidUrl(linkInBio.text.toString().trim())) {
+                Toast.makeText(applicationContext, "Invalid URL", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
             }
+            if (name.isNotEmpty() && user != null)
+                saveUserDetails(user, name)
         }
     }
 
@@ -74,13 +79,11 @@ class EditProfileActivity : AppCompatActivity() {
                     .setTitle("Confirm")
                     .setMessage("Are you sure you want to change your name?\nThis cannot be undone")
                     .setNegativeButton("Cancel") { _, _ ->
-                        // Respond to negative button press
                     }
                     .setPositiveButton("Obviously") { _, _ ->
                         val profileUpdates = userProfileChangeRequest {
                             displayName = name
                         }
-
                         db.collection("users").document(user.uid).get().addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val document = task.result
@@ -110,7 +113,8 @@ class EditProfileActivity : AppCompatActivity() {
     private fun updateBio(bio: String, link: String, uid: String) {
         val data = mapOf(
                 "userBio" to bio,
-                "userBioLink" to link
+                "userBioLink" to link,
+                "bioLastUpdateOn" to FieldValue.serverTimestamp()
         )
         db.collection("users").document(uid)
                 .update(data).addOnSuccessListener { onBackPressed() }.addOnFailureListener {
@@ -180,5 +184,17 @@ class EditProfileActivity : AppCompatActivity() {
                 profileImage.setImageDrawable(drawable)
             }
         }
+    }
+
+    /**
+     * This is used to check the given URL is valid or not.
+     *
+     * @param url
+     * @return true if url is valid, false otherwise.
+     */
+    private fun isValidUrl(url: String): Boolean {
+        val p = Patterns.WEB_URL
+        val m = p.matcher(url.toLowerCase(Locale.ROOT))
+        return m.matches()
     }
 }
