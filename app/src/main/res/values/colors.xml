@@ -19,6 +19,8 @@
     <!--Container colours-->
     <color name="urlPreviewBG">#DADADA</color>
     <color name="scrollViewBG">#EBEBEB</color>
+    <color name="commentBoxBG"></color>
+    <color name="jumpToBottomButtonBG"></color>
 
     <!--light theme colours-->
 
