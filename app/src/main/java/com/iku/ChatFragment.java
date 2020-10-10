@@ -632,7 +632,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     }
 
                     if (!HeartupLiked && !emoji1Liked && !emoji2Liked && !emoji3Liked && !emoji4Liked && !disliked) {
-                        newLikeorDislike(messageDocumentID, emoji, upvotesCount, downvotesCount, authorOfMessage, position);
+                        newLikeOrDislike(messageDocumentID, emoji, upvotesCount, downvotesCount, authorOfMessage, position);
                     } else {
                         if (HeartupLiked) {
                             changeLikesArray(messageDocumentID, emoji, "upvoters", upvotesCount, downvotesCount, authorOfMessage, position);
@@ -731,7 +731,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         chatadapter.notifyItemChanged(position);
     }
 
-    private void newLikeorDislike(String messageDocumentID, String emoji, long UpvotesCount, long DownvotesCount, String authorOfMessage, int position) {
+    private void newLikeOrDislike(String messageDocumentID, String emoji, long UpvotesCount, long DownvotesCount, String authorOfMessage, int position) {
         if (emoji.equals("downvoters")) {
 
             if (!authorOfMessage.equals(user.getUid())) {
