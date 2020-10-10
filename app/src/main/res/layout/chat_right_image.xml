@@ -71,6 +71,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
+                android:autoLink="web"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
@@ -84,7 +85,6 @@
                 android:layout_alignParentEnd="true"
                 android:gravity="end"
                 android:paddingStart="40dp"
-                android:text="12:34 PM"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:visibility="gone" />

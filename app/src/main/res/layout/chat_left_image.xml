@@ -38,7 +38,6 @@
             android:layout_marginStart="20dp"
             android:layout_marginEnd="5dp"
             android:gravity="end|bottom"
-            android:text="12:34 PM"
             android:textColor="#4A4A4A"
             android:textSize="12sp"
             android:visibility="gone"
@@ -99,6 +98,7 @@
                 android:layout_height="wrap_content"
                 android:background="#DCDCDC"
                 android:gravity="start"
+                android:autoLink="web"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#4A4A4A"
                 android:textSize="14sp" />
