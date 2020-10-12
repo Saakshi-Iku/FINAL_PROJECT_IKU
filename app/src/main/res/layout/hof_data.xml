@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:layout_gravity="center"
+    android:layout_margin="40dp"
+    android:background="@android:color/transparent"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:padding="10dp">
+
+        <!--month-->
+        <TextView
+            android:id="@+id/month"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="August 2020"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--leaderboard toppers-->
+        <LinearLayout
+            android:id="@+id/leaderboardToppers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:gravity="bottom"
+            android:orientation="horizontal"
+            android:weightSum="10"
+            app:layout_constraintTop_toBottomOf="@id/month">
+
+            <!--first runner up-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/runnerUp1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="3">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/runnerUp1Image"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/hearts_button_background_selected"
+                    android:padding="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/runnerUp1Badge"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="0dp"
+                    android:background="@drawable/hearts_button_background_selected"
+                    android:padding="6dp"
+                    android:src="@drawable/shield"
+                    app:layout_constraintBottom_toBottomOf="@id/runnerUp1Image"
+                    app:layout_constraintEnd_toEndOf="@id/runnerUp1Image" />
+
+                <TextView
+                    android:id="@+id/runnerUpName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/runnerUp1Image" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--Winner-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/winner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="4">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/winnerImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/hearts_button_background_selected"
+                    android:padding="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/winnerBadge"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="0dp"
+                    android:background="@drawable/hearts_button_background_selected"
+                    android:padding="6dp"
+                    android:src="@drawable/shield"
+                    app:layout_constraintBottom_toBottomOf="@id/winnerImage"
+                    app:layout_constraintEnd_toEndOf="@id/winnerImage" />
+
+                <TextView
+                    android:id="@+id/winnerName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/winnerImage" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--second runner up-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/runnerUp2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_weight="3">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/runnerUp2Image"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/hearts_button_background_selected"
+                    android:padding="1dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/runnerUp2Badge"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="0dp"
+                    android:background="@drawable/hearts_button_background_selected"
+                    android:padding="6dp"
+                    android:src="@drawable/shield"
+                    app:layout_constraintBottom_toBottomOf="@id/runnerUp2Image"
+                    app:layout_constraintEnd_toEndOf="@id/runnerUp2Image" />
+
+                <TextView
+                    android:id="@+id/runnerUp2Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    app:layout_constraintTop_toBottomOf="@id/runnerUp2Image" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </LinearLayout>
+
+        <!--month details-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            android:background="#10000000"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/leaderboardToppers">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Community Activity"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="25dp"
+                android:text="Posts:"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="35"
+                android:textStyle="bold" />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                android:visibility="gone">
+
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.chip.Chip
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Challenges: 17" />
+
+                </com.google.android.material.chip.ChipGroup>
+
+            </HorizontalScrollView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Hearts won:"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="159"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

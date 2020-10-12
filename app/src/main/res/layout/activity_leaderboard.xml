@@ -38,6 +38,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
                 app:layout_constraintEnd_toEndOf="@+id/topAppBar"
                 app:layout_constraintStart_toStartOf="@+id/topAppBar"
@@ -47,9 +48,7 @@
                     android:id="@+id/group_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/shield"
-                    tools:layout_editor_absoluteX="114dp"
-                    tools:layout_editor_absoluteY="13dp" />
+                    android:src="@drawable/shield" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -57,11 +56,10 @@
                     android:layout_gravity="center"
                     android:layout_marginLeft="10dp"
                     android:text="Leaderboard"
-                    android:textSize="16sp"
-                    tools:layout_editor_absoluteX="152dp"
-                    tools:layout_editor_absoluteY="16dp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
+            <!--Back button-->
             <ImageView
                 android:id="@+id/back_button"
                 android:layout_width="56dp"
@@ -73,6 +71,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!--Hall of fame button-->
+            <ImageView
+                android:id="@+id/HallOfFameButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:padding="12dp"
+                android:src="@drawable/ic_baseline_view_carousel_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
