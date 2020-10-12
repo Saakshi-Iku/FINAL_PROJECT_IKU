@@ -64,6 +64,8 @@ import com.soulsurfer.android.SoulSurfer;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -235,7 +237,11 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             final String message = binding.messageTextField.getText().toString().trim();
             binding.chatboxLinkPreview.setVisibility(View.GONE);
             if (!message.isEmpty()) {
-                sendTheMessage(message);
+                try {
+                    sendTheMessage(message);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
                 binding.messageTextField.setText("");
                 binding.messageTextField.requestFocus();
             }
@@ -471,7 +477,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         linkPreviewedMessageStatus = 0;
     }
 
-    private void sendTheMessage(String message) {
+    private void sendTheMessage(String message) throws MalformedURLException {
         Date d = new Date();
         long timestamp = d.getTime();
         if (user != null) {
@@ -488,7 +494,10 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             docData.put("linkPreviewImageUrl", linkPreviewImageUrl);
             docData.put("linkPreviewTitle", linkPreviewTitle);
             docData.put("linkPreviewDesc", linkPreviewDesc);
-            docData.put("linkPreviewUrl", linkPreviewUrl);
+            if (!linkPreviewUrl.equals(""))
+                docData.put("linkPreviewUrl", new URL(linkPreviewUrl).getHost());
+            else
+                docData.put("linkPreviewUrl", "");
 
             ArrayList<Object> upvotersArray = new ArrayList<>();
             docData.put("upvoters", upvotersArray);
