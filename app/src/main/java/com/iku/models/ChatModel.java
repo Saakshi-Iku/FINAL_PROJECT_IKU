@@ -69,11 +69,13 @@ public class ChatModel {
     private boolean deleted;
     @PropertyName("deletedBy")
     private String deletedBy;
+    @PropertyName("postCommentCount")
+    private int postCommentCount;
 
     private ChatModel() {
     }
 
-    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime, String topComment, String topCommenterImageUrl, String topCommenterName, int linkPreview, String linkPreviewUrl, String linkPreviewTitle, String linkPreviewDesc, String linkPreviewImageUrl, boolean deleted , String deletedBy) {
+    public ChatModel(String message, String UID, String userName, String type, String imageUrl, int upvoteCount, long timestamp, long messageUpdateTime, ArrayList<String> upvoters, ArrayList<String> emoji1, ArrayList<String> emoji2, ArrayList<String> emoji3, ArrayList<String> emoji4, ArrayList<String> downvoters, ArrayList<String> spamReportedBy, int downvoteCount, boolean edited, boolean spam, int spamCount, String originalImageUrl, Timestamp readableMessageUpdateTime, String topComment, String topCommenterImageUrl, String topCommenterName, int linkPreview, String linkPreviewUrl, String linkPreviewTitle, String linkPreviewDesc, String linkPreviewImageUrl, boolean deleted, String deletedBy, int postCommentCount) {
         this.message = message;
         this.UID = UID;
         this.userName = userName;
@@ -105,6 +107,7 @@ public class ChatModel {
         this.linkPreviewImageUrl = linkPreviewImageUrl;
         this.deleted = deleted;
         this.deletedBy = deletedBy;
+        this.postCommentCount = postCommentCount;
     }
 
     public String getMessage() {
@@ -227,10 +230,6 @@ public class ChatModel {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
     public String getDeletedBy() {
         return deletedBy;
     }
@@ -239,4 +238,7 @@ public class ChatModel {
         this.deletedBy = deletedBy;
     }
 
+    public int getPostCommentCount() {
+        return postCommentCount;
+    }
 }

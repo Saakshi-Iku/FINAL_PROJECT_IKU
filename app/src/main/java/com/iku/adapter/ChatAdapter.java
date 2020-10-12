@@ -29,7 +29,6 @@ import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.iku.R;
 import com.iku.models.ChatModel;
 import com.squareup.picasso.Callback;
@@ -38,6 +37,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
@@ -58,13 +58,14 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     public static final int MSG_TYPE_IMAGE_RIGHT_SPAM = 11;
     public static final int MSG_TYPE_LEFT_LINK_SPAM = 12;
     public static final int MSG_TYPE_RIGHT_LINK_SPAM = 13;
+    public static final int MSG_TYPE_IMAGE_LEFT_COMMENT = 14;
+    public static final int MSG_TYPE_IMAGE_RIGHT_COMMENT = 15;
 
     private static final String TAG = ChatAdapter.class.getSimpleName();
     private ChatAdapter.OnItemClickListener listener;
     private Context mContext;
-    private SimpleDateFormat sfd = new SimpleDateFormat("hh:mm a");
+    private SimpleDateFormat sfd = new SimpleDateFormat("hh:mm a", Locale.US);
     private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public ChatAdapter(Context context, @NonNull FirestoreRecyclerOptions<ChatModel> options) {
         super(options);
@@ -114,6 +115,16 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             case MSG_TYPE_IMAGE_RIGHT:
                 final ChatRightImageViewHolder chatRightImageViewHolder = (ChatRightImageViewHolder) viewHolder;
                 chatRightImageViewHolder.bindChat(chatModel);
+                break;
+
+            case MSG_TYPE_IMAGE_LEFT_COMMENT:
+                final ChatLeftImageCommentViewHolder chatLeftImageCommentViewHolder = (ChatLeftImageCommentViewHolder) viewHolder;
+                chatLeftImageCommentViewHolder.bindChat(chatModel);
+                break;
+
+            case MSG_TYPE_IMAGE_RIGHT_COMMENT:
+                final ChatRightCommentImageViewHolder chatRightCommentImageViewHolder = (ChatRightCommentImageViewHolder) viewHolder;
+                chatRightCommentImageViewHolder.bindChat(chatModel);
                 break;
 
             case MSG_TYPE_LEFT_SPAM:
@@ -175,6 +186,12 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         } else if (viewType == MSG_TYPE_IMAGE_RIGHT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_right_image, parent, false);
             return new ChatRightImageViewHolder(view);
+        } else if (viewType == MSG_TYPE_IMAGE_LEFT_COMMENT) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_left_image, parent, false);
+            return new ChatLeftImageCommentViewHolder(view);
+        } else if (viewType == MSG_TYPE_IMAGE_RIGHT_COMMENT) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_right_image, parent, false);
+            return new ChatRightCommentImageViewHolder(view);
         } else if (viewType == MSG_TYPE_LEFT_SPAM) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_left, parent, false);
             return new ChatLeftSpamViewHolder(view);
@@ -228,6 +245,13 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     return MSG_TYPE_IMAGE_RIGHT_SPAM;
                 else
                     return 0;
+            } else if (getItem(position).getPostCommentCount() > 0 && getItem(position).getType().equals("image")) {
+                if (!getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("image"))
+                    return MSG_TYPE_IMAGE_LEFT_COMMENT;
+                else if (getItem(position).getType().equals("image") && getItem(position).getimageUrl() != null && getItem(position).getUID().equals(user.getUid()))
+                    return MSG_TYPE_IMAGE_RIGHT_COMMENT;
+                else
+                    return 0;
             } else {
                 if (getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("text") && getItem(position).getLinkPreview() == 0)
                     return MSG_TYPE_RIGHT;
@@ -246,7 +270,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             }
         }
     }
-
 
     public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
@@ -487,6 +510,135 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftImageViewHolder extends RecyclerView.ViewHolder {
 
+        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited;
+        private ImageView receiverImage;
+        private MaterialButton viewPostBtn;
+
+        @SuppressLint("ClickableViewAccessibility")
+        public ChatLeftImageViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            messageText = itemView.findViewById(R.id.message);
+            messageTime = itemView.findViewById(R.id.message_time);
+            messageTime2 = itemView.findViewById(R.id.message_time2);
+            messageTime3 = itemView.findViewById(R.id.message_time3);
+            senderName = itemView.findViewById(R.id.sender_name);
+            receiverImage = itemView.findViewById(R.id.receivedImage);
+            upvoteCount = itemView.findViewById(R.id.upvoteCount);
+            edited = itemView.findViewById(R.id.editFlag);
+            viewPostBtn = itemView.findViewById(R.id.viewPostButton);
+
+            viewPostBtn.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
+        }
+
+        void bindChat(ChatModel chatModel) {
+            long timeStampImageLeft = chatModel.getTimestamp();
+
+            messageText.setText(chatModel.getMessage());
+            messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+            messageText.setLinkTextColor(Color.parseColor("#343493"));
+            BetterLinkMovementMethod
+                    .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                    .setOnLinkLongClickListener(((textView, url) -> {
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("link", url);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }))
+                    .setOnLinkClickListener((textView, url) -> {
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        customTabsIntent.launchUrl(mContext, Uri.parse(url));
+                        return true;
+                    });
+            messageTime.setText(sfd.format(new Date(timeStampImageLeft)));
+            messageTime2.setText(sfd.format(new Date(timeStampImageLeft)));
+            messageTime3.setText(sfd.format(new Date(timeStampImageLeft)));
+            senderName.setText(chatModel.getUserName());
+
+            if (senderName.getVisibility() == View.VISIBLE) {
+                messageTime.setVisibility(View.VISIBLE);
+                messageTime2.setVisibility(View.GONE);
+                messageTime3.setVisibility(View.GONE);
+            } else {
+                if (chatModel.isEdited()) {
+                    messageTime3.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                    messageTime2.setVisibility(View.GONE);
+                } else {
+                    if (chatModel.getMessage().length() <= 25) {
+                        messageTime2.setVisibility(View.VISIBLE);
+                        messageTime.setVisibility(View.GONE);
+                        messageTime3.setVisibility(View.GONE);
+                    } else {
+                        messageTime3.setVisibility(View.VISIBLE);
+                        messageTime.setVisibility(View.GONE);
+                        messageTime2.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            if (chatModel.getUpvoteCount() > 0) {
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.VISIBLE);
+                upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
+                if (chatModel.getupvoters().size() > 0)
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji1().size() > 0)
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji2().size() > 0)
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji3().size() > 0)
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji4().size() > 0)
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.GONE);
+            } else
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.GONE);
+
+            Picasso.get()
+                    .load(chatModel.getimageUrl())
+                    .noFade()
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(receiverImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get()
+                                    .load(chatModel.getimageUrl())
+                                    .noFade()
+                                    .placeholder(R.drawable.progress_animation)
+                                    .into(receiverImage);
+                        }
+                    });
+
+        }
+
+    }
+
+    public class ChatLeftImageCommentViewHolder extends RecyclerView.ViewHolder {
+
         private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, commentTextView;
         private ImageView receiverImage;
         private MaterialButton viewPostBtn;
@@ -494,7 +646,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         private CircleImageView commenterProfilePicture;
 
         @SuppressLint("ClickableViewAccessibility")
-        public ChatLeftImageViewHolder(@NonNull View itemView) {
+        public ChatLeftImageCommentViewHolder(@NonNull View itemView) {
             super(itemView);
 
             messageText = itemView.findViewById(R.id.message);
@@ -652,6 +804,122 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightImageViewHolder extends RecyclerView.ViewHolder {
 
+        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited;
+        private ImageView sentImage;
+        private MaterialButton viewPostBtn;
+
+        @SuppressLint("ClickableViewAccessibility")
+        public ChatRightImageViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            messageText = itemView.findViewById(R.id.message);
+            messageTime = itemView.findViewById(R.id.message_time);
+            messageTime2 = itemView.findViewById(R.id.message_time2);
+            sentImage = itemView.findViewById(R.id.sentImage);
+            upvoteCount = itemView.findViewById(R.id.upvoteCount);
+            edited = itemView.findViewById(R.id.editFlag);
+            viewPostBtn = itemView.findViewById(R.id.viewPostButton);
+
+            viewPostBtn.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
+        }
+
+        void bindChat(ChatModel chatModel) {
+            long timeStampImageRight = chatModel.getTimestamp();
+
+            messageText.setText(chatModel.getMessage());
+            messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+            messageText.setLinkTextColor(Color.parseColor("#343493"));
+            BetterLinkMovementMethod
+                    .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                    .setOnLinkLongClickListener(((textView, url) -> {
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("link", url);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }))
+                    .setOnLinkClickListener((textView, url) -> {
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        customTabsIntent.launchUrl(mContext, Uri.parse(url));
+                        return true;
+                    });
+
+            messageTime.setText(sfd.format(new Date(timeStampImageRight)));
+            messageTime2.setText(sfd.format(new Date(timeStampImageRight)));
+
+            if (chatModel.isEdited()) {
+                edited.setVisibility(View.VISIBLE);
+                messageTime2.setVisibility(View.VISIBLE);
+            } else {
+                edited.setVisibility(View.GONE);
+                if (chatModel.getMessage().length() <= 25) {
+                    messageTime.setVisibility(View.VISIBLE);
+                    messageTime2.setVisibility(View.GONE);
+                } else {
+                    messageTime2.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                }
+            }
+
+            if (chatModel.getUpvoteCount() > 0) {
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.VISIBLE);
+                upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
+                if (chatModel.getupvoters().size() > 0)
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji1().size() > 0)
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji2().size() > 0)
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji3().size() > 0)
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji4().size() > 0)
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.GONE);
+            } else
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.GONE);
+
+            Picasso.get()
+                    .load(chatModel.getimageUrl())
+                    .noFade()
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(sentImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get()
+                                    .load(chatModel.getimageUrl())
+                                    .noFade()
+                                    .placeholder(R.drawable.progress_animation)
+                                    .into(sentImage);
+                        }
+                    });
+        }
+    }
+
+    public class ChatRightCommentImageViewHolder extends RecyclerView.ViewHolder {
+
         private MaterialTextView messageText, messageTime, messageTime2, messageTime3, upvoteCount, edited, commentTextView;
         private ImageView sentImage;
         private MaterialButton viewPostBtn;
@@ -659,7 +927,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         private CircleImageView commenterProfilePicture;
 
         @SuppressLint("ClickableViewAccessibility")
-        public ChatRightImageViewHolder(@NonNull View itemView) {
+        public ChatRightCommentImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
             messageText = itemView.findViewById(R.id.message);
