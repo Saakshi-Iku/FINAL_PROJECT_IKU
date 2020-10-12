@@ -92,7 +92,7 @@ public class ChatImageActivity extends AppCompatActivity {
         mStorageRef = FirebaseStorage.getInstance().getReference(user.getUid());
         db = FirebaseFirestore.getInstance();
         messageEntered = findViewById(R.id.messageTextField);
-        backButton = findViewById(R.id.backbutton);
+        backButton = findViewById(R.id.back_button);
         sendImageChatbtn = findViewById(R.id.sendMessageButton);
         chosenImage = findViewById(R.id.chosenImage);
 
