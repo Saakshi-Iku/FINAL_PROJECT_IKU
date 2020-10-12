@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -273,6 +274,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public interface OnItemClickListener {
         void onItemClick(DocumentSnapshot documentSnapshot, int position);
+
+        void onTopCommentClick(DocumentSnapshot documentSnapshot, int position);
     }
 
     public class ChatLeftViewHolder extends RecyclerView.ViewHolder {
@@ -668,6 +671,13 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     listener.onItemClick(getSnapshots().getSnapshot(position), position);
                 }
             });
+
+            commentsLayout.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onTopCommentClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
         }
 
         void bindChat(ChatModel chatModel) {
@@ -692,34 +702,33 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                         return true;
                     });
 
-            if (chatModel.getTopComment() != null) {
-                commentsLayout.setVisibility(View.VISIBLE);
-                commentTextView.setText(chatModel.getTopComment());
-                String url = chatModel.getTopCommenterImageUrl();
-                String firstLetter, secondLetter;
-                if (url != null && !url.equals("null")) {
-                    Picasso.get().load(url).noFade().networkPolicy(NetworkPolicy.OFFLINE)
-                            .into(commenterProfilePicture, new Callback() {
-                                @Override
-                                public void onSuccess() {
-                                }
+            commentsLayout.setVisibility(View.VISIBLE);
+            commentTextView.setText(chatModel.getTopComment());
+            String url = chatModel.getTopCommenterImageUrl();
+            String firstLetter, secondLetter;
+            if (url != null && !url.equals("null")) {
+                Picasso.get().load(url).noFade().networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(commenterProfilePicture, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                            }
 
-                                @Override
-                                public void onError(Exception e) {
-                                    Picasso.get().load(url).noFade().into(commenterProfilePicture);
-                                }
-                            });
-                } else {
-                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
-                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
-                    TextDrawable drawable = TextDrawable.builder()
-                            .beginConfig()
-                            .width(200)
-                            .height(200)
-                            .endConfig()
-                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
-                    commenterProfilePicture.setImageDrawable(drawable);
-                }
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get().load(url).noFade().into(commenterProfilePicture);
+                            }
+                        });
+            } else {
+                firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                TextDrawable drawable = TextDrawable.builder()
+                        .beginConfig()
+                        .width(200)
+                        .height(200)
+                        .endConfig()
+                        .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                commenterProfilePicture.setImageDrawable(drawable);
+
             }
 
             messageTime.setText(sfd.format(new Date(timeStampImageLeft)));
@@ -946,6 +955,12 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && listener != null) {
                     listener.onItemClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
+            commentsLayout.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onTopCommentClick(getSnapshots().getSnapshot(position), position);
                 }
             });
         }

@@ -291,18 +291,47 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
         });
 
-        chatadapter.setOnItemClickListener((documentSnapshot, position) -> {
-            Intent viewChatImageIntent = new Intent(getContext(), ViewPostActivity.class);
-            ChatModel chatModel = documentSnapshot.toObject(ChatModel.class);
-            if (chatModel != null) {
-                String name = chatModel.getUserName();
-                String url = chatModel.getimageUrl();
-                String originalUrl = chatModel.getOriginalImageUrl();
-                String message = chatModel.getMessage();
-                long timestamp = chatModel.getTimestamp();
-                String userUid = chatModel.getUID();
-                String messageId = documentSnapshot.getId();
-                if (name != null && url != null) {
+        chatadapter.setOnItemClickListener(new ChatAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(DocumentSnapshot documentSnapshot, int position) {
+                Intent viewChatImageIntent = new Intent(getContext(), ViewPostActivity.class);
+                ChatModel chatModel = documentSnapshot.toObject(ChatModel.class);
+                if (chatModel != null) {
+                    String name = chatModel.getUserName();
+                    String url = chatModel.getimageUrl();
+                    String originalUrl = chatModel.getOriginalImageUrl();
+                    String message = chatModel.getMessage();
+                    long timestamp = chatModel.getTimestamp();
+                    String userUid = chatModel.getUID();
+                    String messageId = documentSnapshot.getId();
+                    if (name != null && url != null) {
+                        viewChatImageIntent.putExtra("EXTRA_PERSON_NAME", name);
+                        viewChatImageIntent.putExtra("EXTRA_MESSAGE", message);
+                        if (originalUrl != null) {
+                            viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", originalUrl);
+                            viewChatImageIntent.putExtra("EXTRA_IMAGE_SECOND_URL", url);
+                        } else
+                            viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
+                        viewChatImageIntent.putExtra("EXTRA_POST_TIMESTAMP", timestamp);
+                        viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", messageId);
+                        viewChatImageIntent.putExtra("EXTRA_USER_ID", userUid);
+                        startActivity(viewChatImageIntent);
+                    }
+                }
+            }
+
+            @Override
+            public void onTopCommentClick(DocumentSnapshot documentSnapshot, int position) {
+                Intent viewChatImageIntent = new Intent(getContext(), ViewPostActivity.class);
+                String documentID = documentSnapshot.getId();
+                String postType = chatadapter.getItem(position).getType();
+                String UID = chatadapter.getItem(position).getUID();
+                String name = chatadapter.getItem(position).getUserName();
+                String url = chatadapter.getItem(position).getimageUrl();
+                String originalUrl = chatadapter.getItem(position).getOriginalImageUrl();
+                String message = chatadapter.getItem(position).getMessage();
+                long timestamp = chatadapter.getItem(position).getTimestamp();
+                if (name != null) {
                     viewChatImageIntent.putExtra("EXTRA_PERSON_NAME", name);
                     viewChatImageIntent.putExtra("EXTRA_MESSAGE", message);
                     if (originalUrl != null) {
@@ -311,8 +340,8 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     } else
                         viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
                     viewChatImageIntent.putExtra("EXTRA_POST_TIMESTAMP", timestamp);
-                    viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", messageId);
-                    viewChatImageIntent.putExtra("EXTRA_USER_ID", userUid);
+                    viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", documentID);
+                    viewChatImageIntent.putExtra("EXTRA_USER_ID", UID);
                     startActivity(viewChatImageIntent);
                 }
             }
@@ -1109,6 +1138,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                             Intent viewChatImageIntent = new Intent(getContext(), ViewPostActivity.class);
                             String name = chatadapter.getItem(position).getUserName();
                             String url = chatadapter.getItem(position).getimageUrl();
+                            String postType = chatadapter.getItem(position).getType();
                             String originalUrl = chatadapter.getItem(position).getOriginalImageUrl();
                             String message = chatadapter.getItem(position).getMessage();
                             long timestamp = chatadapter.getItem(position).getTimestamp();
