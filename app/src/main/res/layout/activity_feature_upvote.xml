@@ -75,70 +75,32 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
-
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_below="@id/appBar"
-        android:background="@color/scrollViewBG">
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <!--page description-->
+        <TextView
+            android:id="@+id/pageDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="parent">
+            android:background="#10000000"
+            android:paddingHorizontal="25dp"
+            android:paddingVertical="10dp"
+            android:text="Upvote for your favourite feature ideas:"
+            android:textAlignment="center"
+            android:textSize="12sp"
+            android:textColor="@android:color/black" />
 
-            <!--page description-->
-            <TextView
-                android:id="@+id/pageDescription"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#10000000"
-                android:paddingHorizontal="25dp"
-                android:paddingVertical="10dp"
-                android:text="Upvote for your favourite feature ideas:"
-                android:textAlignment="center"
-                android:textSize="12sp"
-                android:textColor="@android:color/black" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never" />
 
-            <com.google.android.material.chip.ChipGroup
-                android:id="@+id/filters"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/mostRequested"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:chipBackgroundColor="#10000000"
-                    android:textSize="12sp"
-                    android:text="@string/most_requested"
-                    app:chipStrokeWidth="1dp"
-                    app:chipStrokeColor="@android:color/darker_gray"/>
-
-                <com.google.android.material.chip.Chip
-                    android:id="@+id/recentlyAdded"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:chipBackgroundColor="#10000000"
-                    android:textSize="12sp"
-                    android:text="@string/recently_added"
-                    app:chipStrokeWidth="1dp"
-                    app:chipStrokeColor="@android:color/darker_gray"/>
-
-            </com.google.android.material.chip.ChipGroup>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never" />
-
-        </LinearLayout>
-
-    </ScrollView>
+    </LinearLayout>
 
 </RelativeLayout>

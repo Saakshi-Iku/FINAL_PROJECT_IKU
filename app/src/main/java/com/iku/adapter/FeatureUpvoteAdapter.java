@@ -1,5 +1,8 @@
+
 package com.iku.adapter;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +22,13 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
-public class FeatureUpvoteAdapter extends FirestoreRecyclerAdapter<FeatureUpvoteModel, FeatureUpvoteAdapter.LeaderboardViewHolder> {
+public class FeatureUpvoteAdapter extends FirestoreRecyclerAdapter<FeatureUpvoteModel, FeatureUpvoteAdapter.FeatureUpVoteViewHolder> {
 
-    private String TAG = FeatureUpvoteAdapter.class.getSimpleName();
+    private Context mContext;
 
-    public FeatureUpvoteAdapter(@NonNull FirestoreRecyclerOptions<FeatureUpvoteModel> options) {
+    public FeatureUpvoteAdapter(@NonNull FirestoreRecyclerOptions<FeatureUpvoteModel> options, Context mContext) {
         super(options);
+        this.mContext = mContext;
     }
 
     private OnItemClickListener mListener;
@@ -38,45 +42,25 @@ public class FeatureUpvoteAdapter extends FirestoreRecyclerAdapter<FeatureUpvote
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull LeaderboardViewHolder leaderboardViewHolder, int position, @NonNull FeatureUpvoteModel FeatureUpvoteModel) {
-
-        leaderboardViewHolder.firstNameTextView.setText(FeatureUpvoteModel.getTitle());
-        leaderboardViewHolder.descTextView.setText(FeatureUpvoteModel.getDescription());
-        leaderboardViewHolder.pointsTextView.setText("Upvoted: " + FeatureUpvoteModel.getUpvote_count());
-        String[] p = FeatureUpvoteModel.getImage().split("/");
-        String imageLink = "https://drive.google.com/uc?export=download&id=" + p[5];
-        Picasso.get()
-                .load(imageLink)
-                .noFade()
-                .networkPolicy(NetworkPolicy.OFFLINE)
-                .into(leaderboardViewHolder.image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                    }
-
-                    @Override
-                    public void onError(Exception e) {
-                        Picasso.get().load(imageLink).noFade().into(leaderboardViewHolder.image);
-                    }
-                });
+    protected void onBindViewHolder(@NonNull FeatureUpVoteViewHolder featureUpVoteViewHolder, int position, @NonNull FeatureUpvoteModel featureUpvoteModel) {
+        featureUpVoteViewHolder.bindView(featureUpvoteModel);
     }
 
     @NonNull
     @Override
-    public LeaderboardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public FeatureUpVoteViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.upvote_data, parent, false);
-        return new FeatureUpvoteAdapter.LeaderboardViewHolder(view, mListener);
+        return new FeatureUpvoteAdapter.FeatureUpVoteViewHolder(view, mListener);
     }
 
-    public class LeaderboardViewHolder extends RecyclerView.ViewHolder {
+    public class FeatureUpVoteViewHolder extends RecyclerView.ViewHolder {
 
         private TextView firstNameTextView, pointsTextView, descTextView;
-        private Button upvoteFeatureButton;
         private ImageView image;
 
-        public LeaderboardViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
+        public FeatureUpVoteViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
-            upvoteFeatureButton = itemView.findViewById(R.id.button);
+            Button upvoteFeatureButton = itemView.findViewById(R.id.button);
             firstNameTextView = itemView.findViewById(R.id.title);
             descTextView = itemView.findViewById(R.id.description);
             pointsTextView = itemView.findViewById(R.id.requestCount);
@@ -89,10 +73,29 @@ public class FeatureUpvoteAdapter extends FirestoreRecyclerAdapter<FeatureUpvote
                         listener.onItemClick(position, getSnapshots().getSnapshot(position));
                     }
                 }
-
             });
         }
+
+        void bindView(FeatureUpvoteModel featureUpvoteModel) {
+            firstNameTextView.setText(featureUpvoteModel.getTitle());
+            descTextView.setText(featureUpvoteModel.getDescription());
+            pointsTextView.setText(mContext.getString(R.string.upvoted) + featureUpvoteModel.getUpvote_count());
+            String[] p = featureUpvoteModel.getImage().split("/");
+            String imageLink = "https://drive.google.com/uc?export=download&id=" + p[5];
+            Picasso.get()
+                    .load(imageLink)
+                    .noFade()
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(image, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+                            Picasso.get().load(imageLink).noFade().into(image);
+                        }
+                    });
+        }
     }
-
-
 }

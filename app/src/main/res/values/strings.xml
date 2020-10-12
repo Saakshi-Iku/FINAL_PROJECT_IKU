@@ -45,6 +45,6 @@
     <string name="reported_and_deleted_comment">Comment reported by others and/or deleted by a community chief.</string>
     <string name="message_deleted">Message was deleted.</string>
     <string name="comment_deleted">Comment was deleted.</string>
-
+    <string name="upvoted">Upvoted: </string>
 
 </resources>
