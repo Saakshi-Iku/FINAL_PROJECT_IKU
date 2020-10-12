@@ -52,16 +52,26 @@
                     android:textSize="18sp" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/back_button"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:contentDescription="@string/back_button_content_desc"
-                android:padding="16dp"
-                android:src="@drawable/ic_arrow_back_24"
+            <!--Back button-->
+            <FrameLayout
+                android:id="@+id/backButtonContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/bg_oval_transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/back_button"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:padding="10dp"
+                    android:contentDescription="@string/back_button_content_desc"
+                    android:src="@drawable/ic_arrow_back_24" />
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
