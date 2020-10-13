@@ -204,11 +204,16 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
 
         if (clickType != null) {
             if (clickType.equals("TOP_COMMENT")) {
-                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.scrollView.getLayoutParams();
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
                 params.addRule(RelativeLayout.BELOW, R.id.appBar);
-                viewPostBinding.scrollView.setLayoutParams(params);
+                viewPostBinding.imageContainer.setLayoutParams(params);
+                slideView(viewPostBinding.imageContainer, viewPostBinding.imageContainer.getLayoutParams().height, 400);
+                viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
+                viewPostBinding.seeIcon.setRotation(90);
+                viewPostBinding.seeType.setText(R.string.see_less);
                 viewPostBinding.messageArea.setVisibility(View.VISIBLE);
-                viewPostBinding.messageTextField.requestFocus();
+                viewPostBinding.postDescriptionPreview.setVisibility(View.GONE);
+                scrollStatus = 1;
             }
         }
 
