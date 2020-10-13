@@ -45,17 +45,17 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ChatImageActivity extends AppCompatActivity {
-
-    public static final String DATE_FORMAT = "yyyyMMdd_HHmmss";
     private StorageReference mStorageRef;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseFirestore db;
     private FirebaseAnalytics mFirebaseAnalytics;
-    private SimpleDateFormat dateFormatter;
+    private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
+    ;
     private Uri mImageUri;
     private int PICK_IMAGE = 1;
     private String docId, message, imageUrl;
+    private int compressedImageHeight, compressedImageWidth;
     byte[] dataSave;
     private int STORAGE_PERMISSION_CODE = 10;
     private String originalImageUrl;
@@ -95,9 +95,6 @@ public class ChatImageActivity extends AppCompatActivity {
         backButton = findViewById(R.id.backbutton);
         sendImageChatbtn = findViewById(R.id.sendMessageButton);
         chosenImage = findViewById(R.id.chosenImage);
-        dateFormatter = new SimpleDateFormat(
-                DATE_FORMAT, Locale.US);
-
 
         Bundle extras = getIntent().getExtras();
         docId = extras.getString("documentId");
@@ -133,7 +130,6 @@ public class ChatImageActivity extends AppCompatActivity {
             uploadTask.addOnSuccessListener(taskSnapshot -> {
                 Task<Uri> downloadUrl = imageRef.getDownloadUrl();
                 downloadUrl.addOnSuccessListener(uri -> {
-
                     Date d = new Date();
                     long timestamp = d.getTime();
                     Map<String, Object> docData = new HashMap<>();
@@ -143,6 +139,8 @@ public class ChatImageActivity extends AppCompatActivity {
                     docData.put("uid", user.getUid());
                     docData.put("type", "image");
                     docData.put("imageUrl", uri.toString());
+                    docData.put("compressedImageWidth", compressedImageWidth);
+                    docData.put("compressedImageHeight", compressedImageHeight);
                     docData.put("originalImageUrl", originalImageUrl);
                     docData.put("userName", user.getDisplayName());
                     docData.put("upvoteCount", 0);
@@ -256,10 +254,12 @@ public class ChatImageActivity extends AppCompatActivity {
                 });
             });
 
-            Bitmap bitmap = null;
+            Bitmap bitmap;
             try {
                 bitmap = decodeUriToBitmap(getApplicationContext(), mImageUri);
                 bitmap = getResizedBitmap(bitmap, bitmap.getWidth() / 2, bitmap.getHeight() / 2);
+                compressedImageWidth = bitmap.getWidth();
+                compressedImageHeight = bitmap.getHeight();
                 chosenImage.setImageBitmap(bitmap);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
