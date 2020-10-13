@@ -82,7 +82,7 @@
                 android:id="@+id/group_icon"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:padding="6dp"
+                android:padding="10dp"
                 android:src="@drawable/shield"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
