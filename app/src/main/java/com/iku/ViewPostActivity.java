@@ -97,7 +97,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
     }
 
     private void initCommentsView() {
-        Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("timestamp", Query.Direction.DESCENDING);
+        Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("timestamp", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<CommentModel> options = new FirestoreRecyclerOptions.Builder<CommentModel>()
                 .setQuery(query, CommentModel.class)
                 .build();
