@@ -247,9 +247,9 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 else
                     return 0;
             } else if (getItem(position).getPostCommentCount() > 0 && getItem(position).getType().equals("image")) {
-                if (!getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("image"))
+                if (!getItem(position).getUID().equals(user.getUid()))
                     return MSG_TYPE_IMAGE_LEFT_COMMENT;
-                else if (getItem(position).getType().equals("image") && getItem(position).getimageUrl() != null && getItem(position).getUID().equals(user.getUid()))
+                else if (getItem(position).getimageUrl() != null && getItem(position).getUID().equals(user.getUid()))
                     return MSG_TYPE_IMAGE_RIGHT_COMMENT;
                 else
                     return 0;
@@ -280,9 +280,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, linkTitle, linkDescription, linkSource;
-        private ImageView linkPreviewImage;
-        private ConstraintLayout linkPreviewLayout;
+        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftViewHolder(@NonNull View itemView) {
@@ -295,11 +293,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             senderName = itemView.findViewById(R.id.sender_name);
             upvoteCount = itemView.findViewById(R.id.upvoteCount);
             edited = itemView.findViewById(R.id.editFlag);
-            linkTitle = itemView.findViewById(R.id.linkTitle);
-            linkDescription = itemView.findViewById(R.id.linkPreviewDescription);
-            linkSource = itemView.findViewById(R.id.linkSourceDomain);
-            linkPreviewImage = itemView.findViewById(R.id.linkPreviewImage);
-            linkPreviewLayout = itemView.findViewById(R.id.linkPreview);
         }
 
         void bindChat(ChatModel chatModel) {
@@ -565,6 +558,20 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime3.setText(sfd.format(new Date(timeStampImageLeft)));
             senderName.setText(chatModel.getUserName());
 
+            if (chatModel.isEdited()) {
+                edited.setVisibility(View.VISIBLE);
+                messageTime2.setVisibility(View.VISIBLE);
+            } else {
+                edited.setVisibility(View.GONE);
+                if (chatModel.getMessage().length() <= 25) {
+                    messageTime.setVisibility(View.VISIBLE);
+                    messageTime2.setVisibility(View.GONE);
+                } else {
+                    messageTime2.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                }
+            }
+
             if (senderName.getVisibility() == View.VISIBLE) {
                 messageTime.setVisibility(View.VISIBLE);
                 messageTime2.setVisibility(View.GONE);
@@ -701,6 +708,20 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                         customTabsIntent.launchUrl(mContext, Uri.parse(url));
                         return true;
                     });
+
+            if (chatModel.isEdited()) {
+                edited.setVisibility(View.VISIBLE);
+                messageTime2.setVisibility(View.VISIBLE);
+            } else {
+                edited.setVisibility(View.GONE);
+                if (chatModel.getMessage().length() <= 25) {
+                    messageTime.setVisibility(View.VISIBLE);
+                    messageTime2.setVisibility(View.GONE);
+                } else {
+                    messageTime2.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                }
+            }
 
             commentsLayout.setVisibility(View.VISIBLE);
             commentTextView.setText(chatModel.getTopComment());
@@ -929,7 +950,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightCommentImageViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, upvoteCount, edited, commentTextView;
+        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, commentTextView;
         private ImageView sentImage;
         private MaterialButton viewPostBtn;
         private ConstraintLayout commentsLayout;
@@ -942,7 +963,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageText = itemView.findViewById(R.id.message);
             messageTime = itemView.findViewById(R.id.message_time);
             messageTime2 = itemView.findViewById(R.id.message_time2);
-            messageTime3 = itemView.findViewById(R.id.message_time3);
             sentImage = itemView.findViewById(R.id.sentImage);
             upvoteCount = itemView.findViewById(R.id.upvoteCount);
             edited = itemView.findViewById(R.id.editFlag);
@@ -1087,9 +1107,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, linkTitle, linkDescription, linkSource;
-        private ImageView linkPreviewImage;
-        private ConstraintLayout linkPreviewLayout;
+        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightViewHolder(@NonNull View itemView) {
@@ -1099,12 +1117,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime = itemView.findViewById(R.id.message_time);
             messageTime2 = itemView.findViewById(R.id.message_time2);
             upvoteCount = itemView.findViewById(R.id.upvoteCount);
-            edited = itemView.findViewById(R.id.editFlag);
-            linkTitle = itemView.findViewById(R.id.linkTitle);
-            linkDescription = itemView.findViewById(R.id.linkPreviewDescription);
-            linkSource = itemView.findViewById(R.id.linkSourceDomain);
-            linkPreviewImage = itemView.findViewById(R.id.linkPreviewImage);
-            linkPreviewLayout = itemView.findViewById(R.id.linkPreview);
+            edited = itemView.findViewById(R.id.editFlag);;
         }
 
         void bindChat(ChatModel chatModel) {
@@ -1291,10 +1304,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftSpamViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount, linkTitle, linkDescription, linkSource;
+        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount;
         private LinearLayout reportLayout;
-        private ImageView linkPreviewImage;
-        private ConstraintLayout linkPreviewLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftSpamViewHolder(@NonNull View itemView) {
@@ -1309,11 +1320,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             edited = itemView.findViewById(R.id.editFlag);
             reportLayout = itemView.findViewById(R.id.flag_layout);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
-            linkTitle = itemView.findViewById(R.id.linkTitle);
-            linkDescription = itemView.findViewById(R.id.linkPreviewDescription);
-            linkSource = itemView.findViewById(R.id.linkSourceDomain);
-            linkPreviewImage = itemView.findViewById(R.id.linkPreviewImage);
-            linkPreviewLayout = itemView.findViewById(R.id.linkPreview);
         }
 
         void bindChat(ChatModel chatModel) {
@@ -1593,6 +1599,20 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                         return true;
                     });
 
+            if (chatModel.isEdited()) {
+                edited.setVisibility(View.VISIBLE);
+                messageTime2.setVisibility(View.VISIBLE);
+            } else {
+                edited.setVisibility(View.GONE);
+                if (chatModel.getMessage().length() <= 25) {
+                    messageTime.setVisibility(View.VISIBLE);
+                    messageTime2.setVisibility(View.GONE);
+                } else {
+                    messageTime2.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                }
+            }
+
             if (chatModel.getTopComment() != null) {
                 commentsLayout.setVisibility(View.VISIBLE);
                 commentTextView.setText(chatModel.getTopComment());
@@ -1866,10 +1886,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightSpamViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, spamCount, linkTitle, linkDescription, linkSource;
+        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, spamCount;
         private LinearLayout reportLayout;
-        private ImageView linkPreviewImage;
-        private ConstraintLayout linkPreviewLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightSpamViewHolder(@NonNull View itemView) {
@@ -1882,11 +1900,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             edited = itemView.findViewById(R.id.editFlag);
             reportLayout = itemView.findViewById(R.id.flag_layout);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
-            linkTitle = itemView.findViewById(R.id.linkTitle);
-            linkDescription = itemView.findViewById(R.id.linkPreviewDescription);
-            linkSource = itemView.findViewById(R.id.linkSourceDomain);
-            linkPreviewImage = itemView.findViewById(R.id.linkPreviewImage);
-            linkPreviewLayout = itemView.findViewById(R.id.linkPreview);
         }
 
         void bindChat(ChatModel chatModel) {
