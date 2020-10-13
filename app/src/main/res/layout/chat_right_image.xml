@@ -180,6 +180,7 @@
                     android:maxLines="3"
                     android:textColor="@color/white"
                     android:textSize="12sp"
+                    android:ellipsize="end"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/viewCommentPreview"
                     app:layout_constraintStart_toEndOf="@id/profileImage"
