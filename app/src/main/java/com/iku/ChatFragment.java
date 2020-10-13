@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -40,7 +41,14 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -79,11 +87,11 @@ import java.util.regex.Pattern;
 import nl.dionsegijn.konfetti.models.Shape;
 import nl.dionsegijn.konfetti.models.Size;
 
-public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchListener {
+public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchListener, OnSuccessListener<AppUpdateInfo> {
 
     private static final String TAG = ChatFragment.class.getSimpleName();
     private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-    private SimpleDateFormat sfdMainDate = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+    private final SimpleDateFormat sfdMainDate = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
     private FirebaseUser user;
     private MaterialTextView memberCount;
     private FirebaseFirestore db;
@@ -99,13 +107,14 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     private GestureDetectorCompat detector;
     // 0 means normal send, 1 means update an old message
     private int editTextStatus = 0;
-    private int STORAGE_PERMISSION_CODE = 10;
     // 0 means false, 1 is link preview message
     private int linkPreviewedMessageStatus = 0;
     private String linkPreviewImageUrl = "";
     private String linkPreviewTitle = "";
     private String linkPreviewDesc = "";
     private String linkPreviewUrl = "";
+    private AppUpdateManager appUpdateManager;
+    public static final int REQUEST_CODE = 1234;
     private ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permsGranted -> {
         if (permsGranted.containsValue(false)) {
             //user denied one or more permissions
@@ -867,6 +876,50 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         return true;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        appUpdateManager = AppUpdateManagerFactory.create(view.getContext());
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onSuccess(AppUpdateInfo appUpdateInfo) {
+        if (appUpdateInfo.updateAvailability()
+                == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+            // If an in-app update is already running, resume the update.
+            startUpdate(appUpdateInfo);
+        } else if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+            // If the update is downloaded but not installed,
+            // notify the user to complete the update.
+            popupSnackbarForCompleteUpdate();
+        } else if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+            if (appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+                startUpdate(appUpdateInfo);
+            }
+        }
+    }
+
+    private void startUpdate(final AppUpdateInfo appUpdateInfo) {
+        final Activity activity = getActivity();
+        new Thread(() -> {
+            try {
+                appUpdateManager.startUpdateFlowForResult(appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        activity,
+                        REQUEST_CODE);
+            } catch (IntentSender.SendIntentException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void popupSnackbarForCompleteUpdate() {
+        Snackbar snackbar = Snackbar.make(getActivity().findViewById(R.id.fragment_chat_root), "An update has just been downloaded.", Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("RESTART", view -> appUpdateManager.completeUpdate());
+        snackbar.setActionTextColor(ContextCompat.getColor(getContext(), R.color.colorPrimary));
+        snackbar.show();
+    }
+
     private class RecyclerViewOnGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
@@ -1450,6 +1503,11 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
             super.onLongPress(e);
         }
+    }
 
+    @Override
+    public void onResume() {
+        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(this::onSuccess);
+        super.onResume();
     }
 }
