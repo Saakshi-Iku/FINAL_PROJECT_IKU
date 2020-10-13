@@ -168,20 +168,14 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             map.put("spam", true);
         db.collection("iku_earth_messages").document(messageDocumentID)
                 .update(map)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        //Log event
-                        Bundle delete_bundle = new Bundle();
-                        delete_bundle.putString("UID", user.getUid());
-                        delete_bundle.putString("Name", user.getDisplayName());
-                        mFirebaseAnalytics.logEvent("deleted_message", delete_bundle);
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    //Log event
+                    Bundle delete_bundle = new Bundle();
+                    delete_bundle.putString("UID", user.getUid());
+                    delete_bundle.putString("Name", user.getDisplayName());
+                    mFirebaseAnalytics.logEvent("deleted_message", delete_bundle);
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
+                .addOnFailureListener(e -> {
                 });
     }
 
@@ -339,7 +333,6 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             public void onTopCommentClick(DocumentSnapshot documentSnapshot, int position) {
                 Intent viewChatImageIntent = new Intent(getContext(), ViewPostActivity.class);
                 String documentID = documentSnapshot.getId();
-                String postType = chatadapter.getItem(position).getType();
                 String UID = chatadapter.getItem(position).getUID();
                 String name = chatadapter.getItem(position).getUserName();
                 String url = chatadapter.getItem(position).getimageUrl();
@@ -355,6 +348,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     } else
                         viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
                     viewChatImageIntent.putExtra("EXTRA_POST_TIMESTAMP", timestamp);
+                    viewChatImageIntent.putExtra("EXTRA_CLICK_TYPE", "TOP_COMMENT");
                     viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", documentID);
                     viewChatImageIntent.putExtra("EXTRA_USER_ID", UID);
                     startActivity(viewChatImageIntent);
@@ -1509,5 +1503,17 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     public void onResume() {
         appUpdateManager.getAppUpdateInfo().addOnSuccessListener(this::onSuccess);
         super.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        chatadapter.startListening();
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        chatadapter.stopListening();
+        super.onStop();
     }
 }

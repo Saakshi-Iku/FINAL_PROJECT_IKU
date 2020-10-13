@@ -476,16 +476,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             }
                         });
             } else {
-                firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
-                secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
-                TextDrawable drawable = TextDrawable.builder()
-                        .beginConfig()
-                        .width(200)
-                        .height(200)
-                        .endConfig()
-                        .buildRect(firstLetter + secondLetter, Color.DKGRAY);
-                commenterProfilePicture.setImageDrawable(drawable);
-
+                if (chatModel.getTopCommenterName() != null) {
+                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                    TextDrawable drawable = TextDrawable.builder()
+                            .beginConfig()
+                            .width(200)
+                            .height(200)
+                            .endConfig()
+                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                    commenterProfilePicture.setImageDrawable(drawable);
+                }
             }
 
             if (chatModel.isEdited())
@@ -906,16 +907,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             }
                         });
             } else {
-                firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
-                secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
-                TextDrawable drawable = TextDrawable.builder()
-                        .beginConfig()
-                        .width(200)
-                        .height(200)
-                        .endConfig()
-                        .buildRect(firstLetter + secondLetter, Color.DKGRAY);
-                commenterProfilePicture.setImageDrawable(drawable);
-
+                if (chatModel.getTopCommenterName() != null) {
+                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                    TextDrawable drawable = TextDrawable.builder()
+                            .beginConfig()
+                            .width(200)
+                            .height(200)
+                            .endConfig()
+                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                    commenterProfilePicture.setImageDrawable(drawable);
+                }
             }
 
             messageTime.setText(sfd.format(new Date(timeStampImageLeft)));
@@ -1167,15 +1169,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                 }
                             });
                 } else {
-                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
-                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
-                    TextDrawable drawable = TextDrawable.builder()
-                            .beginConfig()
-                            .width(200)
-                            .height(200)
-                            .endConfig()
-                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
-                    commenterProfilePicture.setImageDrawable(drawable);
+                    if (chatModel.getTopCommenterName() != null) {
+                        firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                        secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                        TextDrawable drawable = TextDrawable.builder()
+                                .beginConfig()
+                                .width(200)
+                                .height(200)
+                                .endConfig()
+                                .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                        commenterProfilePicture.setImageDrawable(drawable);
+                    }
                 }
             }
 
@@ -1415,15 +1419,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                 }
                             });
                 } else {
-                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
-                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
-                    TextDrawable drawable = TextDrawable.builder()
-                            .beginConfig()
-                            .width(200)
-                            .height(200)
-                            .endConfig()
-                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
-                    commenterProfilePicture.setImageDrawable(drawable);
+                    if (chatModel.getTopCommenterName() != null) {
+                        firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                        secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                        TextDrawable drawable = TextDrawable.builder()
+                                .beginConfig()
+                                .width(200)
+                                .height(200)
+                                .endConfig()
+                                .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                        commenterProfilePicture.setImageDrawable(drawable);
+                    }
                 }
             }
 
@@ -1929,15 +1935,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                 }
                             });
                 } else {
-                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
-                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
-                    TextDrawable drawable = TextDrawable.builder()
-                            .beginConfig()
-                            .width(200)
-                            .height(200)
-                            .endConfig()
-                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
-                    commenterProfilePicture.setImageDrawable(drawable);
+                    if (chatModel.getTopCommenterName() != null) {
+                        firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                        secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                        TextDrawable drawable = TextDrawable.builder()
+                                .beginConfig()
+                                .width(200)
+                                .height(200)
+                                .endConfig()
+                                .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                        commenterProfilePicture.setImageDrawable(drawable);
+                    }
                 }
             }
 
@@ -2105,15 +2113,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                 }
                             });
                 } else {
-                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
-                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
-                    TextDrawable drawable = TextDrawable.builder()
-                            .beginConfig()
-                            .width(200)
-                            .height(200)
-                            .endConfig()
-                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
-                    commenterProfilePicture.setImageDrawable(drawable);
+                    if (chatModel.getTopCommenterName() != null) {
+                        firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                        secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                        TextDrawable drawable = TextDrawable.builder()
+                                .beginConfig()
+                                .width(200)
+                                .height(200)
+                                .endConfig()
+                                .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                        commenterProfilePicture.setImageDrawable(drawable);
+                    }
                 }
             }
 
