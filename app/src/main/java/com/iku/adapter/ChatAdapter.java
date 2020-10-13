@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +45,9 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerView.ViewHolder> {
 
     public static final int MSG_TYPE_LEFT = 0;
+    public static final int MSG_TYPE_LEFT_COMMENT = 16;
     public static final int MSG_TYPE_RIGHT = 1;
+    public static final int MSG_TYPE_RIGHT_COMMENT = 17;
     public static final int MSG_TYPE_LEFT_LINK = 6;
     public static final int MSG_TYPE_RIGHT_LINK = 7;
     public static final int MSG_TYPE_IMAGE_LEFT = 2;
@@ -93,6 +94,11 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                 chatLeftViewHolder.bindChat(chatModel);
                 break;
 
+            case MSG_TYPE_LEFT_COMMENT:
+                ChatLeftCommentViewHolder chatLeftCommentViewHolder = (ChatLeftCommentViewHolder) viewHolder;
+                chatLeftCommentViewHolder.bindChat(chatModel);
+                break;
+
             case MSG_TYPE_LEFT_LINK:
                 ChatLeftLinkViewHolder chatLeftLinkViewHolder = (ChatLeftLinkViewHolder) viewHolder;
                 chatLeftLinkViewHolder.bindChat(chatModel);
@@ -101,6 +107,11 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             case MSG_TYPE_RIGHT:
                 ChatRightViewHolder chatRightViewHolder = (ChatRightViewHolder) viewHolder;
                 chatRightViewHolder.bindChat(chatModel);
+                break;
+
+            case MSG_TYPE_RIGHT_COMMENT:
+                ChatRightCommentViewHolder chatRightCommentViewHolder = (ChatRightCommentViewHolder) viewHolder;
+                chatRightCommentViewHolder.bindChat(chatModel);
                 break;
 
             case MSG_TYPE_RIGHT_LINK:
@@ -178,6 +189,12 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         } else if (viewType == MSG_TYPE_RIGHT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_right, parent, false);
             return new ChatRightViewHolder(view);
+        } else if (viewType == MSG_TYPE_RIGHT_COMMENT) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_right, parent, false);
+            return new ChatRightCommentViewHolder(view);
+        } else if (viewType == MSG_TYPE_LEFT_COMMENT) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_left, parent, false);
+            return new ChatLeftCommentViewHolder(view);
         } else if (viewType == MSG_TYPE_LEFT) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.chat_left, parent, false);
             return new ChatLeftViewHolder(view);
@@ -246,11 +263,15 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     return MSG_TYPE_IMAGE_RIGHT_SPAM;
                 else
                     return 0;
-            } else if (getItem(position).getPostCommentCount() > 0 && getItem(position).getType().equals("image")) {
-                if (!getItem(position).getUID().equals(user.getUid()))
+            } else if (getItem(position).getPostCommentCount() > 0) {
+                if (!getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("image"))
                     return MSG_TYPE_IMAGE_LEFT_COMMENT;
-                else if (getItem(position).getimageUrl() != null && getItem(position).getUID().equals(user.getUid()))
+                else if (getItem(position).getimageUrl() != null && getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("image"))
                     return MSG_TYPE_IMAGE_RIGHT_COMMENT;
+                else if (!getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("text"))
+                    return MSG_TYPE_LEFT_COMMENT;
+                else if (getItem(position).getUID().equals(user.getUid()) && getItem(position).getType().equals("text"))
+                    return MSG_TYPE_RIGHT_COMMENT;
                 else
                     return 0;
             } else {
@@ -321,6 +342,151 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2.setText(sfd.format(new Date(timeStampLeft)));
             messageTime3.setText(sfd.format(new Date(timeStampLeft)));
             senderName.setText(chatModel.getUserName());
+
+            if (chatModel.isEdited())
+                edited.setVisibility(View.VISIBLE);
+            else
+                edited.setVisibility(View.GONE);
+
+            //Change the visibilty according to the visibility of the sender's name.
+            if (senderName.getVisibility() == View.VISIBLE) {
+                messageTime.setVisibility(View.VISIBLE);
+                messageTime2.setVisibility(View.GONE);
+                messageTime3.setVisibility(View.GONE);
+            } else {
+                //Change the visibilities according to senderName's visibility
+                if (chatModel.isEdited()) {
+                    messageTime3.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                    messageTime2.setVisibility(View.GONE);
+                } else {
+                    if (chatModel.getMessage().length() <= 25) {
+                        messageTime2.setVisibility(View.VISIBLE);
+                        messageTime.setVisibility(View.GONE);
+                        messageTime3.setVisibility(View.GONE);
+                    } else {
+                        messageTime3.setVisibility(View.VISIBLE);
+                        messageTime.setVisibility(View.GONE);
+                        messageTime2.setVisibility(View.GONE);
+                    }
+                }
+            }
+            if (chatModel.getUpvoteCount() > 0) {
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.VISIBLE);
+                upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
+                if (chatModel.getupvoters().size() > 0)
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji1().size() > 0)
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji2().size() > 0)
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji3().size() > 0)
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji4().size() > 0)
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.GONE);
+            } else
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.GONE);
+        }
+    }
+
+    public class ChatLeftCommentViewHolder extends RecyclerView.ViewHolder {
+
+        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, commentTextView;
+        private ConstraintLayout commentsLayout;
+        private CircleImageView commenterProfilePicture;
+
+        @SuppressLint("ClickableViewAccessibility")
+        public ChatLeftCommentViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            messageText = itemView.findViewById(R.id.message);
+            messageTime = itemView.findViewById(R.id.message_time);
+            messageTime2 = itemView.findViewById(R.id.message_time2);
+            messageTime3 = itemView.findViewById(R.id.message_time3);
+            senderName = itemView.findViewById(R.id.sender_name);
+            upvoteCount = itemView.findViewById(R.id.upvoteCount);
+            edited = itemView.findViewById(R.id.editFlag);
+            commentsLayout = itemView.findViewById(R.id.commentsPreview);
+            commenterProfilePicture = itemView.findViewById(R.id.profileImage);
+            commentTextView = itemView.findViewById(R.id.comment);
+
+            commentsLayout.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onTopCommentClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
+        }
+
+        void bindChat(ChatModel chatModel) {
+            long timeStampLeft = chatModel.getTimestamp();
+
+            messageText.setText(chatModel.getMessage());
+            messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+            messageText.setLinkTextColor(Color.parseColor("#1111b7"));
+            BetterLinkMovementMethod
+                    .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                    .setOnLinkLongClickListener(((textView, url) -> {
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("link", url);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }))
+                    .setOnLinkClickListener((textView, url) -> {
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        customTabsIntent.launchUrl(mContext, Uri.parse(url));
+                        return true;
+                    });
+
+            messageTime.setText(sfd.format(new Date(timeStampLeft)));
+            messageTime2.setText(sfd.format(new Date(timeStampLeft)));
+            messageTime3.setText(sfd.format(new Date(timeStampLeft)));
+            senderName.setText(chatModel.getUserName());
+
+            commentsLayout.setVisibility(View.VISIBLE);
+            commentTextView.setText(chatModel.getTopComment());
+            String url = chatModel.getTopCommenterImageUrl();
+            String firstLetter, secondLetter;
+            if (url != null && !url.equals("null")) {
+                Picasso.get().load(url).noFade().networkPolicy(NetworkPolicy.OFFLINE)
+                        .into(commenterProfilePicture, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+                                Picasso.get().load(url).noFade().into(commenterProfilePicture);
+                            }
+                        });
+            } else {
+                firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                TextDrawable drawable = TextDrawable.builder()
+                        .beginConfig()
+                        .width(200)
+                        .height(200)
+                        .endConfig()
+                        .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                commenterProfilePicture.setImageDrawable(drawable);
+
+            }
 
             if (chatModel.isEdited())
                 edited.setVisibility(View.VISIBLE);
@@ -832,6 +998,227 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     }
 
+    public class ChatRightViewHolder extends RecyclerView.ViewHolder {
+
+        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited;
+
+        @SuppressLint("ClickableViewAccessibility")
+        public ChatRightViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            messageText = itemView.findViewById(R.id.message);
+            messageTime = itemView.findViewById(R.id.message_time);
+            messageTime2 = itemView.findViewById(R.id.message_time2);
+            upvoteCount = itemView.findViewById(R.id.upvoteCount);
+            edited = itemView.findViewById(R.id.editFlag);
+            ;
+        }
+
+        void bindChat(ChatModel chatModel) {
+            long timeStampRight = chatModel.getTimestamp();
+
+            if (chatModel.getUpvoteCount() > 0) {
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.VISIBLE);
+                upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
+
+                if (chatModel.getupvoters().size() > 0)
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji1().size() > 0)
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji2().size() > 0)
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji3().size() > 0)
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji4().size() > 0)
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.GONE);
+            } else
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.GONE);
+
+            messageText.setText(chatModel.getMessage());
+            messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+            messageText.setLinkTextColor(Color.parseColor("#343493"));
+            BetterLinkMovementMethod
+                    .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                    .setOnLinkLongClickListener(((textView, url) -> {
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("link", url);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }))
+                    .setOnLinkClickListener((textView, url) -> {
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        customTabsIntent.launchUrl(mContext, Uri.parse(url));
+                        return true;
+                    });
+
+            messageTime.setText(sfd.format(new Date(timeStampRight)));
+            messageTime2.setText(sfd.format(new Date(timeStampRight)));
+            upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
+
+            if (chatModel.isEdited()) {
+                edited.setVisibility(View.VISIBLE);
+                messageTime2.setVisibility(View.VISIBLE);
+                messageTime.setVisibility(View.GONE);
+            } else {
+                edited.setVisibility(View.GONE);
+                if (chatModel.getMessage().length() <= 25) {
+                    messageTime.setVisibility(View.VISIBLE);
+                    messageTime2.setVisibility(View.GONE);
+                } else {
+                    messageTime2.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
+    public class ChatRightCommentViewHolder extends RecyclerView.ViewHolder {
+
+        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, commentTextView;
+        private ConstraintLayout commentsLayout;
+        private CircleImageView commenterProfilePicture;
+
+        @SuppressLint("ClickableViewAccessibility")
+        public ChatRightCommentViewHolder(@NonNull View itemView) {
+            super(itemView);
+
+            messageText = itemView.findViewById(R.id.message);
+            messageTime = itemView.findViewById(R.id.message_time);
+            messageTime2 = itemView.findViewById(R.id.message_time2);
+            upvoteCount = itemView.findViewById(R.id.upvoteCount);
+            edited = itemView.findViewById(R.id.editFlag);
+            commentsLayout = itemView.findViewById(R.id.commentsPreview);
+            commenterProfilePicture = itemView.findViewById(R.id.profileImage);
+            commentTextView = itemView.findViewById(R.id.comment);
+
+            commentsLayout.setOnClickListener(view -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onTopCommentClick(getSnapshots().getSnapshot(position), position);
+                }
+            });
+        }
+
+        void bindChat(ChatModel chatModel) {
+            long timeStampRight = chatModel.getTimestamp();
+
+            if (chatModel.getUpvoteCount() > 0) {
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.VISIBLE);
+                upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
+
+                if (chatModel.getupvoters().size() > 0)
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.heartImage).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji1().size() > 0)
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji1).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji2().size() > 0)
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji2).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji3().size() > 0)
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji3).setVisibility(View.GONE);
+
+                if (chatModel.getEmoji4().size() > 0)
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.VISIBLE);
+                else
+                    itemView.findViewById(R.id.emoji4).setVisibility(View.GONE);
+            } else
+                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.GONE);
+
+            if (chatModel.getTopComment() != null) {
+                commentsLayout.setVisibility(View.VISIBLE);
+                commentTextView.setText(chatModel.getTopComment());
+                String url = chatModel.getTopCommenterImageUrl();
+                String firstLetter, secondLetter;
+                if (url != null && !url.equals("null")) {
+                    Picasso.get().load(url).noFade().networkPolicy(NetworkPolicy.OFFLINE)
+                            .into(commenterProfilePicture, new Callback() {
+                                @Override
+                                public void onSuccess() {
+                                }
+
+                                @Override
+                                public void onError(Exception e) {
+                                    Picasso.get().load(url).noFade().into(commenterProfilePicture);
+                                }
+                            });
+                } else {
+                    firstLetter = String.valueOf(chatModel.getTopCommenterName().charAt(0));
+                    secondLetter = chatModel.getTopCommenterName().substring(chatModel.getTopCommenterName().indexOf(' ') + 1, chatModel.getTopCommenterName().indexOf(' ') + 2).trim();
+                    TextDrawable drawable = TextDrawable.builder()
+                            .beginConfig()
+                            .width(200)
+                            .height(200)
+                            .endConfig()
+                            .buildRect(firstLetter + secondLetter, Color.DKGRAY);
+                    commenterProfilePicture.setImageDrawable(drawable);
+                }
+            }
+
+            messageText.setText(chatModel.getMessage());
+            messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
+            messageText.setLinkTextColor(Color.parseColor("#343493"));
+            BetterLinkMovementMethod
+                    .linkify(Linkify.WEB_URLS, (Activity) mContext)
+                    .setOnLinkLongClickListener(((textView, url) -> {
+                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText("link", url);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }))
+                    .setOnLinkClickListener((textView, url) -> {
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        customTabsIntent.launchUrl(mContext, Uri.parse(url));
+                        return true;
+                    });
+
+            messageTime.setText(sfd.format(new Date(timeStampRight)));
+            messageTime2.setText(sfd.format(new Date(timeStampRight)));
+            upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
+
+            if (chatModel.isEdited()) {
+                edited.setVisibility(View.VISIBLE);
+                messageTime2.setVisibility(View.VISIBLE);
+                messageTime.setVisibility(View.GONE);
+            } else {
+                edited.setVisibility(View.GONE);
+                if (chatModel.getMessage().length() <= 25) {
+                    messageTime.setVisibility(View.VISIBLE);
+                    messageTime2.setVisibility(View.GONE);
+                } else {
+                    messageTime2.setVisibility(View.VISIBLE);
+                    messageTime.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
     public class ChatRightImageViewHolder extends RecyclerView.ViewHolder {
 
         private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited;
@@ -1102,95 +1489,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                     .into(sentImage);
                         }
                     });
-        }
-    }
-
-    public class ChatRightViewHolder extends RecyclerView.ViewHolder {
-
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited;
-
-        @SuppressLint("ClickableViewAccessibility")
-        public ChatRightViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            messageText = itemView.findViewById(R.id.message);
-            messageTime = itemView.findViewById(R.id.message_time);
-            messageTime2 = itemView.findViewById(R.id.message_time2);
-            upvoteCount = itemView.findViewById(R.id.upvoteCount);
-            edited = itemView.findViewById(R.id.editFlag);;
-        }
-
-        void bindChat(ChatModel chatModel) {
-            long timeStampRight = chatModel.getTimestamp();
-
-            if (chatModel.getUpvoteCount() > 0) {
-                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.VISIBLE);
-                upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
-
-                if (chatModel.getupvoters().size() > 0)
-                    itemView.findViewById(R.id.heartImage).setVisibility(View.VISIBLE);
-                else
-                    itemView.findViewById(R.id.heartImage).setVisibility(View.GONE);
-
-                if (chatModel.getEmoji1().size() > 0)
-                    itemView.findViewById(R.id.emoji1).setVisibility(View.VISIBLE);
-                else
-                    itemView.findViewById(R.id.emoji1).setVisibility(View.GONE);
-
-                if (chatModel.getEmoji2().size() > 0)
-                    itemView.findViewById(R.id.emoji2).setVisibility(View.VISIBLE);
-                else
-                    itemView.findViewById(R.id.emoji2).setVisibility(View.GONE);
-
-                if (chatModel.getEmoji3().size() > 0)
-                    itemView.findViewById(R.id.emoji3).setVisibility(View.VISIBLE);
-                else
-                    itemView.findViewById(R.id.emoji3).setVisibility(View.GONE);
-
-                if (chatModel.getEmoji4().size() > 0)
-                    itemView.findViewById(R.id.emoji4).setVisibility(View.VISIBLE);
-                else
-                    itemView.findViewById(R.id.emoji4).setVisibility(View.GONE);
-            } else
-                itemView.findViewById(R.id.upvotesLayout).setVisibility(View.GONE);
-
-            messageText.setText(chatModel.getMessage());
-            messageText.setMovementMethod(BetterLinkMovementMethod.getInstance());
-            messageText.setLinkTextColor(Color.parseColor("#343493"));
-            BetterLinkMovementMethod
-                    .linkify(Linkify.WEB_URLS, (Activity) mContext)
-                    .setOnLinkLongClickListener(((textView, url) -> {
-                        ClipboardManager clipboard = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
-                        ClipData clip = ClipData.newPlainText("link", url);
-                        clipboard.setPrimaryClip(clip);
-                        Toast.makeText(mContext, "Link copied to clipboard.", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }))
-                    .setOnLinkClickListener((textView, url) -> {
-                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                        CustomTabsIntent customTabsIntent = builder.build();
-                        customTabsIntent.launchUrl(mContext, Uri.parse(url));
-                        return true;
-                    });
-
-            messageTime.setText(sfd.format(new Date(timeStampRight)));
-            messageTime2.setText(sfd.format(new Date(timeStampRight)));
-            upvoteCount.setText(String.valueOf(chatModel.getUpvoteCount()));
-
-            if (chatModel.isEdited()) {
-                edited.setVisibility(View.VISIBLE);
-                messageTime2.setVisibility(View.VISIBLE);
-                messageTime.setVisibility(View.GONE);
-            } else {
-                edited.setVisibility(View.GONE);
-                if (chatModel.getMessage().length() <= 25) {
-                    messageTime.setVisibility(View.VISIBLE);
-                    messageTime2.setVisibility(View.GONE);
-                } else {
-                    messageTime2.setVisibility(View.VISIBLE);
-                    messageTime.setVisibility(View.GONE);
-                }
-            }
         }
     }
 
