@@ -1504,16 +1504,4 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         appUpdateManager.getAppUpdateInfo().addOnSuccessListener(this::onSuccess);
         super.onResume();
     }
-
-    @Override
-    public void onStart() {
-        chatadapter.startListening();
-        super.onStart();
-    }
-
-    @Override
-    public void onStop() {
-        chatadapter.stopListening();
-        super.onStop();
-    }
 }
