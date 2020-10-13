@@ -238,15 +238,29 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     private void initSendButton() {
         binding.sendMessageButton.setOnClickListener(view -> {
             final String message = binding.messageTextField.getText().toString().trim();
-            binding.chatboxLinkPreview.setVisibility(View.GONE);
-            if (!message.isEmpty()) {
-                try {
-                    sendTheMessage(message);
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
+            List<String> containedUrls = new ArrayList<>();
+            String urlRegex = "^((https?)://)?(www\\.)?([a-zA-Z0-9]{2,256}\\.[a-z]{2,6}){1}[a-zA-Z_0-9\\+&@#/%\\?=~_\\|!:,\\.;-]*$";
+            Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
+            Matcher urlMatcher = pattern.matcher(message);
+
+            while (urlMatcher.find()) {
+                containedUrls.add(message.substring(urlMatcher.start(0), urlMatcher.end(0)));
+            }
+
+            if(containedUrls.size() == 1){
+                Toast.makeText(getActivity(), "Add some description.", Toast.LENGTH_SHORT).show();
+                binding.messageTextField.setText(message);
+            } else {
+                binding.chatboxLinkPreview.setVisibility(View.GONE);
+                if (!message.isEmpty()) {
+                    try {
+                        sendTheMessage(message);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    }
+                    binding.messageTextField.setText("");
+                    binding.messageTextField.requestFocus();
                 }
-                binding.messageTextField.setText("");
-                binding.messageTextField.requestFocus();
             }
         });
     }
