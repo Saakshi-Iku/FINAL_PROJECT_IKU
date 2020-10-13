@@ -50,7 +50,6 @@ public class FeatureUpvoteActivity extends AppCompatActivity {
         ((SimpleItemAnimator) featureUpvoteBinding.recyclerview.getItemAnimator()).setSupportsChangeAnimations(false);
         featureUpvoteBinding.recyclerview.setLayoutManager(linearLayoutManager);
         featureUpvoteBinding.recyclerview.setAdapter(adapter);
-        adapter.startListening();
 
         adapter.setOnItemClickListener((position, snapshot) -> {
             FeatureUpvoteModel featureUpvoteModel = snapshot.toObject(FeatureUpvoteModel.class);
@@ -80,17 +79,6 @@ public class FeatureUpvoteActivity extends AppCompatActivity {
                 adapter.notifyItemChanged(position);
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         adapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        adapter.stopListening();
     }
 }
