@@ -235,12 +235,13 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                     .load(imageUrl)
                     .noFade()
                     .networkPolicy(NetworkPolicy.OFFLINE)
-                    .placeholder(R.drawable.progress_animation)
                     .resize(5000, 5000)
                     .onlyScaleDown()
                     .into(viewPostBinding.viewedImage, new Callback() {
                         @Override
                         public void onSuccess() {
+                            viewPostBinding.viewedImage.setVisibility(View.VISIBLE);
+                            viewPostBinding.imageProgressBar.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -250,7 +251,6 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                                     .noFade()
                                     .resize(5000, 5000)
                                     .onlyScaleDown()
-                                    .placeholder(R.drawable.progress_animation)
                                     .into(viewPostBinding.viewedImage);
                         }
                     });
