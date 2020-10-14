@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
@@ -38,8 +38,8 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private FirebaseAnalytics mFirebaseAnalytics;
     private String photoUrl;
-    private MaterialTextView userHeartsTextView, userHeartsAddnTextView, userBioTextView, userLinkTextView;
-    private LinearLayout userBioView, userLinkView;
+    private ImageView userBioIcon, userLinkIcon;
+    private MaterialTextView userHeartsTextView, userBioTextView, userLinkTextView;
     private FragmentProfileBinding profileBinding;
 
     public ProfileFragment() {
@@ -60,11 +60,10 @@ public class ProfileFragment extends Fragment {
         user = mAuth.getCurrentUser();
 
         userHeartsTextView = view.findViewById(R.id.userHearts);
-        userHeartsAddnTextView = view.findViewById(R.id.addnTextView);
         userBioTextView = view.findViewById(R.id.userBio);
         userLinkTextView = view.findViewById(R.id.linkInBio);
-        userBioView = view.findViewById(R.id.userBioView);
-        userLinkView = view.findViewById(R.id.linkInBioView);
+        userBioIcon = view.findViewById(R.id.userBioIcon);
+        userLinkIcon = view.findViewById(R.id.linkInBioIcon);
 
         initButtons();
         getUserDetails();
@@ -88,20 +87,11 @@ public class ProfileFragment extends Fragment {
         });
 
         profileBinding.linkInBio.setOnClickListener(view -> {
-            Uri page;
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             CustomTabsIntent customTabsIntent = builder.build();
-            if (!profileBinding.linkInBio.getText().toString().trim().startsWith("http://") && !profileBinding.linkInBio.getText().toString().trim().startsWith("https://")) {
-                page = Uri.parse("http://" + profileBinding.linkInBio.getText().toString().trim());
-                customTabsIntent.launchUrl(view.getContext(), page);
-            } else
-                customTabsIntent.launchUrl(view.getContext(), Uri.parse(profileBinding.linkInBio.getText().toString().trim()));
+            customTabsIntent.launchUrl(view.getContext(), Uri.parse(profileBinding.linkInBio.getText().toString().trim()));
         });
 
-        profileBinding.addHabitButton.setOnClickListener(view -> {
-            Intent goToHabitsPage = new Intent(getActivity(), HabitsActivity.class);
-            startActivity(goToHabitsPage);
-        });
     }
 
     private void getProfileDetails() {
@@ -194,19 +184,19 @@ public class ProfileFragment extends Fragment {
                                     String bio = (String) change.getDocument().get("userBio");
                                     String link = (String) change.getDocument().get("userBioLink");
                                     if (bio != null && !bio.equals("")) {
-                                        userBioView.setVisibility(View.VISIBLE);
+                                        userBioIcon.setVisibility(View.VISIBLE);
+                                        userBioTextView.setVisibility(View.VISIBLE);
                                         userBioTextView.setText(bio);
                                     }
                                     if (link != null && !link.equals("")) {
-                                        userLinkView.setVisibility(View.VISIBLE);
+                                        userLinkIcon.setVisibility(View.VISIBLE);
+                                        userLinkTextView.setVisibility(View.VISIBLE);
                                         userLinkTextView.setText(link);
                                     }
-
-                                    if (points == 0) {
-                                        userHeartsTextView.setVisibility(View.GONE);
-                                        userHeartsAddnTextView.setText(R.string.yet_to_win_hearts);
-                                    } else
-                                        userHeartsTextView.setText(String.valueOf(change.getDocument().getLong("points")));
+                                    if (points == 0)
+                                        userHeartsTextView.setText(R.string.yet_to_win_hearts);
+                                    else
+                                        userHeartsTextView.setText("Hearts won: " + points);
                                 }
                             }
                         }
