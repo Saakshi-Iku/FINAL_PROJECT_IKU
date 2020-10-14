@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -676,6 +677,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited;
         private ImageView receiverImage;
         private MaterialButton viewPostBtn;
+        private ProgressBar leftProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftImageViewHolder(@NonNull View itemView) {
@@ -687,6 +689,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime3 = itemView.findViewById(R.id.message_time3);
             senderName = itemView.findViewById(R.id.sender_name);
             receiverImage = itemView.findViewById(R.id.receivedImage);
+            leftProgress = itemView.findViewById(R.id.chatLeftProgress);
             upvoteCount = itemView.findViewById(R.id.upvoteCount);
             edited = itemView.findViewById(R.id.editFlag);
             viewPostBtn = itemView.findViewById(R.id.viewPostButton);
@@ -798,6 +801,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     .into(receiverImage, new Callback() {
                         @Override
                         public void onSuccess() {
+                            receiverImage.setVisibility(View.VISIBLE);
+                            leftProgress.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -805,7 +810,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             Picasso.get()
                                     .load(chatModel.getimageUrl())
                                     .noFade()
-                                    .placeholder(R.drawable.progress_animation)
                                     .into(receiverImage);
                         }
                     });
@@ -821,6 +825,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         private MaterialButton viewPostBtn;
         private ConstraintLayout commentsLayout;
         private CircleImageView commenterProfilePicture;
+        private ProgressBar leftProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftImageCommentViewHolder(@NonNull View itemView) {
@@ -834,6 +839,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             receiverImage = itemView.findViewById(R.id.receivedImage);
             upvoteCount = itemView.findViewById(R.id.upvoteCount);
             edited = itemView.findViewById(R.id.editFlag);
+            leftProgress = itemView.findViewById(R.id.chatLeftProgress);
             viewPostBtn = itemView.findViewById(R.id.viewPostButton);
             commentsLayout = itemView.findViewById(R.id.commentsPreview);
             commenterProfilePicture = itemView.findViewById(R.id.profileImage);
@@ -984,6 +990,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     .into(receiverImage, new Callback() {
                         @Override
                         public void onSuccess() {
+                            receiverImage.setVisibility(View.VISIBLE);
+                            leftProgress.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -1228,6 +1236,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited;
         private ImageView sentImage;
         private MaterialButton viewPostBtn;
+        private ProgressBar rightProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightImageViewHolder(@NonNull View itemView) {
@@ -1239,6 +1248,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             sentImage = itemView.findViewById(R.id.sentImage);
             upvoteCount = itemView.findViewById(R.id.upvoteCount);
             edited = itemView.findViewById(R.id.editFlag);
+            rightProgress = itemView.findViewById(R.id.chatRightProgress);
             viewPostBtn = itemView.findViewById(R.id.viewPostButton);
 
             viewPostBtn.setOnClickListener(view -> {
@@ -1325,6 +1335,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     .into(sentImage, new Callback() {
                         @Override
                         public void onSuccess() {
+                            sentImage.setVisibility(View.VISIBLE);
+                            rightProgress.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -1346,6 +1358,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         private MaterialButton viewPostBtn;
         private ConstraintLayout commentsLayout;
         private CircleImageView commenterProfilePicture;
+        private ProgressBar rightProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightCommentImageViewHolder(@NonNull View itemView) {
@@ -1360,6 +1373,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             viewPostBtn = itemView.findViewById(R.id.viewPostButton);
             commentsLayout = itemView.findViewById(R.id.commentsPreview);
             commenterProfilePicture = itemView.findViewById(R.id.profileImage);
+            rightProgress = itemView.findViewById(R.id.chatRightProgress);
             commentTextView = itemView.findViewById(R.id.comment);
 
             viewPostBtn.setOnClickListener(view -> {
@@ -1484,6 +1498,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     .into(sentImage, new Callback() {
                         @Override
                         public void onSuccess() {
+                            sentImage.setVisibility(View.VISIBLE);
+                            rightProgress.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -1853,6 +1869,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         private LinearLayout reportLayout;
         private ConstraintLayout commentsLayout;
         private CircleImageView commenterProfilePicture;
+        private ProgressBar leftProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftImageSpamViewHolder(@NonNull View itemView) {
@@ -1868,6 +1885,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             edited = itemView.findViewById(R.id.editFlag);
             viewPostBtn = itemView.findViewById(R.id.viewPostButton);
             reportLayout = itemView.findViewById(R.id.flag_layout);
+            leftProgress = itemView.findViewById(R.id.chatLeftProgress);
             spamCount = itemView.findViewById(R.id.spamCount_textView);
             commentsLayout = itemView.findViewById(R.id.commentsPreview);
             commenterProfilePicture = itemView.findViewById(R.id.profileImage);
@@ -2016,6 +2034,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     .into(receiverImage, new Callback() {
                         @Override
                         public void onSuccess() {
+                            receiverImage.setVisibility(View.VISIBLE);
+                            leftProgress.setVisibility(View.GONE);
                         }
 
                         @Override
@@ -2040,6 +2060,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
         private LinearLayout reportLayout;
         private ConstraintLayout commentsLayout;
         private CircleImageView commenterProfilePicture;
+        private ProgressBar rightProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightImageSpamViewHolder(@NonNull View itemView) {
@@ -2058,6 +2079,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             commentsLayout = itemView.findViewById(R.id.commentsPreview);
             commenterProfilePicture = itemView.findViewById(R.id.profileImage);
             commentTextView = itemView.findViewById(R.id.comment);
+            rightProgress = itemView.findViewById(R.id.chatRightProgress);
 
             viewPostBtn.setOnClickListener(view -> {
                 int position = getAdapterPosition();
@@ -2178,6 +2200,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                     .into(sentImage, new Callback() {
                         @Override
                         public void onSuccess() {
+                            sentImage.setVisibility(View.VISIBLE);
+                            rightProgress.setVisibility(View.GONE);
                         }
 
                         @Override

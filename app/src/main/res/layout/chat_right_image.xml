@@ -22,14 +22,30 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <!--Sent image is shown here-->
-        <com.google.android.material.imageview.ShapeableImageView
+        <ImageView
             android:id="@+id/sentImage"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:fitsSystemWindows="true"
             android:scaleType="centerCrop"
+            android:visibility="invisible"
             app:layout_constraintDimensionRatio="1"
+            android:elevation="0dp"
+            app:layout_constraintEnd_toEndOf="@id/constraintLayout"
+            app:layout_constraintStart_toStartOf="@id/constraintLayout"
+            app:layout_constraintTop_toTopOf="@id/constraintLayout"
+            app:layout_constraintHeight_min="35dp"/>
+
+        <ProgressBar
+            android:id="@+id/chatRightProgress"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintDimensionRatio="1"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/white"
             android:elevation="0dp"
             app:layout_constraintEnd_toEndOf="@id/constraintLayout"
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
