@@ -252,6 +252,8 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                                     .resize(5000, 5000)
                                     .onlyScaleDown()
                                     .into(viewPostBinding.viewedImage);
+                            viewPostBinding.viewedImage.setVisibility(View.VISIBLE);
+                            viewPostBinding.imageProgressBar.setVisibility(View.GONE);
                         }
                     });
         } else {
