@@ -21,3 +21,9 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.iku.models.** { *; }
+-keep class com.soulsurfer.android.** { *; }
+#Jsoup
+-keep public class org.jsoup.** {
+public *;
+}
+-keeppackagenames org.jsoup.nodes
