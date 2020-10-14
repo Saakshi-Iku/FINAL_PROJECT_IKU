@@ -62,8 +62,6 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_toEndOf="@+id/heartUp"
-                android:layout_toRightOf="@id/heartUp"
                 android:layout_weight="1"
                 android:background="@drawable/hearts_button_background"
                 android:elevation="2dp"
@@ -88,8 +86,6 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_toEndOf="@+id/emoji1"
-                android:layout_toRightOf="@id/emoji1"
                 android:layout_weight="1"
                 android:background="@drawable/hearts_button_background"
                 android:elevation="2dp"
@@ -114,8 +110,6 @@
                 android:layout_height="45dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
-                android:layout_toEndOf="@+id/emoji2"
-                android:layout_toRightOf="@id/emoji2"
                 android:layout_weight="1"
                 android:background="@drawable/hearts_button_background"
                 android:elevation="2dp"
@@ -139,8 +133,6 @@
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_marginStart="5dp"
-                android:layout_toEndOf="@+id/emoji3"
-                android:layout_toRightOf="@id/emoji3"
                 android:layout_weight="1"
                 android:background="@drawable/hearts_button_background"
                 android:elevation="2dp"
@@ -164,8 +156,6 @@
                 android:layout_width="1dp"
                 android:layout_height="35dp"
                 android:layout_marginStart="10dp"
-                android:layout_toEndOf="@+id/emoji4"
-                android:layout_toRightOf="@id/emoji4"
                 android:background="#B3B3B3" />
 
             <!--Heart down option-->
@@ -173,11 +163,8 @@
                 android:id="@+id/heartDown"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
-                android:layout_alignParentEnd="false"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="5dp"
-                android:layout_toEndOf="@+id/div"
-                android:layout_toRightOf="@id/div"
                 android:layout_weight="1"
                 android:background="@drawable/hearts_button_background"
                 android:elevation="2dp"
@@ -355,7 +342,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/edit_icon"
-            android:text="Edit"
+            android:text="@string/edit_message"
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 
@@ -400,7 +387,7 @@
             android:layout_gravity="center"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/report_icon"
-            android:text="Report"
+            android:text="@string/report_message"
             android:textColor="@android:color/black"
             android:textSize="14sp" />
 

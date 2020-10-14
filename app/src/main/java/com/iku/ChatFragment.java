@@ -18,15 +18,19 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GestureDetectorCompat;
@@ -98,6 +102,13 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     private FragmentChatBinding binding;
     private RecyclerView mChatRecyclerview;
     private ChatAdapter chatadapter;
+    private ImageButton jumpToBottomButton, closeButton;
+    private RelativeLayout editWarningLayout;
+    private TextView cancelEditButton, linkPreviewTitleTextView, linkPreviewDescriptionTextView;
+    private MaterialTextView chatDateTextView;
+    private EditText messageTextField;
+    private ConstraintLayout scrollToBottomLayout, chatBoxLinkPreviewLayout;
+    private ImageView linkPreviewImage;
     private long upvotesCount;
     private long downvotesCount;
     private String authorOfMessage;
@@ -188,8 +199,19 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
         memberCount = view.findViewById(R.id.memberCount);
         mChatRecyclerview = view.findViewById(R.id.chatRecyclerView);
+        jumpToBottomButton = view.findViewById(R.id.jumpToBottom);
+        closeButton = view.findViewById(R.id.close);
+        editWarningLayout = view.findViewById(R.id.editWarning);
+        cancelEditButton = view.findViewById(R.id.cancel_edit);
+        messageTextField = view.findViewById(R.id.messageTextField);
+        scrollToBottomLayout = view.findViewById(R.id.scrollToBottomButton);
+        chatDateTextView = view.findViewById(R.id.chatDate);
+        chatBoxLinkPreviewLayout = view.findViewById(R.id.chatboxLinkPreview);
+        linkPreviewImage = view.findViewById(R.id.linkPreviewImage);
+        linkPreviewTitleTextView = view.findViewById(R.id.linkTitle);
+        linkPreviewDescriptionTextView = view.findViewById(R.id.linkPreviewDescription);
         mChatRecyclerview.addOnItemTouchListener(this);
-        binding.chatDate.setVisibility(View.GONE);
+        chatDateTextView.setVisibility(View.GONE);
     }
 
     private void initButtons() {
@@ -217,13 +239,13 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
         });
 
-        binding.jumpToBottom.setOnClickListener(view -> {
+        jumpToBottomButton.setOnClickListener(view -> {
             mChatRecyclerview.scrollToPosition(0);
-            binding.jumpToBottom.setVisibility(View.GONE);
+            jumpToBottomButton.setVisibility(View.GONE);
         });
 
-        binding.close.setOnClickListener(view -> {
-            binding.chatboxLinkPreview.setVisibility(View.GONE);
+        closeButton.setOnClickListener(view -> {
+            chatBoxLinkPreviewLayout.setVisibility(View.GONE);
             linkPreviewImageUrl = "";
             linkPreviewTitle = "";
             linkPreviewDesc = "";
@@ -237,7 +259,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
     private void initSendButton() {
         binding.sendMessageButton.setOnClickListener(view -> {
-            final String message = binding.messageTextField.getText().toString().trim();
+            final String message = messageTextField.getText().toString().trim();
             List<String> containedUrls = new ArrayList<>();
             String urlRegex = "^((https?)://)?(www\\.)?([a-zA-Z0-9]{2,256}\\.[a-z]{2,6}){1}[a-zA-Z_0-9\\+&@#/%\\?=~_\\|!:,\\.;-]*$";
             Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
@@ -247,19 +269,19 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                 containedUrls.add(message.substring(urlMatcher.start(0), urlMatcher.end(0)));
             }
 
-            if(containedUrls.size() == 1){
+            if (containedUrls.size() == 1) {
                 Toast.makeText(getActivity(), "Add some description.", Toast.LENGTH_SHORT).show();
-                binding.messageTextField.setText(message);
+                messageTextField.setText(message);
             } else {
-                binding.chatboxLinkPreview.setVisibility(View.GONE);
+                chatBoxLinkPreviewLayout.setVisibility(View.GONE);
                 if (!message.isEmpty()) {
                     try {
                         sendTheMessage(message);
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
-                    binding.messageTextField.setText("");
-                    binding.messageTextField.requestFocus();
+                    messageTextField.setText("");
+                    messageTextField.requestFocus();
                 }
             }
         });
@@ -285,7 +307,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
                 mChatRecyclerview.scrollToPosition(0);
-                binding.jumpToBottom.setVisibility(View.GONE);
+                jumpToBottomButton.setVisibility(View.GONE);
             }
         });
 
@@ -297,19 +319,19 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                 super.onScrolled(recyclerView, dx, dy);
                 int firstVisiblePosition = linearLayoutManager.findLastVisibleItemPosition();
                 if (dy < 0) {
-                    binding.scrollToBottomButton.setVisibility(View.VISIBLE);
-                    binding.jumpToBottom.setVisibility(View.VISIBLE);
-                    binding.chatDate.setVisibility(View.VISIBLE);
+                    scrollToBottomLayout.setVisibility(View.VISIBLE);
+                    jumpToBottomButton.setVisibility(View.VISIBLE);
+                    chatDateTextView.setVisibility(View.VISIBLE);
                     if (sfdMainDate.format(new Date(chatadapter.getItem(firstVisiblePosition).getTimestamp())).equals(sfdMainDate.format(new Date().getTime())))
-                        binding.chatDate.setText(R.string.today_text);
+                        chatDateTextView.setText(R.string.today_text);
                     else if (DateUtils.isToday(chatadapter.getItem(firstVisiblePosition).getTimestamp() + DateUtils.DAY_IN_MILLIS)) {
-                        binding.chatDate.setText(R.string.yesterday_text);
+                        chatDateTextView.setText(R.string.yesterday_text);
                     } else
-                        binding.chatDate.setText(sfdMainDate.format(chatadapter.getItem(firstVisiblePosition).getTimestamp()));
+                        chatDateTextView.setText(sfdMainDate.format(chatadapter.getItem(firstVisiblePosition).getTimestamp()));
                 } else if (dy > 0) {
-                    binding.scrollToBottomButton.setVisibility(View.GONE);
-                    binding.jumpToBottom.setVisibility(View.GONE);
-                    binding.chatDate.setVisibility(View.GONE);
+                    scrollToBottomLayout.setVisibility(View.GONE);
+                    jumpToBottomButton.setVisibility(View.GONE);
+                    chatDateTextView.setVisibility(View.GONE);
                 }
             }
         });
@@ -385,8 +407,8 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     @Override
                     public void onSuccess(Void aVoid) {
                         chatadapter.notifyItemChanged(position);
-                        binding.messageTextField.setText("");
-                        binding.messageTextField.requestFocus();
+                        messageTextField.setText("");
+                        messageTextField.requestFocus();
                         editTextStatus = 0;
                         initSendButton();
                     }
@@ -414,7 +436,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
     private void watchTextBox() {
 
-        binding.messageTextField.addTextChangedListener(new TextWatcher() {
+        messageTextField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -433,29 +455,29 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                         if (pageInfo != null) {
                                             if (pageInfo.getTitle() != null && pageInfo.getDescription() != null) {
                                                 linkPreviewedMessageStatus = 1;
-                                                binding.chatboxLinkPreview.setVisibility(View.VISIBLE);
-                                                binding.linkTitle.setText(pageInfo.getTitle());
-                                                binding.linkPreviewDescription.setText(pageInfo.getDescription());
+                                                chatBoxLinkPreviewLayout.setVisibility(View.VISIBLE);
+                                                linkPreviewTitleTextView.setText(pageInfo.getTitle());
+                                                linkPreviewDescriptionTextView.setText(pageInfo.getDescription());
                                                 linkPreviewTitle = pageInfo.getTitle();
                                                 linkPreviewDesc = pageInfo.getDescription();
                                                 linkPreviewUrl = pageInfo.getUrl();
                                                 if (pageInfo.getImageUrl() != null) {
                                                     if (isValidUrl(pageInfo.getImageUrl())) {
-                                                        binding.linkPreviewImage.setVisibility(View.VISIBLE);
+                                                        linkPreviewImage.setVisibility(View.VISIBLE);
                                                         linkPreviewImageUrl = pageInfo.getImageUrl();
-                                                        Picasso.get().load(pageInfo.getImageUrl()).noFade().into(binding.linkPreviewImage, new Callback() {
+                                                        Picasso.get().load(pageInfo.getImageUrl()).noFade().into(linkPreviewImage, new Callback() {
                                                             @Override
                                                             public void onSuccess() {
                                                             }
 
                                                             @Override
                                                             public void onError(Exception e) {
-                                                                binding.linkPreviewImage.setVisibility(View.GONE);
+                                                                linkPreviewImage.setVisibility(View.GONE);
                                                             }
                                                         });
                                                     }
                                                 } else
-                                                    binding.linkPreviewImage.setVisibility(View.GONE);
+                                                    linkPreviewImage.setVisibility(View.GONE);
                                             } else {
                                                 setLinkPreviewOff();
                                             }
@@ -486,7 +508,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     }
 
     private void setLinkPreviewOff() {
-        binding.chatboxLinkPreview.setVisibility(View.GONE);
+        chatBoxLinkPreviewLayout.setVisibility(View.GONE);
         linkPreviewImageUrl = "";
         linkPreviewTitle = "";
         linkPreviewDesc = "";
@@ -552,7 +574,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                 new java.util.TimerTask() {
                                                     @Override
                                                     public void run() {
-                                                        if (binding.chatboxLinkPreview.getVisibility() == View.VISIBLE)
+                                                        if (chatBoxLinkPreviewLayout.getVisibility() == View.VISIBLE)
                                                             temp.runOnUiThread(() -> setLinkPreviewOff());
                                                     }
                                                 },
@@ -562,7 +584,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                 new java.util.TimerTask() {
                                                     @Override
                                                     public void run() {
-                                                        if (binding.chatboxLinkPreview.getVisibility() == View.VISIBLE)
+                                                        if (chatBoxLinkPreviewLayout.getVisibility() == View.VISIBLE)
                                                             temp.runOnUiThread(() -> setLinkPreviewOff());
                                                     }
                                                 },
@@ -572,7 +594,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                 new java.util.TimerTask() {
                                                     @Override
                                                     public void run() {
-                                                        if (binding.chatboxLinkPreview.getVisibility() == View.VISIBLE)
+                                                        if (chatBoxLinkPreviewLayout.getVisibility() == View.VISIBLE)
                                                             temp.runOnUiThread(() -> setLinkPreviewOff());
                                                     }
                                                 },
@@ -582,7 +604,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                 new java.util.TimerTask() {
                                                     @Override
                                                     public void run() {
-                                                        if (binding.chatboxLinkPreview.getVisibility() == View.VISIBLE)
+                                                        if (chatBoxLinkPreviewLayout.getVisibility() == View.VISIBLE)
                                                             temp.runOnUiThread(() -> setLinkPreviewOff());
                                                     }
                                                 },
@@ -1250,30 +1272,30 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                             if (!(chatadapter.getItem(position).getTimestamp() < System.currentTimeMillis() - (60 * 60 * 1000))) {
                                 updateMessageView.setVisibility(View.VISIBLE);
                                 updateMessageView.setOnClickListener(view12 -> {
-                                    binding.editWarning.setVisibility(View.VISIBLE);
-                                    binding.cancelEdit.setOnClickListener(view1 -> {
+                                    editWarningLayout.setVisibility(View.VISIBLE);
+                                    cancelEditButton.setOnClickListener(view1 -> {
                                         editTextStatus = 0;
                                         initSendButton();
-                                        binding.editWarning.setVisibility(View.GONE);
-                                        binding.messageTextField.setText("");
-                                        binding.messageTextField.clearFocus();
+                                        editWarningLayout.setVisibility(View.GONE);
+                                        messageTextField.setText("");
+                                        messageTextField.clearFocus();
                                     });
                                     if (chatadapter.getItem(position).getType().equals("text")) {
-                                        binding.messageTextField.setText(chatadapter.getItem(position).getMessage());
-                                        binding.messageTextField.setSelection(binding.messageTextField.getText().length());
+                                        messageTextField.setText(chatadapter.getItem(position).getMessage());
+                                        messageTextField.setSelection(messageTextField.getText().length());
                                         bottomSheetDialog.dismiss();
                                         editTextStatus = 1;
                                         if (editTextStatus == 1) {
                                             binding.sendMessageButton.setOnClickListener(view121 -> {
-                                                binding.editWarning.setVisibility(View.GONE);
+                                                editWarningLayout.setVisibility(View.GONE);
                                                 editTextStatus = 0;
-                                                updateMessage(documentID, position, binding.messageTextField.getText().toString().trim());
-                                                binding.messageTextField.setText("");
-                                                binding.messageTextField.requestFocus();
+                                                updateMessage(documentID, position, messageTextField.getText().toString().trim());
+                                                messageTextField.setText("");
+                                                messageTextField.requestFocus();
                                             });
                                         }
                                     } else if (chatadapter.getItem(position).getType().equals("image")) {
-                                        binding.editWarning.setVisibility(View.GONE);
+                                        editWarningLayout.setVisibility(View.GONE);
                                         Intent goToImageSend = new Intent(getActivity(), ChatImageActivity.class);
                                         goToImageSend.putExtra("documentId", documentID);
                                         goToImageSend.putExtra("message", chatadapter.getItem(position).getMessage());
@@ -1384,30 +1406,30 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                             if (!(chatadapter.getItem(position).getTimestamp() < System.currentTimeMillis() - (60 * 60 * 1000))) {
                                 updateMessageView.setVisibility(View.VISIBLE);
                                 updateMessageView.setOnClickListener(view12 -> {
-                                    binding.editWarning.setVisibility(View.VISIBLE);
-                                    binding.cancelEdit.setOnClickListener(view1 -> {
+                                    editWarningLayout.setVisibility(View.VISIBLE);
+                                    cancelEditButton.setOnClickListener(view1 -> {
                                         editTextStatus = 0;
                                         initSendButton();
-                                        binding.editWarning.setVisibility(View.GONE);
-                                        binding.messageTextField.setText("");
-                                        binding.messageTextField.clearFocus();
+                                        editWarningLayout.setVisibility(View.GONE);
+                                        messageTextField.setText("");
+                                        messageTextField.clearFocus();
                                     });
                                     if (chatadapter.getItem(position).getType().equals("text")) {
-                                        binding.messageTextField.setText(chatadapter.getItem(position).getMessage());
-                                        binding.messageTextField.setSelection(binding.messageTextField.getText().length());
+                                        messageTextField.setText(chatadapter.getItem(position).getMessage());
+                                        messageTextField.setSelection(messageTextField.getText().length());
                                         bottomSheetDialog.dismiss();
                                         editTextStatus = 1;
                                         if (editTextStatus == 1) {
                                             binding.sendMessageButton.setOnClickListener(view121 -> {
-                                                binding.editWarning.setVisibility(View.GONE);
+                                                editWarningLayout.setVisibility(View.GONE);
                                                 editTextStatus = 0;
-                                                updateMessage(documentID, position, binding.messageTextField.getText().toString().trim());
-                                                binding.messageTextField.setText("");
-                                                binding.messageTextField.requestFocus();
+                                                updateMessage(documentID, position, messageTextField.getText().toString().trim());
+                                                messageTextField.setText("");
+                                                messageTextField.requestFocus();
                                             });
                                         }
                                     } else if (chatadapter.getItem(position).getType().equals("image")) {
-                                        binding.editWarning.setVisibility(View.GONE);
+                                        editWarningLayout.setVisibility(View.GONE);
                                         Intent goToImageSend = new Intent(getActivity(), ChatImageActivity.class);
                                         goToImageSend.putExtra("documentId", documentID);
                                         goToImageSend.putExtra("message", chatadapter.getItem(position).getMessage());

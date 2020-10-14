@@ -214,7 +214,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <ImageView
                 android:id="@+id/linkPreviewImage"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
