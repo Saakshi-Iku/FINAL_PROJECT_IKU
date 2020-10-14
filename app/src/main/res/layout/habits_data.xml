@@ -431,16 +431,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:visibility="visible"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
                     <!--Heart button-->
                     <ImageButton
                         android:id="@+id/supportHabitButton"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:padding="6dp"
                         android:background="@color/fui_transparent"
+                        android:padding="6dp"
                         android:src="@drawable/ic_fire_filled" />
 
                     <!--Hearts for habits-->
@@ -503,9 +503,9 @@
                 android:id="@+id/CTA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hapticFeedbackEnabled="true"
                 android:text="Start"
                 android:textAllCaps="false"
-                android:hapticFeedbackEnabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/progress" />

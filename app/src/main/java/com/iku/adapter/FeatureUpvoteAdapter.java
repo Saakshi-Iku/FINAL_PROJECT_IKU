@@ -1,8 +1,6 @@
-
 package com.iku.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,17 +22,12 @@ import com.squareup.picasso.Picasso;
 
 public class FeatureUpvoteAdapter extends FirestoreRecyclerAdapter<FeatureUpvoteModel, FeatureUpvoteAdapter.FeatureUpVoteViewHolder> {
 
-    private Context mContext;
+    private final Context mContext;
+    private OnItemClickListener mListener;
 
     public FeatureUpvoteAdapter(@NonNull FirestoreRecyclerOptions<FeatureUpvoteModel> options, Context mContext) {
         super(options);
         this.mContext = mContext;
-    }
-
-    private OnItemClickListener mListener;
-
-    public interface OnItemClickListener {
-        void onItemClick(int position, DocumentSnapshot snapshot);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -53,10 +46,16 @@ public class FeatureUpvoteAdapter extends FirestoreRecyclerAdapter<FeatureUpvote
         return new FeatureUpvoteAdapter.FeatureUpVoteViewHolder(view, mListener);
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(int position, DocumentSnapshot snapshot);
+    }
+
     public class FeatureUpVoteViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView firstNameTextView, pointsTextView, descTextView;
-        private ImageView image;
+        private final TextView firstNameTextView;
+        private final TextView pointsTextView;
+        private final TextView descTextView;
+        private final ImageView image;
 
         public FeatureUpVoteViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);

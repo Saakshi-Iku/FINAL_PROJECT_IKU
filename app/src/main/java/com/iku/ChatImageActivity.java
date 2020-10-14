@@ -45,29 +45,25 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ChatImageActivity extends AppCompatActivity {
+    private final SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
+    private final int PICK_IMAGE = 1;
+    private final int STORAGE_PERMISSION_CODE = 10;
+    private final String[] appPermissions = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    };
+    private final String TAG = ChatImageActivity.class.getSimpleName();
+    byte[] dataSave;
     private StorageReference mStorageRef;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
     private FirebaseFirestore db;
     private FirebaseAnalytics mFirebaseAnalytics;
-    private SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
-    ;
     private Uri mImageUri;
-    private int PICK_IMAGE = 1;
     private String docId, message, imageUrl;
     private int compressedImageHeight, compressedImageWidth;
-    byte[] dataSave;
-    private int STORAGE_PERMISSION_CODE = 10;
     private String originalImageUrl;
     private String originalFileName;
-
-    private String[] appPermissions = {
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_EXTERNAL_STORAGE
-    };
-
-    private String TAG = ChatImageActivity.class.getSimpleName();
-
     private ImageButton sendImageChatbtn;
 
     private ImageView backButton;
@@ -79,6 +75,15 @@ public class ChatImageActivity extends AppCompatActivity {
     private UploadTask uploadTaskOriginal;
 
     private ActivityChatImageBinding chatImageBinding;
+
+    public static Bitmap decodeUriToBitmap(Context mContext, Uri sendUri) throws IOException {
+        Bitmap getBitmap = null;
+        InputStream image_stream;
+        image_stream = mContext.getContentResolver().openInputStream(sendUri);
+        getBitmap = BitmapFactory.decodeStream(image_stream);
+        image_stream.close();
+        return getBitmap;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -304,15 +309,6 @@ public class ChatImageActivity extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                 });
-    }
-
-    public static Bitmap decodeUriToBitmap(Context mContext, Uri sendUri) throws IOException {
-        Bitmap getBitmap = null;
-        InputStream image_stream;
-        image_stream = mContext.getContentResolver().openInputStream(sendUri);
-        getBitmap = BitmapFactory.decodeStream(image_stream);
-        image_stream.close();
-        return getBitmap;
     }
 
     public Bitmap getResizedBitmap(Bitmap bm, int newWidth, int newHeight) {

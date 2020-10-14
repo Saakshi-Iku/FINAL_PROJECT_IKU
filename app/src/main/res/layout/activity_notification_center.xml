@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -42,17 +41,17 @@
                     android:id="@+id/backButtonContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
                     android:layout_gravity="center"
-                    android:background="@drawable/bg_oval_transparent"
-                    android:layout_alignParentStart="true">
+                    android:background="@drawable/bg_oval_transparent">
 
                     <ImageView
                         android:id="@+id/back_button"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:background="?selectableItemBackgroundBorderless"
-                        android:padding="10dp"
                         android:contentDescription="@string/back_button_content_desc"
+                        android:padding="10dp"
                         android:src="@drawable/ic_arrow_back_24" />
                 </FrameLayout>
 
@@ -74,7 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="Notifications"
-                        android:textSize="16sp"/>
+                        android:textSize="16sp" />
 
                 </LinearLayout>
 
@@ -90,10 +89,10 @@
                 android:layout_marginBottom="5dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_baseline_settings_24"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
                 app:layout_constraintEnd_toEndOf="@+id/topAppBar"
-                app:layout_constraintTop_toTopOf="@+id/topAppBar"
-                android:visibility="invisible"/>
+                app:layout_constraintTop_toTopOf="@+id/topAppBar" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -105,29 +104,29 @@
         android:layout_height="match_parent"
         android:layout_below="@id/appBar">
 
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-           <androidx.recyclerview.widget.RecyclerView
-               android:id="@+id/notificationRecyclerView"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:padding="5dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/notificationRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp" />
 
-           <TextView
-               android:id="@+id/endOfListText"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:gravity="center"
-               android:paddingVertical="5dp"
-               android:text="That's All Folks!"
-               android:textSize="12dp"
-               android:visibility="gone"
-               app:layout_constraintTop_toBottomOf="@id/notificationRecyclerView" />
+            <TextView
+                android:id="@+id/endOfListText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingVertical="5dp"
+                android:text="That's All Folks!"
+                android:textSize="12dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/notificationRecyclerView" />
 
-       </LinearLayout>
+        </LinearLayout>
 
     </ScrollView>
 

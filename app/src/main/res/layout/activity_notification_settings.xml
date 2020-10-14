@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -53,8 +52,8 @@
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:background="?selectableItemBackgroundBorderless"
-                        android:padding="10dp"
                         android:contentDescription="@string/back_button_content_desc"
+                        android:padding="10dp"
                         android:src="@drawable/ic_arrow_back_24" />
                 </FrameLayout>
 
@@ -100,12 +99,12 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select your preference for receiving app notifications:"
+                android:background="#10000000"
                 android:paddingHorizontal="25dp"
                 android:paddingVertical="10dp"
-                android:textSize="12sp"
+                android:text="Select your preference for receiving app notifications:"
                 android:textAlignment="center"
-                android:background="#10000000"/>
+                android:textSize="12sp" />
 
             <!--notifications for new messages-->
             <RelativeLayout
@@ -118,10 +117,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@id/notificationToggle1"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:text="New message on group"
-                    android:layout_centerVertical="true" />
+                    android:layout_toStartOf="@id/notificationToggle1"
+                    android:text="New message on group" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/notificationToggle1"
@@ -142,10 +141,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@id/notificationToggle2"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:text="New posts on the group"
-                    android:layout_centerVertical="true" />
+                    android:layout_toStartOf="@id/notificationToggle2"
+                    android:text="New posts on the group" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/notificationToggle2"
@@ -166,10 +165,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@id/notificationToggle3"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:text="Someone hearts your post/message"
-                    android:layout_centerVertical="true" />
+                    android:layout_toStartOf="@id/notificationToggle3"
+                    android:text="Someone hearts your post/message" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/notificationToggle3"
@@ -190,10 +189,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_toStartOf="@id/notificationToggle4"
+                    android:layout_centerVertical="true"
                     android:layout_marginEnd="20dp"
-                    android:text="New comment on your post/message"
-                    android:layout_centerVertical="true" />
+                    android:layout_toStartOf="@id/notificationToggle4"
+                    android:text="New comment on your post/message" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/notificationToggle4"

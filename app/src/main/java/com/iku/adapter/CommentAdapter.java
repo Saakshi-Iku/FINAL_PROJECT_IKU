@@ -2,7 +2,6 @@ package com.iku.adapter;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.amulyakhare.textdrawable.TextDrawable;
@@ -34,43 +32,73 @@ import java.util.concurrent.TimeUnit;
 public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, CommentAdapter.CommentViewHolder> {
 
     private static final String TAG = CommentAdapter.class.getSimpleName();
-
-    private CommentAdapter.OnItemClickListener mListener;
-
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
     private static final int SECOND_MILLIS = 1000;
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private CommentAdapter.OnItemClickListener mListener;
 
-    public interface OnItemClickListener {
-        void onItemClick(int pos, DocumentSnapshot snapshot);
+    public CommentAdapter(@NonNull FirestoreRecyclerOptions<CommentModel> options) {
+        super(options);
+    }
 
-        void onHeartClick(int pos, DocumentSnapshot snapshot);
+    public static String getTimeAgo(long time) {
+        if (time < 1000000000000L) {
+            // if timestamp given in seconds, convert to millis
+            time *= 1000;
+        }
+
+        long now = System.currentTimeMillis();
+        if (time > now || time <= 0) {
+            return null;
+        }
+
+        // TODO: localize
+        final long diff = now - time;
+        long day = TimeUnit.MILLISECONDS.toDays(diff);
+        if (diff < MINUTE_MILLIS) {
+            return "Just now";
+        } else if (diff < 2 * MINUTE_MILLIS) {
+            return "moments ago";
+        } else if (diff < 50 * MINUTE_MILLIS) {
+            return diff / MINUTE_MILLIS + " mins";
+        } else if (diff < 90 * MINUTE_MILLIS) {
+            return "1h";
+        } else if (diff < 24 * HOUR_MILLIS) {
+            return diff / HOUR_MILLIS + "h";
+        } else if (diff < 48 * HOUR_MILLIS) {
+            return "Yesterday";
+        } else if (day >= 7) {
+            if (day > 360) {
+                return (day / 360) + "y";
+            } else if (day > 30) {
+                return (day / 30) + "m";
+            } else {
+                return diff / DAY_MILLIS + "d";
+            }
+        } else {
+            return diff / DAY_MILLIS + "d";
+        }
     }
 
     public void setOnItemClickListener(CommentAdapter.OnItemClickListener listener) {
         mListener = listener;
     }
 
-    public CommentAdapter(@NonNull FirestoreRecyclerOptions<CommentModel> options) {
-        super(options);
-    }
-
     @Override
     protected void onBindViewHolder(@NonNull CommentViewHolder commentViewHolder, int position, @NonNull CommentModel commentModel) {
         long timeStamp = commentModel.getTimestamp();
-        if(commentModel.isSpam() || commentModel.isDeleted()) {
+        if (commentModel.isSpam() || commentModel.isDeleted()) {
             commentViewHolder.commentTextView.setTypeface(commentViewHolder.commentTextView.getTypeface(), Typeface.ITALIC);
 /*
             commentViewHolder.commentTextView.setTextColor(ContextCompat.getColor(mContext(R.color.deletedTextLight));
 */
-            if(commentModel.getDeletedBy().equals("author"))
+            if (commentModel.getDeletedBy().equals("author"))
                 commentViewHolder.commentTextView.setText(R.string.comment_deleted);
             else
                 commentViewHolder.commentTextView.setText(R.string.reported_and_deleted_comment);
-        }else {
+        } else {
             commentViewHolder.commentTextView.setTypeface(commentViewHolder.commentTextView.getTypeface(), Typeface.NORMAL);
             commentViewHolder.commentTextView.setText(commentModel.getComment());
         }
@@ -98,10 +126,20 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
         return new CommentAdapter.CommentViewHolder(view);
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(int pos, DocumentSnapshot snapshot);
+
+        void onHeartClick(int pos, DocumentSnapshot snapshot);
+    }
+
     public class CommentViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView commentTextView, commenterNameTextView, timestampTextView, commentHeartCountTextView;
-        private ImageView profileImageView, heartImage;
+        private final TextView commentTextView;
+        private final TextView commenterNameTextView;
+        private final TextView timestampTextView;
+        private final TextView commentHeartCountTextView;
+        private final ImageView profileImageView;
+        private final ImageView heartImage;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -187,45 +225,6 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
                             }
                         }
                     });
-        }
-    }
-
-    public static String getTimeAgo(long time) {
-        if (time < 1000000000000L) {
-            // if timestamp given in seconds, convert to millis
-            time *= 1000;
-        }
-
-        long now = System.currentTimeMillis();
-        if (time > now || time <= 0) {
-            return null;
-        }
-
-        // TODO: localize
-        final long diff = now - time;
-        long day = TimeUnit.MILLISECONDS.toDays(diff);
-        if (diff < MINUTE_MILLIS) {
-            return "Just now";
-        } else if (diff < 2 * MINUTE_MILLIS) {
-            return "moments ago";
-        } else if (diff < 50 * MINUTE_MILLIS) {
-            return diff / MINUTE_MILLIS + " mins";
-        } else if (diff < 90 * MINUTE_MILLIS) {
-            return "1h";
-        } else if (diff < 24 * HOUR_MILLIS) {
-            return diff / HOUR_MILLIS + "h";
-        } else if (diff < 48 * HOUR_MILLIS) {
-            return "Yesterday";
-        } else if (day >= 7) {
-            if (day > 360) {
-                return (day / 360) + "y";
-            } else if (day > 30) {
-                return (day / 30) + "m";
-            } else {
-                return diff / DAY_MILLIS + "d";
-            }
-        } else {
-            return diff / DAY_MILLIS + "d";
         }
     }
 }

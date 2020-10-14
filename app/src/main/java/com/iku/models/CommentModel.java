@@ -36,7 +36,7 @@ public class CommentModel {
 
     }
 
-    public CommentModel(String comment, String uid, String commenterName, long timestamp, int heartsCount, ArrayList<String> heartsArray, Timestamp readableTimestamp, boolean spam, int spamCount, ArrayList<String> spamReportedBy, boolean deleted, String deletedBy ) {
+    public CommentModel(String comment, String uid, String commenterName, long timestamp, int heartsCount, ArrayList<String> heartsArray, Timestamp readableTimestamp, boolean spam, int spamCount, ArrayList<String> spamReportedBy, boolean deleted, String deletedBy) {
         this.comment = comment;
         this.uid = uid;
         this.commenterName = commenterName;

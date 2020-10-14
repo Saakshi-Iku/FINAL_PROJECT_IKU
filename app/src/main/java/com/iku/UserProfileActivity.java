@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 
@@ -17,11 +16,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.MetadataChanges;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.iku.databinding.ActivityUserPofileBinding;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -30,17 +26,13 @@ import com.squareup.picasso.Picasso;
 public class UserProfileActivity extends AppCompatActivity {
 
 
+    private final String TAG = UserProfileActivity.class.getSimpleName();
     private ImageView profilePicture;
-    private MaterialTextView nameTextView, userHeartsTextView, userLinkTextView, linkHeaderTextView,bioHeaderTextView,bioTextView;
+    private MaterialTextView nameTextView, userHeartsTextView, userLinkTextView, linkHeaderTextView, bioHeaderTextView, bioTextView;
     private FirebaseFirestore db;
-
     private String userName;
-
     private String userUID;
-
     private ActivityUserPofileBinding userPofileBinding;
-
-    private String TAG = UserProfileActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +54,8 @@ public class UserProfileActivity extends AppCompatActivity {
         userHeartsTextView = findViewById(R.id.userHearts);
         userLinkTextView = findViewById(R.id.linkInBio);
         linkHeaderTextView = findViewById(R.id.linkHeader);
-        bioTextView=findViewById(R.id.userBio);
-        bioHeaderTextView=findViewById(R.id.userBioHeader);
+        bioTextView = findViewById(R.id.userBio);
+        bioHeaderTextView = findViewById(R.id.userBioHeader);
         getUserDetails(userUID);
         getPicture(userUID);
     }
@@ -141,12 +133,12 @@ public class UserProfileActivity extends AppCompatActivity {
                             long points = (long) change.getDocument().get("points");
                             String link = (String) change.getDocument().get("userBioLink");
                             String bio = (String) change.getDocument().get("userBio");
-                            if (bio!=null&& !bio.equals("")){
+                            if (bio != null && !bio.equals("")) {
                                 userPofileBinding.userBioHeader.setVisibility(View.VISIBLE);
                                 userPofileBinding.userBio.setVisibility(View.VISIBLE);
                                 userPofileBinding.userBio.setText(bio);
                             }
-                            if (link!=null&& !link.equals("")){
+                            if (link != null && !link.equals("")) {
                                 userPofileBinding.linkHeader.setVisibility(View.VISIBLE);
                                 userPofileBinding.linkInBio.setVisibility(View.VISIBLE);
                                 userPofileBinding.linkInBio.setText(link);

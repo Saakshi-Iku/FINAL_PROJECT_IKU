@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:gravity="center"
     android:orientation="vertical"
-    android:padding="5dp"
-    android:gravity="center">
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/badgeImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/iku"/>
+        android:src="@drawable/iku" />
 
     <TextView
         android:id="@+id/badgeName"
@@ -20,23 +19,23 @@
         android:gravity="center"
         android:text="The Minimalist"
         android:textSize="12sp"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/viewBadgeDetailsButton"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_marginHorizontal="5dp"
         android:text="View"
         android:textAllCaps="false"
-        android:textSize="12sp"
-        android:layout_marginHorizontal="5dp"/>
+        android:textSize="12sp" />
 
     <TextView
         android:id="@+id/nominationCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="10sp"
         android:gravity="center"
-        android:text="Nominated by \n13 others"/>
+        android:text="Nominated by \n13 others"
+        android:textSize="10sp" />
 
 </LinearLayout>

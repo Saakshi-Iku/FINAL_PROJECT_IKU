@@ -18,14 +18,14 @@ import com.iku.models.UserModel;
 
 public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, RecyclerView.ViewHolder> {
 
-    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    private LeaderBoardAdapter.OnItemClickOfSameUidListener listener;
-    private LeaderBoardAdapter.OnItemClickOfDiffUidListener listenerDiff;
     public static final int CURRENT_USER = 0;
     public static final int OTHER_USER = 1;
     public static final int FIRST_PLACE = 2;
     public static final int SECOND_PLACE = 3;
     public static final int THIRD_PLACE = 4;
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+    private LeaderBoardAdapter.OnItemClickOfSameUidListener listener;
+    private LeaderBoardAdapter.OnItemClickOfDiffUidListener listenerDiff;
 
     public LeaderBoardAdapter(@NonNull FirestorePagingOptions<UserModel> options) {
         super(options);
@@ -63,14 +63,13 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, Recycl
         } else if (viewType == FIRST_PLACE) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.first_place_leaderboard, parent, false);
             return new LeaderBoardAdapter.OtherUserViewHolder(view);
-        }else if (viewType == SECOND_PLACE) {
+        } else if (viewType == SECOND_PLACE) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.second_place_leaderboard, parent, false);
             return new LeaderBoardAdapter.OtherUserViewHolder(view);
-        }else if (viewType == THIRD_PLACE) {
+        } else if (viewType == THIRD_PLACE) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.third_place_leaderboard, parent, false);
             return new LeaderBoardAdapter.OtherUserViewHolder(view);
-        }
-        else
+        } else
             return null;
     }
 
@@ -81,6 +80,20 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, Recycl
 
     public void setOnItemClickOfDiffUidListener(LeaderBoardAdapter.OnItemClickOfDiffUidListener listenerDiff) {
         this.listenerDiff = listenerDiff;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (getItem(position).get("uid").equals(user.getUid()))
+            return CURRENT_USER;
+        if (position == 0)
+            return FIRST_PLACE;
+        if (position == 1)
+            return SECOND_PLACE;
+        if (position == 2)
+            return THIRD_PLACE;
+        else
+            return OTHER_USER;
     }
 
     public interface OnItemClickOfSameUidListener {
@@ -104,7 +117,6 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, Recycl
             });
         }
     }
-
 
     public class CurrentUserViewHolder extends RecyclerView.ViewHolder {
 
@@ -132,20 +144,6 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, Recycl
         }
 
 
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (getItem(position).get("uid").equals(user.getUid()))
-            return CURRENT_USER;
-        if (position == 0)
-            return FIRST_PLACE;
-        if (position == 1)
-            return SECOND_PLACE;
-        if (position == 2)
-            return THIRD_PLACE;
-        else
-            return OTHER_USER;
     }
 }
 

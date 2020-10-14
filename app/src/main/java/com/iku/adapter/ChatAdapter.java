@@ -65,10 +65,10 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     public static final int MSG_TYPE_IMAGE_RIGHT_COMMENT = 15;
 
     private static final String TAG = ChatAdapter.class.getSimpleName();
+    private final Context mContext;
+    private final SimpleDateFormat sfd = new SimpleDateFormat("hh:mm a", Locale.US);
+    private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private ChatAdapter.OnItemClickListener listener;
-    private Context mContext;
-    private SimpleDateFormat sfd = new SimpleDateFormat("hh:mm a", Locale.US);
-    private FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
     public ChatAdapter(Context context, @NonNull FirestoreRecyclerOptions<ChatModel> options) {
         super(options);
@@ -302,7 +302,13 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView senderName;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftViewHolder(@NonNull View itemView) {
@@ -406,9 +412,16 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftCommentViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, commentTextView;
-        private ConstraintLayout commentsLayout;
-        private CircleImageView commenterProfilePicture;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView senderName;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView commentTextView;
+        private final ConstraintLayout commentsLayout;
+        private final CircleImageView commenterProfilePicture;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftCommentViewHolder(@NonNull View itemView) {
@@ -552,9 +565,18 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftLinkViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, linkTitle, linkDescription, linkSource;
-        private ImageView linkPreviewImage;
-        private ConstraintLayout linkPreviewLayout;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView senderName;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView linkTitle;
+        private final MaterialTextView linkDescription;
+        private final MaterialTextView linkSource;
+        private final ImageView linkPreviewImage;
+        private final ConstraintLayout linkPreviewLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftLinkViewHolder(@NonNull View itemView) {
@@ -674,10 +696,16 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftImageViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited;
-        private ImageView receiverImage;
-        private MaterialButton viewPostBtn;
-        private ProgressBar leftProgress;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView senderName;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final ImageView receiverImage;
+        private final MaterialButton viewPostBtn;
+        private final ProgressBar leftProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftImageViewHolder(@NonNull View itemView) {
@@ -820,12 +848,19 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftImageCommentViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, commentTextView;
-        private ImageView receiverImage;
-        private MaterialButton viewPostBtn;
-        private ConstraintLayout commentsLayout;
-        private CircleImageView commenterProfilePicture;
-        private ProgressBar leftProgress;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView senderName;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView commentTextView;
+        private final ImageView receiverImage;
+        private final MaterialButton viewPostBtn;
+        private final ConstraintLayout commentsLayout;
+        private final CircleImageView commenterProfilePicture;
+        private final ProgressBar leftProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftImageCommentViewHolder(@NonNull View itemView) {
@@ -1010,7 +1045,11 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightViewHolder(@NonNull View itemView) {
@@ -1021,7 +1060,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
             messageTime2 = itemView.findViewById(R.id.message_time2);
             upvoteCount = itemView.findViewById(R.id.upvoteCount);
             edited = itemView.findViewById(R.id.editFlag);
-            ;
         }
 
         void bindChat(ChatModel chatModel) {
@@ -1100,9 +1138,14 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightCommentViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, commentTextView;
-        private ConstraintLayout commentsLayout;
-        private CircleImageView commenterProfilePicture;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView commentTextView;
+        private final ConstraintLayout commentsLayout;
+        private final CircleImageView commenterProfilePicture;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightCommentViewHolder(@NonNull View itemView) {
@@ -1233,10 +1276,14 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightImageViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited;
-        private ImageView sentImage;
-        private MaterialButton viewPostBtn;
-        private ProgressBar rightProgress;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final ImageView sentImage;
+        private final MaterialButton viewPostBtn;
+        private final ProgressBar rightProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightImageViewHolder(@NonNull View itemView) {
@@ -1353,12 +1400,17 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightCommentImageViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, commentTextView;
-        private ImageView sentImage;
-        private MaterialButton viewPostBtn;
-        private ConstraintLayout commentsLayout;
-        private CircleImageView commenterProfilePicture;
-        private ProgressBar rightProgress;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView commentTextView;
+        private final ImageView sentImage;
+        private final MaterialButton viewPostBtn;
+        private final ConstraintLayout commentsLayout;
+        private final CircleImageView commenterProfilePicture;
+        private final ProgressBar rightProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightCommentImageViewHolder(@NonNull View itemView) {
@@ -1516,9 +1568,16 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightLinkViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, linkTitle, linkDescription, linkSource;
-        private ImageView linkPreviewImage;
-        private ConstraintLayout linkPreviewLayout;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView linkTitle;
+        private final MaterialTextView linkDescription;
+        private final MaterialTextView linkSource;
+        private final ImageView linkPreviewImage;
+        private final ConstraintLayout linkPreviewLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightLinkViewHolder(@NonNull View itemView) {
@@ -1624,8 +1683,15 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftSpamViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount;
-        private LinearLayout reportLayout;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView senderName;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView spamCount;
+        private final LinearLayout reportLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftSpamViewHolder(@NonNull View itemView) {
@@ -1735,10 +1801,20 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftLinkSpamViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount, linkTitle, linkDescription, linkSource;
-        private LinearLayout reportLayout;
-        private ImageView linkPreviewImage;
-        private ConstraintLayout linkPreviewLayout;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView senderName;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView spamCount;
+        private final MaterialTextView linkTitle;
+        private final MaterialTextView linkDescription;
+        private final MaterialTextView linkSource;
+        private final LinearLayout reportLayout;
+        private final ImageView linkPreviewImage;
+        private final ConstraintLayout linkPreviewLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftLinkSpamViewHolder(@NonNull View itemView) {
@@ -1863,13 +1939,21 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatLeftImageSpamViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, senderName, upvoteCount, edited, spamCount, commentTextView;
-        private ImageView receiverImage;
-        private MaterialButton viewPostBtn;
-        private LinearLayout reportLayout;
-        private ConstraintLayout commentsLayout;
-        private CircleImageView commenterProfilePicture;
-        private ProgressBar leftProgress;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView senderName;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView spamCount;
+        private final MaterialTextView commentTextView;
+        private final ImageView receiverImage;
+        private final MaterialButton viewPostBtn;
+        private final LinearLayout reportLayout;
+        private final ConstraintLayout commentsLayout;
+        private final CircleImageView commenterProfilePicture;
+        private final ProgressBar leftProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatLeftImageSpamViewHolder(@NonNull View itemView) {
@@ -2054,13 +2138,20 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightImageSpamViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, messageTime3, upvoteCount, edited, spamCount, commentTextView;
-        private ImageView sentImage;
-        private MaterialButton viewPostBtn;
-        private LinearLayout reportLayout;
-        private ConstraintLayout commentsLayout;
-        private CircleImageView commenterProfilePicture;
-        private ProgressBar rightProgress;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView spamCount;
+        private final MaterialTextView commentTextView;
+        private final ImageView sentImage;
+        private final MaterialButton viewPostBtn;
+        private final LinearLayout reportLayout;
+        private final ConstraintLayout commentsLayout;
+        private final CircleImageView commenterProfilePicture;
+        private final ProgressBar rightProgress;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightImageSpamViewHolder(@NonNull View itemView) {
@@ -2218,8 +2309,13 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightSpamViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, spamCount;
-        private LinearLayout reportLayout;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView spamCount;
+        private final LinearLayout reportLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightSpamViewHolder(@NonNull View itemView) {
@@ -2313,10 +2409,18 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
     public class ChatRightLinkSpamViewHolder extends RecyclerView.ViewHolder {
 
-        private MaterialTextView messageText, messageTime, messageTime2, upvoteCount, edited, spamCount, linkTitle, linkDescription, linkSource;
-        private LinearLayout reportLayout;
-        private ImageView linkPreviewImage;
-        private ConstraintLayout linkPreviewLayout;
+        private final MaterialTextView messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView upvoteCount;
+        private final MaterialTextView edited;
+        private final MaterialTextView spamCount;
+        private final MaterialTextView linkTitle;
+        private final MaterialTextView linkDescription;
+        private final MaterialTextView linkSource;
+        private final LinearLayout reportLayout;
+        private final ImageView linkPreviewImage;
+        private final ConstraintLayout linkPreviewLayout;
 
         @SuppressLint("ClickableViewAccessibility")
         public ChatRightLinkSpamViewHolder(@NonNull View itemView) {
@@ -2425,7 +2529,9 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     }
 
     private class ChatRightDeletedViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView messageTime, messageTime2, messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageText;
 
         public ChatRightDeletedViewHolder(View itemView) {
             super(itemView);
@@ -2456,7 +2562,11 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
     }
 
     private class ChatLeftDeletedViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView messageTime, messageTime2, messageTime3, senderName, messageText;
+        private final MaterialTextView messageTime;
+        private final MaterialTextView messageTime2;
+        private final MaterialTextView messageTime3;
+        private final MaterialTextView senderName;
+        private final MaterialTextView messageText;
 
         public ChatLeftDeletedViewHolder(View itemView) {
             super(itemView);

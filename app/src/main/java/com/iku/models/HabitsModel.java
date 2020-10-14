@@ -28,7 +28,7 @@ public class HabitsModel {
     public HabitsModel() {
     }
 
-    public HabitsModel(String habit_name, String habit_ilustration, String type, String frequency, int week, String day, String timeslot, int support_count, long streak,  long timestamp) {
+    public HabitsModel(String habit_name, String habit_ilustration, String type, String frequency, int week, String day, String timeslot, int support_count, long streak, long timestamp) {
         this.habit_name = habit_name;
         this.habit_illustration = habit_ilustration;
         this.type = type;
@@ -53,9 +53,13 @@ public class HabitsModel {
         return type;
     }
 
-    public String getFrequency() { return frequency; }
+    public String getFrequency() {
+        return frequency;
+    }
 
-    public int getWeek() { return week; }
+    public int getWeek() {
+        return week;
+    }
 
     public String getDay() {
         return day;
@@ -65,7 +69,9 @@ public class HabitsModel {
         return timeslot;
     }
 
-    public int getSupport_count() { return support_count; }
+    public int getSupport_count() {
+        return support_count;
+    }
 
     public long getStreak() {
         return streak;

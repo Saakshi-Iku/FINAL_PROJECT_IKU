@@ -117,8 +117,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:text="About"
-        android:visibility="gone"
         android:textColor="@color/colorPrimary"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/userBio"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -129,12 +129,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        android:visibility="gone"
         android:maxLines="6"
         android:paddingHorizontal="20dp"
         android:paddingVertical="10dp"
         android:textAlignment="center"
         android:textSize="13sp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/userBioHeader" />
 
     <!--Link in bio-->
@@ -156,12 +156,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        android:textColorLink="@color/colorAccent"
-        android:visibility="gone"
         android:minLines="1"
         android:padding="10dp"
         android:textAlignment="center"
+        android:textColorLink="@color/colorAccent"
         android:textSize="13sp"
+        android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/linkHeader" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

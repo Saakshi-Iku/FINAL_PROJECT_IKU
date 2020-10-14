@@ -73,8 +73,8 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:background="?selectableItemBackgroundBorderless"
-                    android:padding="10dp"
                     android:contentDescription="@string/back_button_content_desc"
+                    android:padding="10dp"
                     android:src="@drawable/ic_arrow_back_24" />
             </FrameLayout>
 
@@ -87,8 +87,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/appBar"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBar">
 
         <!--Profile image-->
         <de.hdodenhof.circleimageview.CircleImageView
@@ -99,7 +99,7 @@
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <!--User name-->
         <com.google.android.material.textview.MaterialTextView

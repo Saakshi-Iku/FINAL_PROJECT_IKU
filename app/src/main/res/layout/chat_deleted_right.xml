@@ -47,10 +47,10 @@
             android:textColor="@color/white"
             android:textSize="12sp"
             android:visibility="visible"
-            app:layout_constraintStart_toEndOf="@id/message"
             app:layout_constraintBottom_toBottomOf="@id/message"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/message"
             app:layout_constraintTop_toTopOf="@id/message"
             app:layout_constraintVertical_bias="1.0" />
 

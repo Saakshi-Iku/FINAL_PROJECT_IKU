@@ -49,11 +49,23 @@ import java.util.Map;
 
 public class ReportBugActivity extends AppCompatActivity {
 
+    private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    private final ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permsGranted -> {
+        if (permsGranted.containsValue(false)) {
+            //user denied one or more permissions
+            Toast.makeText(this, "PERMISSIONS NOT GRANTED", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent i = new Intent();
+            i.setType("image/*");
+            i.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(i, 2);
+        }
+    });
     ImageView d1, d2, d3;
     EditText messageEntered;
     Button upload;
-    String myArray[] = new String[3];
-    Uri UriArray[] = new Uri[3];
+    String[] myArray = new String[3];
+    Uri[] UriArray = new Uri[3];
     List<Uri> myList = new ArrayList<>();
     List<String> finalUrl = new ArrayList<>();
     Uri mainUri;
@@ -78,8 +90,6 @@ public class ReportBugActivity extends AppCompatActivity {
     private ImageView img1, img2, img3, img4;
     private int counter = 0;
     private Date d;
-    private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
-
     private ActivityReportBugBinding reportBugBinding;
 
     public static Bitmap decodeUri(Context c, Uri uri, final int requiredSize) throws
@@ -118,15 +128,15 @@ public class ReportBugActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         user = fAuth.getCurrentUser();
 
-        messageEntered = (EditText) findViewById(R.id.feedbackText);
-        upload = (Button) findViewById(R.id.submitButton);
-        img1 = (ImageView) findViewById(R.id.firstImage);
-        img2 = (ImageView) findViewById(R.id.secondImage);
-        img3 = (ImageView) findViewById(R.id.thirdImage);
-        img4 = (ImageView) findViewById(R.id.hiddenImageView);
-        d1 = (ImageView) findViewById(R.id.delete1);
-        d2 = (ImageView) findViewById(R.id.delete2);
-        d3 = (ImageView) findViewById(R.id.delete3);
+        messageEntered = findViewById(R.id.feedbackText);
+        upload = findViewById(R.id.submitButton);
+        img1 = findViewById(R.id.firstImage);
+        img2 = findViewById(R.id.secondImage);
+        img3 = findViewById(R.id.thirdImage);
+        img4 = findViewById(R.id.hiddenImageView);
+        d1 = findViewById(R.id.delete1);
+        d2 = findViewById(R.id.delete2);
+        d3 = findViewById(R.id.delete3);
 
         reportBugBinding.backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -475,18 +485,6 @@ public class ReportBugActivity extends AppCompatActivity {
         mProgress.setCancelable(false);
         mProgress.setIndeterminate(true);
     }
-
-    private ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permsGranted -> {
-        if (permsGranted.containsValue(false)) {
-            //user denied one or more permissions
-            Toast.makeText(this, "PERMISSIONS NOT GRANTED", Toast.LENGTH_SHORT).show();
-        } else {
-            Intent i = new Intent();
-            i.setType("image/*");
-            i.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(i, 2);
-        }
-    });
 
     /**
      * Compares all permissions in the provided array with the permissions granted to the application.

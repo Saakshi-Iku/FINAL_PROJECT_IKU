@@ -6,83 +6,84 @@
     android:animateLayoutChanges="true"
     android:background="#EBEBEB">
 
-    <!--App Bar Layout-->    <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/appBar"
-    android:layout_width="match_parent"
-    android:layout_height="57dp"
-    android:background="@color/white"
-    android:padding="6dp">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!--App Bar Layout-->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="57dp"
+        android:background="@color/white"
+        android:padding="6dp">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/group_logo"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:padding="2dp"
-            android:src="@drawable/ic_iku"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="bottom|center"
-            android:text="#ikuexperiment"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/subtitle"
-            app:layout_constraintStart_toStartOf="@+id/subtitle"
-            app:layout_constraintTop_toTopOf="@+id/topAppBar" />
+            <ImageView
+                android:id="@+id/group_logo"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:padding="2dp"
+                android:src="@drawable/ic_iku"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:gravity="center|top"
-            android:text="Community"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/group_logo"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|center"
+                android:text="#ikuexperiment"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@id/subtitle"
+                app:layout_constraintStart_toStartOf="@+id/subtitle"
+                app:layout_constraintTop_toTopOf="@+id/topAppBar" />
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/memberCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/group_icon"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/subtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:gravity="center|top"
+                android:text="Community"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/group_logo"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
 
-        <ImageView
-            android:id="@+id/group_icon"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:padding="6dp"
-            android:src="@drawable/shield"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/memberCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="14dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/group_icon"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/group_icon"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:padding="6dp"
+                android:src="@drawable/shield"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</com.google.android.material.appbar.AppBarLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
 
     <!--To display date at the top of chat-->
     <com.google.android.material.textview.MaterialTextView
@@ -127,11 +128,11 @@
             android:id="@+id/editWarning"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            app:layout_constraintCircleRadius="5dp"
+            android:layout_marginBottom="6dp"
             android:background="@drawable/url_preview_background"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/chatbox"
-            android:layout_marginBottom="6dp">
+            app:layout_constraintCircleRadius="5dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -140,8 +141,8 @@
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
                 android:padding="5dp"
-                android:textColor="@android:color/black"
-                android:text="Editing Message"/>
+                android:text="Editing Message"
+                android:textColor="@android:color/black" />
 
             <TextView
                 android:id="@+id/cancel_edit"
@@ -152,7 +153,7 @@
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:text="Cancel"
-                android:textColor="#009E9E"/>
+                android:textColor="#009E9E" />
 
         </RelativeLayout>
 
@@ -174,8 +175,8 @@
                 android:id="@+id/linkPreviewImage"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:minWidth="30dp"
                 android:maxHeight="65dp"
+                android:minWidth="30dp"
                 android:src="@drawable/iku"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintDimensionRatio="1"
@@ -186,10 +187,10 @@
                 android:id="@+id/linkTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Link Title"
                 android:layout_marginStart="5dp"
                 android:padding="1dp"
                 android:singleLine="true"
+                android:text="Link Title"
                 android:textColor="#90000000"
                 android:textSize="12sp"
                 android:textStyle="bold"
@@ -202,12 +203,12 @@
                 android:id="@+id/linkPreviewDescription"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:text="This is a short discription of the page hosted on the internet for testing purpose."
                 android:layout_marginStart="5dp"
+                android:maxLines="3"
                 android:padding="1dp"
+                android:text="This is a short discription of the page hosted on the internet for testing purpose."
                 android:textColor="#80000000"
                 android:textSize="14sp"
-                android:maxLines="3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/linkPreviewImage"

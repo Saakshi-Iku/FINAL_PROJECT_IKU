@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@drawable/bottom_sheet">
+    android:background="@drawable/bottom_sheet"
+    android:orientation="vertical">
 
     <!--Header-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:elevation="2dp">
+        android:elevation="2dp"
+        android:gravity="center">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Award a badge"
             android:gravity="center"
+            android:text="Award a badge"
             android:textColor="@color/colorPrimary"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_weight="0"
-            android:src="@drawable/ic_next_36"
             android:background="@color/fui_transparent"
             android:rotation="90"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:src="@drawable/ic_next_36"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -39,11 +39,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="12sp"
         android:paddingHorizontal="25dp"
         android:paddingVertical="5dp"
+        android:text="Nominate abhi for a badge. Most nominated badge will be awarded to abhi at the end of the month. "
         android:textColor="@android:color/secondary_text_dark"
-        android:text="Nominate abhi for a badge. Most nominated badge will be awarded to abhi at the end of the month. "/>
+        android:textSize="12sp" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -51,7 +51,7 @@
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </ScrollView>
 

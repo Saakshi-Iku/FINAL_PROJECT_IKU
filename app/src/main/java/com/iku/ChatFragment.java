@@ -93,9 +93,21 @@ import nl.dionsegijn.konfetti.models.Size;
 
 public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchListener, OnSuccessListener<AppUpdateInfo> {
 
+    public static final int REQUEST_CODE = 1234;
     private static final String TAG = ChatFragment.class.getSimpleName();
     private static final String[] perms = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
     private final SimpleDateFormat sfdMainDate = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+    private final ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permsGranted -> {
+        if (permsGranted.containsValue(false)) {
+            //user denied one or more permissions
+            Toast.makeText(getActivity(), "PERMISSIONS NOT GRANTED", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Permission Granted!", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(getActivity(), ChatImageActivity.class);
+            i.putExtra("documentId", "default");
+            startActivity(i);
+        }
+    });
     private FirebaseUser user;
     private MaterialTextView memberCount;
     private FirebaseFirestore db;
@@ -125,18 +137,6 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     private String linkPreviewDesc = "";
     private String linkPreviewUrl = "";
     private AppUpdateManager appUpdateManager;
-    public static final int REQUEST_CODE = 1234;
-    private ActivityResultLauncher<String[]> requestMultiplePermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permsGranted -> {
-        if (permsGranted.containsValue(false)) {
-            //user denied one or more permissions
-            Toast.makeText(getActivity(), "PERMISSIONS NOT GRANTED", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getActivity(), "Permission Granted!", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(getActivity(), ChatImageActivity.class);
-            i.putExtra("documentId", "default");
-            startActivity(i);
-        }
-    });
 
     public ChatFragment() {
         // Required empty public constructor
@@ -950,6 +950,12 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         snackbar.show();
     }
 
+    @Override
+    public void onResume() {
+        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(this::onSuccess);
+        super.onResume();
+    }
+
     private class RecyclerViewOnGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
@@ -1535,11 +1541,5 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             }
             super.onLongPress(e);
         }
-    }
-
-    @Override
-    public void onResume() {
-        appUpdateManager.getAppUpdateInfo().addOnSuccessListener(this::onSuccess);
-        super.onResume();
     }
 }

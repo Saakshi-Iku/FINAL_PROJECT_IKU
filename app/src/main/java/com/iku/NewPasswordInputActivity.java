@@ -21,14 +21,10 @@ import com.iku.databinding.ActivityNewPasswordInputBinding;
 
 public class NewPasswordInputActivity extends AppCompatActivity {
 
+    private final String TAG = NewPasswordInputActivity.class.getSimpleName();
     private ActivityNewPasswordInputBinding binding;
-
     private String email, password;
-
     private FirebaseAuth fAuth;
-
-    private String TAG = NewPasswordInputActivity.class.getSimpleName();
-
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override

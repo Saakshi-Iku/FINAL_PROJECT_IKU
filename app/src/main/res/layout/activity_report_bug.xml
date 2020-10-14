@@ -76,8 +76,8 @@
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:background="?selectableItemBackgroundBorderless"
-                        android:padding="10dp"
                         android:contentDescription="@string/back_button_content_desc"
+                        android:padding="10dp"
                         android:src="@drawable/ic_arrow_back_24" />
                 </FrameLayout>
 
