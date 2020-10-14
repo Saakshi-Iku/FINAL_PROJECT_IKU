@@ -3,18 +3,15 @@ package com.iku;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
@@ -271,6 +268,8 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         }
     }
 
+    private int hiddenState = 0;
+
     @SuppressLint("ClickableViewAccessibility")
     private void initButtons() {
         viewPostBinding.backButton.setOnClickListener(view -> onBackPressed());
@@ -291,6 +290,23 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         viewPostBinding.viewHandle.setOnClickListener(view -> {
 
         });
+
+        viewPostBinding.viewedImage.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (hiddenState == 0) {
+                    viewPostBinding.viewHandle.setVisibility(View.GONE);
+                    viewPostBinding.appBar.setVisibility(View.GONE);
+                    hiddenState=1;
+                } else if (hiddenState ==1){
+                    viewPostBinding.viewHandle.setVisibility(View.VISIBLE);
+                    viewPostBinding.appBar.setVisibility(View.VISIBLE);
+                    hiddenState=0;
+                }
+                return false;
+            }
+        });
+
         viewPostBinding.userName.setOnClickListener(view -> {
             String name = extras.getString("EXTRA_PERSON_NAME");
             String uid = extras.getString("EXTRA_USER_ID");
@@ -782,14 +798,12 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
 
         @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
-            Log.i(TAG, "onDoubleTapEvent: " + e.getAction());
             return super.onDoubleTapEvent(e);
         }
 
         @Override
         public void onLongPress(MotionEvent e) {
             View view = viewPostBinding.commentsView.findChildViewUnder(e.getX(), e.getY());
-            Log.i(TAG, "onLongPress: " + e.getAction() + "\nView" + view);
             if (view != null) {
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(ViewPostActivity.this);
                 View parentView = getLayoutInflater().inflate(R.layout.user_bottom_sheet, null);
