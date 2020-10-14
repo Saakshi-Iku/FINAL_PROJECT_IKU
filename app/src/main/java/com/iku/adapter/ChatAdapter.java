@@ -839,6 +839,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                     .load(chatModel.getimageUrl())
                                     .noFade()
                                     .into(receiverImage);
+                            receiverImage.setVisibility(View.VISIBLE);
+                            leftProgress.setVisibility(View.GONE);
                         }
                     });
 
@@ -1036,6 +1038,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                     .noFade()
                                     .placeholder(R.drawable.progress_animation)
                                     .into(receiverImage);
+                            receiverImage.setVisibility(View.VISIBLE);
+                            leftProgress.setVisibility(View.GONE);
                         }
                     });
 
@@ -1393,6 +1397,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                     .noFade()
                                     .placeholder(R.drawable.progress_animation)
                                     .into(sentImage);
+                            sentImage.setVisibility(View.VISIBLE);
+                            rightProgress.setVisibility(View.GONE);
                         }
                     });
         }
@@ -1561,6 +1567,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                     .noFade()
                                     .placeholder(R.drawable.progress_animation)
                                     .into(sentImage);
+                            sentImage.setVisibility(View.VISIBLE);
+                            rightProgress.setVisibility(View.GONE);
                         }
                     });
         }
@@ -2129,6 +2137,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                     .noFade()
                                     .placeholder(R.drawable.progress_animation)
                                     .into(receiverImage);
+                            receiverImage.setVisibility(View.VISIBLE);
+                            leftProgress.setVisibility(View.GONE);
                         }
                     });
 
@@ -2302,6 +2312,8 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                                     .noFade()
                                     .placeholder(R.drawable.progress_animation)
                                     .into(sentImage);
+                            sentImage.setVisibility(View.VISIBLE);
+                            rightProgress.setVisibility(View.GONE);
                         }
                     });
         }
