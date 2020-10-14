@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:maxWidth="800dp"
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
     android:layout_marginEnd="50dp">
@@ -60,21 +61,20 @@
             android:visibility="invisible"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-            app:layout_constraintHeight_min="35dp"
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
             app:layout_constraintTop_toBottomOf="@+id/sender_name" />
 
         <ProgressBar
             android:id="@+id/chatLeftProgress"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:elevation="0dp"
             app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-            app:layout_constraintHeight_min="35dp"
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
-            app:layout_constraintTop_toBottomOf="@+id/sender_name"/>
+            app:layout_constraintTop_toTopOf="@+id/receivedImage"
+            app:layout_constraintBottom_toBottomOf="@id/receivedImage"/>
 
         <!--View post button-->
         <com.google.android.material.button.MaterialButton
@@ -233,9 +233,10 @@
 
                 <ImageView
                     android:id="@+id/viewCommentPreview"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:padding="2dp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:paddingVertical="12dp"
+                    android:paddingStart="20dp"
                     android:src="@drawable/ic_next_36"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
