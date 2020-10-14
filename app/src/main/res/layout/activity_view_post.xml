@@ -5,8 +5,8 @@
     android:id="@+id/view_post_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
     android:animateLayoutChanges="true"
+    android:background="@android:color/black"
     tools:context=".ViewPostActivity">
 
     <!--top bar-->
@@ -41,10 +41,10 @@
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:background="?selectableItemBackgroundBorderless"
-                    android:padding="10dp"
                     android:contentDescription="@string/back_button_content_desc"
+                    android:padding="10dp"
                     android:src="@drawable/ic_arrow_back_24"
-                    app:tint="@android:color/white"/>
+                    app:tint="@android:color/white" />
             </FrameLayout>
 
             <com.google.android.material.textview.MaterialTextView
@@ -119,27 +119,34 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true">
 
-        <com.github.chrisbanes.photoview.PhotoView
-            android:id="@+id/viewed_image"
+        <ScrollView
+            android:id="@+id/imageScrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/black"
-            android:adjustViewBounds="true"
-            android:visibility="invisible"
-            android:scaleType="fitCenter"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.github.chrisbanes.photoview.PhotoView
+                android:id="@+id/viewed_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:background="@android:color/black"
+                android:scaleType="fitCenter"
+                android:visibility="invisible" />
+
+        </ScrollView>
 
         <ProgressBar
             android:id="@+id/image_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -153,37 +160,37 @@
                 android:id="@+id/locationChipView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/flairChipView"
-                app:layout_constraintHorizontal_bias="0.0"
                 android:textColor="@color/white"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:chipIcon="@drawable/ic_baseline_location_24"
-                app:chipIconTint="@color/white"
                 app:chipIconSize="16dp"
-                app:chipSurfaceColor="#50000000"
+                app:chipIconTint="@color/white"
+                app:chipStartPadding="9dp"
                 app:chipStrokeColor="@android:color/darker_gray"
                 app:chipStrokeWidth="1dp"
-                app:chipStartPadding="9dp"
-                android:visibility="gone"/>
+                app:chipSurfaceColor="#50000000"
+                app:layout_constraintEnd_toStartOf="@id/flairChipView"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/flairChipView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
                 android:textColor="@color/white"
                 android:textSize="12sp"
+                android:visibility="gone"
                 app:chipIcon="@drawable/ic_baseline_settings_24"
-                app:chipIconTint="@color/white"
                 app:chipIconSize="16dp"
-                app:chipSurfaceColor="#50000000"
+                app:chipIconTint="@color/white"
+                app:chipStartPadding="9dp"
                 app:chipStrokeColor="@android:color/darker_gray"
                 app:chipStrokeWidth="1dp"
-                app:chipStartPadding="9dp"
-                android:visibility="gone"/>
+                app:chipSurfaceColor="#50000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -447,8 +454,8 @@
         android:backgroundTint="#15FFFFFF"
         android:elevation="2dp"
         android:rotation="90"
-        android:visibility="gone"
-        android:src="@drawable/ic_next_36" />
+        android:src="@drawable/ic_next_36"
+        android:visibility="gone" />
 
     <!--Comment message area-->
     <androidx.constraintlayout.widget.ConstraintLayout
