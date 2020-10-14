@@ -34,7 +34,7 @@ class FeatureUpvoteActivity : AppCompatActivity() {
         adapter!!.setOnItemClickListener { position: Int, snapshot: DocumentSnapshot ->
             val featureUpvoteModel = snapshot.toObject(FeatureUpvoteModel::class.java)
             if (featureUpvoteModel != null) {
-                val data = mapOf("feature" to featureUpvoteModel.title, "uid" to mAuth.uid, "timestamp" to System.currentTimeMillis(), "sequence" to FieldValue.increment(1), "row" to featureUpvoteModel.row)
+                val data = mapOf("feature" to featureUpvoteModel.title, "uid" to mAuth.uid, "timestamp" to System.currentTimeMillis(), "sequence" to featureUpvoteModel.upvote_count + 1, "row" to featureUpvoteModel.row)
                 firebaseDb.collection("feature_upvote_users").add(data)
                 firebaseDb.collection("feature_upvote").document(snapshot.id).update("upvote_count", FieldValue.increment(1), "upVotedUser", FieldValue.arrayUnion(mAuth.uid))
                 adapter!!.notifyItemChanged(position)
