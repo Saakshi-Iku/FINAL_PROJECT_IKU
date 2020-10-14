@@ -3,6 +3,7 @@ package com.iku;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,7 +14,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -107,7 +110,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
-                viewPostBinding.scrollView.smoothScrollTo(0, viewPostBinding.heartsArea.getBottom());
+                viewPostBinding.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
             }
         });
 
