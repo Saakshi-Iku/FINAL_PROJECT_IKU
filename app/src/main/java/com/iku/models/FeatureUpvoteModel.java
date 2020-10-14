@@ -2,6 +2,8 @@ package com.iku.models;
 
 import com.google.firebase.database.PropertyName;
 
+import java.util.ArrayList;
+
 public class FeatureUpvoteModel {
 
     @PropertyName("title")
@@ -16,17 +18,20 @@ public class FeatureUpvoteModel {
     private long upvote_count;
     @PropertyName("row")
     private long row;
+    @PropertyName("upVotedUser")
+    private ArrayList<String> upVotedUser;
 
     public FeatureUpvoteModel() {
     }
 
-    public FeatureUpvoteModel(String title, String description, String image, long timestamp, long upvote_count, long row) {
+    public FeatureUpvoteModel(String title, String description, String image, long timestamp, long upvote_count, long row, ArrayList<String> upVotedUser) {
         this.title = title;
         this.description = description;
         this.image = image;
         this.timestamp = timestamp;
         this.upvote_count = upvote_count;
         this.row = row;
+        this.upVotedUser = upVotedUser;
     }
 
     public String getTitle() {
@@ -53,7 +58,7 @@ public class FeatureUpvoteModel {
         return row;
     }
 
-    public void setRow(long row) {
-        this.row = row;
+    public ArrayList<String> getUpVotedUser() {
+        return upVotedUser;
     }
 }

@@ -1,6 +1,7 @@
 package com.iku
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -13,6 +14,7 @@ import com.google.firebase.firestore.Query
 import com.iku.adapter.FeatureUpvoteAdapter
 import com.iku.models.FeatureUpvoteModel
 import kotlinx.android.synthetic.main.activity_feature_upvote.*
+import java.util.*
 
 class FeatureUpvoteActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
@@ -33,11 +35,24 @@ class FeatureUpvoteActivity : AppCompatActivity() {
         recyclerview.adapter = adapter
         adapter!!.setOnItemClickListener { position: Int, snapshot: DocumentSnapshot ->
             val featureUpvoteModel = snapshot.toObject(FeatureUpvoteModel::class.java)
+            var contains = false
             if (featureUpvoteModel != null) {
-                val data = mapOf("feature" to featureUpvoteModel.title, "uid" to mAuth.uid, "timestamp" to System.currentTimeMillis(), "sequence" to featureUpvoteModel.upvote_count + 1, "row" to featureUpvoteModel.row)
-                firebaseDb.collection("feature_upvote_users").add(data)
-                firebaseDb.collection("feature_upvote").document(snapshot.id).update("upvote_count", FieldValue.increment(1), "upVotedUser", FieldValue.arrayUnion(mAuth.uid))
-                adapter!!.notifyItemChanged(position)
+                val upVoterUid: ArrayList<String> = featureUpvoteModel.upVotedUser
+                if (featureUpvoteModel.upvote_count >= 0) {
+                    for (element in upVoterUid) {
+                        if (element.contains(mAuth.uid.toString())) {
+                            contains = true
+                            break
+                        }
+                    }
+                    if (!contains) {
+                        val data = mapOf("feature" to featureUpvoteModel.title, "uid" to mAuth.uid, "timestamp" to System.currentTimeMillis(), "sequence" to featureUpvoteModel.upvote_count + 1, "row" to featureUpvoteModel.row)
+                        firebaseDb.collection("feature_upvote_users").add(data)
+                        firebaseDb.collection("feature_upvote").document(snapshot.id).update("upvote_count", FieldValue.increment(1), "upVotedUser", FieldValue.arrayUnion(mAuth.uid))
+                        adapter!!.notifyItemChanged(position)
+                    } else
+                        Toast.makeText(this, "Already voted!", Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
