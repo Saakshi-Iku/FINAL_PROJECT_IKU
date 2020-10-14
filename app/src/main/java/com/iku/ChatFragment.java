@@ -362,6 +362,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     } else
                         viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
                     viewChatImageIntent.putExtra("EXTRA_POST_TIMESTAMP", timestamp);
+                    viewChatImageIntent.putExtra("EXTRA_CLICK_TYPE", "TOP_COMMENT");
                     viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", documentID);
                     viewChatImageIntent.putExtra("EXTRA_USER_ID", UID);
                     startActivity(viewChatImageIntent);
@@ -1220,7 +1221,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                 } else
                                     viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
                                 viewChatImageIntent.putExtra("EXTRA_POST_TIMESTAMP", timestamp);
-                                viewChatImageIntent.putExtra("EXTRA_CLICK_TYPE", "TOP_COMMENT");
+                                viewChatImageIntent.putExtra("EXTRA_CLICK_TYPE", "ADD_COMMENT");
                                 viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", documentID);
                                 viewChatImageIntent.putExtra("EXTRA_USER_ID", UID);
                                 bottomSheetDialog.dismiss();
@@ -1370,6 +1371,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                 } else
                                     viewChatImageIntent.putExtra("EXTRA_IMAGE_URL", url);
                                 viewChatImageIntent.putExtra("EXTRA_POST_TIMESTAMP", timestamp);
+                                viewChatImageIntent.putExtra("EXTRA_CLICK_TYPE", "ADD_COMMENT");
                                 viewChatImageIntent.putExtra("EXTRA_MESSAGE_ID", documentID);
                                 viewChatImageIntent.putExtra("EXTRA_USER_ID", UID);
                                 bottomSheetDialog.dismiss();
