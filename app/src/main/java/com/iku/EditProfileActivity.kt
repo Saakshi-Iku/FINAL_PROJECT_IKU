@@ -56,9 +56,11 @@ class EditProfileActivity : AppCompatActivity() {
         back_button.setOnClickListener { onBackPressed() }
         save_button.setOnClickListener {
             val name = editUserNameField.text.toString().trim().capitalize(Locale.ROOT)
-            if (!isValidUrl(linkInBio.text.toString().trim())) {
-                Toast.makeText(applicationContext, "Invalid URL", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
+            if (linkInBio.text.toString().trim().isNotEmpty()) {
+                if (!isValidUrl(linkInBio.text.toString().trim())) {
+                    Toast.makeText(applicationContext, "Invalid URL", Toast.LENGTH_LONG).show()
+                    return@setOnClickListener
+                }
             }
             if (name.isNotEmpty() && user != null)
                 saveUserDetails(user, name)
