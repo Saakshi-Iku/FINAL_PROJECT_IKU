@@ -20,9 +20,6 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, Recycl
 
     public static final int CURRENT_USER = 0;
     public static final int OTHER_USER = 1;
-    public static final int FIRST_PLACE = 2;
-    public static final int SECOND_PLACE = 3;
-    public static final int THIRD_PLACE = 4;
     private final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
     private LeaderBoardAdapter.OnItemClickOfSameUidListener listener;
     private LeaderBoardAdapter.OnItemClickOfDiffUidListener listenerDiff;
@@ -40,9 +37,6 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, Recycl
                 currentUserViewHolder.pointsTextView.setText(String.valueOf(userModel.getPoints()));
                 break;
             case OTHER_USER:
-            case THIRD_PLACE:
-            case FIRST_PLACE:
-            case SECOND_PLACE:
                 LeaderBoardAdapter.OtherUserViewHolder otherUserViewHolder = (OtherUserViewHolder) viewHolder;
                 otherUserViewHolder.firstNameTextView.setText(userModel.getFirstName() + " " + userModel.getLastName());
                 otherUserViewHolder.pointsTextView.setText(String.valueOf(userModel.getPoints()));
@@ -60,19 +54,9 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, Recycl
         } else if (viewType == CURRENT_USER) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.leaderboard_data, parent, false);
             return new LeaderBoardAdapter.CurrentUserViewHolder(view);
-        } else if (viewType == FIRST_PLACE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.first_place_leaderboard, parent, false);
-            return new LeaderBoardAdapter.OtherUserViewHolder(view);
-        } else if (viewType == SECOND_PLACE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.second_place_leaderboard, parent, false);
-            return new LeaderBoardAdapter.OtherUserViewHolder(view);
-        } else if (viewType == THIRD_PLACE) {
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.third_place_leaderboard, parent, false);
-            return new LeaderBoardAdapter.OtherUserViewHolder(view);
         } else
             return null;
     }
-
 
     public void setOnItemClickOfSameUidListener(LeaderBoardAdapter.OnItemClickOfSameUidListener listener) {
         this.listener = listener;
@@ -86,12 +70,6 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, Recycl
     public int getItemViewType(int position) {
         if (getItem(position).get("uid").equals(user.getUid()))
             return CURRENT_USER;
-        if (position == 0)
-            return FIRST_PLACE;
-        if (position == 1)
-            return SECOND_PLACE;
-        if (position == 2)
-            return THIRD_PLACE;
         else
             return OTHER_USER;
     }
@@ -142,8 +120,6 @@ public class LeaderBoardAdapter extends FirestorePagingAdapter<UserModel, Recycl
                 }
             });
         }
-
-
     }
 }
 
