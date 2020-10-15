@@ -48,5 +48,7 @@
     <string name="upvoted">Upvoted: </string>
     <string name="report_message">Report message</string>
     <string name="edit_message">Edit message</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="edit_profile_icon">Edit Profile Icon</string>
 
 </resources>

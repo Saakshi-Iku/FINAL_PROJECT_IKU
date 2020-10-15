@@ -41,6 +41,7 @@
                 <ImageView
                     android:layout_width="45dp"
                     android:layout_height="45dp"
+                    android:contentDescription="@string/edit_profile_icon"
                     android:padding="6dp"
                     android:src="@drawable/ic_circle_account"
                     tools:layout_editor_absoluteX="114dp"
@@ -51,7 +52,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="Edit Profile"
+                    android:text="@string/edit_profile"
                     android:textSize="18sp"
                     tools:layout_editor_absoluteX="152dp"
                     tools:layout_editor_absoluteY="16dp" />
@@ -82,168 +83,175 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/info_layout"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/appBar">
 
-        <!--Profile image-->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/profileImage"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!--User name-->
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/userName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:maxLines="1"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/profileImage" />
-
-        <!--Edit user name-->
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/editUserName"
+            android:id="@+id/info_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/userName">
+            android:visibility="gone">
 
+            <!--Profile image-->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--User name-->
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:maxLines="1"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/profileImage" />
+
+            <!--Edit user name-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/editUserName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/userName">
+
+                <ImageView
+                    android:id="@+id/userNameIcon"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_circle_account"
+                    app:layout_constraintBottom_toBottomOf="@id/editUserNameField"
+                    app:layout_constraintStart_toStartOf="@id/editUserNameField"
+                    app:layout_constraintTop_toTopOf="@id/editUserNameField" />
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editUserNameField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="40dp"
+                    android:layout_marginTop="20dp"
+                    android:hint="Your Name"
+                    android:inputType="textPersonName"
+                    android:maxLength="48"
+                    android:maxLines="1"
+                    android:paddingHorizontal="30dp"
+                    android:paddingVertical="20dp"
+                    android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <!--Warning text-->
+                <TextView
+                    android:id="@+id/editUserNameWarning"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="5dp"
+                    android:text="You can change it only once. Choose wisely."
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="@id/editUserNameField"
+                    app:layout_constraintTop_toBottomOf="@id/editUserNameField" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--About user-->
             <ImageView
-                android:id="@+id/userNameIcon"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_circle_account"
-                app:layout_constraintBottom_toBottomOf="@id/editUserNameField"
-                app:layout_constraintStart_toStartOf="@id/editUserNameField"
-                app:layout_constraintTop_toTopOf="@id/editUserNameField" />
+                android:id="@+id/userBioIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_about_24"
+                app:layout_constraintBottom_toBottomOf="@id/userBio"
+                app:layout_constraintStart_toStartOf="@id/userBio"
+                app:layout_constraintTop_toTopOf="@id/userBio" />
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editUserNameField"
+                android:id="@+id/userBio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="40dp"
                 android:layout_marginTop="20dp"
-                android:hint="Your Name"
-                android:inputType="textPersonName"
-                android:maxLength="48"
-                android:maxLines="1"
+                android:hint="What's your story?"
+                android:inputType="textCapSentences"
+                android:maxLength="140"
+                android:maxLines="6"
+                android:minLines="1"
                 android:paddingHorizontal="30dp"
                 android:paddingVertical="20dp"
                 android:textAlignment="center"
                 android:textSize="16sp"
-                android:visibility="visible"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@id/editUserName" />
 
-            <!--Warning text-->
+            <!--Character counter-->
             <TextView
-                android:id="@+id/editUserNameWarning"
+                android:id="@+id/characterCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
-                android:text="You can change it only once. Choose wisely."
+                android:layout_marginBottom="10dp"
                 android:textSize="10sp"
-                app:layout_constraintEnd_toEndOf="@id/editUserNameField"
-                app:layout_constraintTop_toBottomOf="@id/editUserNameField" />
+                app:layout_constraintBottom_toBottomOf="@id/userBio"
+                app:layout_constraintEnd_toEndOf="@id/userBio" />
+
+            <!--Link in bio-->
+            <ImageView
+                android:id="@+id/linkInBioIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_insert_link_24"
+                app:layout_constraintBottom_toBottomOf="@id/linkInBio"
+                app:layout_constraintStart_toStartOf="@id/linkInBio"
+                app:layout_constraintTop_toTopOf="@id/linkInBio" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/linkInBio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="40dp"
+                android:layout_marginTop="20dp"
+                android:hint="Optional Link"
+                android:inputType="textWebEditText"
+                android:paddingHorizontal="30dp"
+                android:paddingVertical="20dp"
+                android:textAlignment="center"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/userBio" />
+
+
+            <!--Save changes-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save_button"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="30dp"
+                android:backgroundTint="@color/white"
+                android:text="Save"
+                android:textAllCaps="false"
+                android:textColor="#66B2B2"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/linkInBio"
+                app:layout_constraintVertical_bias="0.0"
+                app:strokeColor="#66B2B2"
+                app:strokeWidth="1dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--About user-->
-        <ImageView
-            android:id="@+id/userBioIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_about_24"
-            app:layout_constraintBottom_toBottomOf="@id/userBio"
-            app:layout_constraintStart_toStartOf="@id/userBio"
-            app:layout_constraintTop_toTopOf="@id/userBio" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/userBio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginTop="20dp"
-            android:hint="What's your story?"
-            android:inputType="textCapSentences"
-            android:maxLength="140"
-            android:maxLines="6"
-            android:minLines="1"
-            android:paddingHorizontal="30dp"
-            android:paddingVertical="20dp"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/editUserName" />
-
-        <!--Character counter-->
-        <TextView
-            android:id="@+id/characterCount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="10dp"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="@id/userBio"
-            app:layout_constraintEnd_toEndOf="@id/userBio" />
-
-        <!--Link in bio-->
-        <ImageView
-            android:id="@+id/linkInBioIcon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_insert_link_24"
-            app:layout_constraintBottom_toBottomOf="@id/linkInBio"
-            app:layout_constraintStart_toStartOf="@id/linkInBio"
-            app:layout_constraintTop_toTopOf="@id/linkInBio" />
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/linkInBio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="40dp"
-            android:layout_marginTop="20dp"
-            android:hint="Optional Link"
-            android:inputType="textWebEditText"
-            android:paddingHorizontal="30dp"
-            android:paddingVertical="20dp"
-            android:textAlignment="center"
-            android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@id/userBio" />
-
-
-        <!--Save changes-->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/save_button"
-            android:layout_width="150dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="30dp"
-            android:backgroundTint="@color/white"
-            android:text="Save"
-            android:textAllCaps="false"
-            android:textColor="#66B2B2"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linkInBio"
-            app:layout_constraintVertical_bias="0.0"
-            app:strokeColor="#66B2B2"
-            app:strokeWidth="1dp" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <ProgressBar
         android:id="@+id/progress_circular"
