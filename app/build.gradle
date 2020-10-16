@@ -19,8 +19,8 @@ android {
         applicationId "com.iku.test"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 7
-        versionName "0.1.402"
+        versionCode 8
+        versionName "0.1.403"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
