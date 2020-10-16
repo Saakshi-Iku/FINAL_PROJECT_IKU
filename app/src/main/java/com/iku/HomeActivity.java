@@ -63,6 +63,7 @@ public class HomeActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAuth = FirebaseAuth.getInstance();
 
+        setAppVersion();
         verifyUser();
         verifyAdmin();
         final Handler handler = new Handler();
@@ -116,6 +117,22 @@ public class HomeActivity extends AppCompatActivity {
                         .commit();
             }
         });
+    }
+
+    private void setAppVersion() {
+        if (mAuth.getUid() != null) {
+            db.collection("users").document(mAuth.getUid())
+                    .update("appVersion", BuildConfig.VERSION_NAME)
+                    .addOnSuccessListener(aVoid -> {
+                        /*Log event*/
+                        Bundle status_bundle = new Bundle();
+                        status_bundle.putString(FirebaseAnalytics.Param.METHOD, "User Update App");
+                        status_bundle.putString("app_update", "good ikulogist");
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, status_bundle);
+                    })
+                    .addOnFailureListener(e -> {
+                    });
+        }
     }
 
     private void setLastSeen() {

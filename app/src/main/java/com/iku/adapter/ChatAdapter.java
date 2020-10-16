@@ -1036,7 +1036,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             Picasso.get()
                                     .load(chatModel.getimageUrl())
                                     .noFade()
-                                    .placeholder(R.drawable.progress_animation)
                                     .into(receiverImage);
                             receiverImage.setVisibility(View.VISIBLE);
                             leftProgress.setVisibility(View.GONE);
@@ -1395,7 +1394,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             Picasso.get()
                                     .load(chatModel.getimageUrl())
                                     .noFade()
-                                    .placeholder(R.drawable.progress_animation)
                                     .into(sentImage);
                             sentImage.setVisibility(View.VISIBLE);
                             rightProgress.setVisibility(View.GONE);
@@ -1565,7 +1563,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             Picasso.get()
                                     .load(chatModel.getimageUrl())
                                     .noFade()
-                                    .placeholder(R.drawable.progress_animation)
                                     .into(sentImage);
                             sentImage.setVisibility(View.VISIBLE);
                             rightProgress.setVisibility(View.GONE);
@@ -2135,7 +2132,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             Picasso.get()
                                     .load(chatModel.getimageUrl())
                                     .noFade()
-                                    .placeholder(R.drawable.progress_animation)
                                     .into(receiverImage);
                             receiverImage.setVisibility(View.VISIBLE);
                             leftProgress.setVisibility(View.GONE);
@@ -2310,7 +2306,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
                             Picasso.get()
                                     .load(chatModel.getimageUrl())
                                     .noFade()
-                                    .placeholder(R.drawable.progress_animation)
                                     .into(sentImage);
                             sentImage.setVisibility(View.VISIBLE);
                             rightProgress.setVisibility(View.GONE);
