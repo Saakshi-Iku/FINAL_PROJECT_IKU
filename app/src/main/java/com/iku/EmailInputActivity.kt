@@ -54,17 +54,13 @@ class EmailInputActivity : AppCompatActivity() {
                             param(FirebaseAnalytics.Param.METHOD, "Email")
                             param("state", "new user")
                         }
-                        val goToNewPasswordActivity = Intent(this@EmailInputActivity, NewPasswordInputActivity::class.java)
-                        goToNewPasswordActivity.putExtra("email", email)
-                        startActivity(goToNewPasswordActivity)
+                        startActivity(Intent(this, NewPasswordInputActivity::class.java).putExtra("email",email))
                     } else {
                         firebaseAnalytics.logEvent("email_entered") {
                             param(FirebaseAnalytics.Param.METHOD, "Email")
                             param("state", "existing user")
                         }
-                        val goToPasswordActivity = Intent(this@EmailInputActivity, PasswordInputActivity::class.java)
-                        goToPasswordActivity.putExtra("email", email)
-                        startActivity(goToPasswordActivity)
+                        startActivity(Intent(this, PasswordInputActivity::class.java).putExtra("email",email))
                     }
                 }
                 .addOnFailureListener { e ->
