@@ -1,6 +1,7 @@
 package com.iku;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -166,6 +167,7 @@ public class NameInputActivity extends AppCompatActivity {
                     userInfo.put("firstImage", false);
                     userInfo.put("signUpTime", FieldValue.serverTimestamp());
                     userInfo.put("role", "member");
+                    userInfo.put("appVersion", BuildConfig.VERSION_NAME);
 
                     Map<String, Object> userRegistrationTokenInfo = new HashMap<>();
                     userRegistrationTokenInfo.put("registrationToken", token);
@@ -183,6 +185,21 @@ public class NameInputActivity extends AppCompatActivity {
                                     groupRef.update("members", FieldValue.arrayUnion(userID));
                                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                             .setDisplayName(firstName + " " + lastName).build();
+                                    Map<String, Object> userDevInfo = new HashMap<>();
+                                    userDevInfo.put("Device", Build.MANUFACTURER);
+                                    userDevInfo.put("Model", Build.MODEL);
+                                    userDevInfo.put("Android", Build.VERSION.SDK_INT);
+                                    userDevInfo.put("Release", Build.VERSION.RELEASE);
+                                    userDevInfo.put("Kernel", System.getProperty("os.version"));
+                                    userDevInfo.put("Version Name", BuildConfig.VERSION_NAME);
+                                    userDevInfo.put("Version Code", BuildConfig.VERSION_CODE);
+                                    userDevInfo.put("infoTime", FieldValue.serverTimestamp());
+                                    db.collection("usersVerifiedInfo").document(userID)
+                                            .set(userDevInfo)
+                                            .addOnSuccessListener(aVoid2 -> {
+                                            })
+                                            .addOnFailureListener(e -> {
+                                            });
 
                                     user.updateProfile(profileUpdates).addOnCompleteListener(task1 -> updateUI(user));
 
@@ -202,7 +219,7 @@ public class NameInputActivity extends AppCompatActivity {
 
                                 });
 
-                        db.collection("registrationTokens").document(fAuth.getUid())
+                        db.collection("registrationTokens").document(userID)
                                 .set(userRegistrationTokenInfo)
                                 .addOnSuccessListener(aVoid -> {
                                 })

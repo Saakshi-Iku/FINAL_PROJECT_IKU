@@ -2,6 +2,7 @@ package com.iku;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
@@ -218,6 +219,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     userInfo.put("firstImage", false);
                     userInfo.put("signUpTime", FieldValue.serverTimestamp());
                     userInfo.put("role", "member");
+                    userInfo.put("appVersion", BuildConfig.VERSION_NAME);
 
                     final String userID = mAuth.getUid();
 
@@ -242,11 +244,25 @@ public class WelcomeActivity extends AppCompatActivity {
                                     db.collection("users").document(mAuth.getUid())
                                             .set(userInfo)
                                             .addOnSuccessListener(aVoid -> {
+                                                Map<String, Object> userDevInfo = new HashMap<>();
+                                                userDevInfo.put("Device", Build.MANUFACTURER);
+                                                userDevInfo.put("Model", Build.MODEL);
+                                                userDevInfo.put("Android", Build.VERSION.SDK_INT);
+                                                userDevInfo.put("Release", Build.VERSION.RELEASE);
+                                                userDevInfo.put("Kernel", System.getProperty("os.version"));
+                                                userDevInfo.put("Version Name", BuildConfig.VERSION_NAME);
+                                                userDevInfo.put("Version Code", BuildConfig.VERSION_CODE);
+                                                userDevInfo.put("infoTime", FieldValue.serverTimestamp());
+                                                db.collection("usersVerifiedInfo").document(userID)
+                                                        .set(userDevInfo)
+                                                        .addOnSuccessListener(aVoid2 -> {
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                        });
                                                 FirebaseUser user = mAuth.getCurrentUser();
                                                 DocumentReference groupRef = db.collection("groups").document("iku_earth");
                                                 groupRef.update("members", FieldValue.arrayUnion(userID));
                                                 updateUI(user);
-                                                Log.d(TAG, "DocumentSnapshot successfully written!");
                                                 Toast.makeText(WelcomeActivity.this, "Welcome to the community", Toast.LENGTH_LONG).show();
                                             })
                                             .addOnFailureListener(e -> {
@@ -275,7 +291,6 @@ public class WelcomeActivity extends AppCompatActivity {
                 .addOnSuccessListener(aVoid -> {
                 })
                 .addOnFailureListener(e -> {
-
                 });
     }
 }

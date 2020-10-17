@@ -63,8 +63,6 @@ public class HomeActivity extends AppCompatActivity {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mAuth = FirebaseAuth.getInstance();
 
-        setAppVersion();
-        verifyUser();
         verifyAdmin();
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -119,22 +117,6 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void setAppVersion() {
-        if (mAuth.getUid() != null) {
-            db.collection("users").document(mAuth.getUid())
-                    .update("appVersion", BuildConfig.VERSION_NAME)
-                    .addOnSuccessListener(aVoid -> {
-                        /*Log event*/
-                        Bundle status_bundle = new Bundle();
-                        status_bundle.putString(FirebaseAnalytics.Param.METHOD, "User Update App");
-                        status_bundle.putString("app_update", "good ikulogist");
-                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, status_bundle);
-                    })
-                    .addOnFailureListener(e -> {
-                    });
-        }
-    }
-
     private void setLastSeen() {
         if (mAuth.getUid() != null) {
             Date d = new Date();
@@ -153,30 +135,6 @@ public class HomeActivity extends AppCompatActivity {
                         status_bundle.putString(FirebaseAnalytics.Param.METHOD, "Last seen status");
                         status_bundle.putString("Updating_last_seen", "He/She went offline");
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, status_bundle);
-                    })
-                    .addOnFailureListener(e -> {
-                    });
-        }
-    }
-
-    private void verifyUser() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
-        if (mAuth.getUid() != null) {
-            Map<String, Object> userDevInfo = new HashMap<>();
-            userDevInfo.put("Device", Build.MANUFACTURER);
-            userDevInfo.put("Model", Build.MODEL);
-            userDevInfo.put("Android", Build.VERSION.SDK_INT);
-            userDevInfo.put("Release", Build.VERSION.RELEASE);
-            userDevInfo.put("Kernel", System.getProperty("os.version"));
-            userDevInfo.put("Version Name", BuildConfig.VERSION_NAME);
-            userDevInfo.put("Version Code", BuildConfig.VERSION_CODE);
-            userDevInfo.put("infoTime", FieldValue.serverTimestamp());
-            db.collection("usersVerifiedInfo").document(mAuth.getUid())
-                    .set(userDevInfo)
-                    .addOnSuccessListener(aVoid -> {
-                        SharedPreferences.Editor edit = prefs.edit();
-                        edit.putBoolean(getString(R.string.device_store), true);
-                        edit.apply();
                     })
                     .addOnFailureListener(e -> {
                     });
