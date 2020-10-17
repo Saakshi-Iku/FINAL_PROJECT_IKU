@@ -243,6 +243,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         jumpToBottomButton.setOnClickListener(view -> {
             mChatRecyclerview.scrollToPosition(0);
             jumpToBottomButton.setVisibility(View.GONE);
+            chatDateTextView.setVisibility(View.GONE);
         });
 
         closeButton.setOnClickListener(view -> {
