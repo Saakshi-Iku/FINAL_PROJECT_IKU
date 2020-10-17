@@ -55,6 +55,7 @@ public class PasswordInputActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+        binding.enterPassword.requestFocus();
 
         initProgressDialog();
 
@@ -71,106 +72,94 @@ public class PasswordInputActivity extends AppCompatActivity {
             } else {
                 mProgress.show();
                 firebaseAuth.signInWithEmailAndPassword(enteredEmail, binding.enterPassword.getText().toString())
-                        .addOnCompleteListener(PasswordInputActivity.this, tasks -> {
-                            FirebaseInstanceId.getInstance().getInstanceId()
-                                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                                            if (!task.isSuccessful()) {
-                                                return;
-                                            }
+                        .addOnCompleteListener(PasswordInputActivity.this, tasks -> FirebaseInstanceId.getInstance().getInstanceId()
+                                .addOnCompleteListener(task -> {
+                                    if (!task.isSuccessful()) {
+                                        return;
+                                    }
 
-                                            // Get new Instance ID token
-                                            String token = task.getResult().getToken();
+                                    // Get new Instance ID token
+                                    String token = task.getResult().getToken();
 
-                                            if (tasks.isSuccessful()) {
-                                                user = firebaseAuth.getCurrentUser();
-                                                FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
-                                                DocumentReference docIdRef = rootRef.collection("users").document(user.getUid());
-                                                docIdRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                    @Override
-                                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                        if (task.isSuccessful()) {
-                                                            DocumentSnapshot document = task.getResult();
-                                                            if (document.exists()) {
-                                                                sendRegistrationToken(token, user.getUid());
-                                                                Toast.makeText(PasswordInputActivity.this, "Login successful", Toast.LENGTH_LONG).show();
-                                                                //sending to Home Activity
-                                                                mProgress.dismiss();
-                                                                Intent goToHomeActivity = new Intent(PasswordInputActivity.this, HomeActivity.class);
-                                                                goToHomeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                startActivity(goToHomeActivity);
+                                    if (tasks.isSuccessful()) {
+                                        user = firebaseAuth.getCurrentUser();
+                                        FirebaseFirestore rootRef = FirebaseFirestore.getInstance();
+                                        DocumentReference docIdRef = rootRef.collection("users").document(user.getUid());
+                                        docIdRef.get().addOnCompleteListener(task1 -> {
+                                            if (task1.isSuccessful()) {
+                                                DocumentSnapshot document = task1.getResult();
+                                                if (document.exists()) {
+                                                    sendRegistrationToken(token, user.getUid());
+                                                    Toast.makeText(PasswordInputActivity.this, "Login successful", Toast.LENGTH_LONG).show();
+                                                    //sending to Home Activity
+                                                    mProgress.dismiss();
+                                                    Intent goToHomeActivity = new Intent(PasswordInputActivity.this, HomeActivity.class);
+                                                    goToHomeActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    startActivity(goToHomeActivity);
 
-                                                                //log event
-                                                                Bundle password_bundle = new Bundle();
-                                                                password_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
-                                                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, password_bundle);
-                                                            } else {
-                                                                Toast.makeText(PasswordInputActivity.this, "User profile not filled!", Toast.LENGTH_LONG).show();
-                                                                //sending to NameInput Activity
-                                                                mProgress.dismiss();
-                                                                Intent goToNameInputActivity = new Intent(PasswordInputActivity.this, NameInputActivity.class);
-                                                                goToNameInputActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                                                startActivity(goToNameInputActivity);
-                                                            }
-                                                        } else {
-                                                            binding.signinButton.setEnabled(true);
-                                                        }
-                                                    }
-                                                });
-
-
+                                                    //log event
+                                                    Bundle password_bundle = new Bundle();
+                                                    password_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
+                                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, password_bundle);
+                                                } else {
+                                                    Toast.makeText(PasswordInputActivity.this, "User profile not filled!", Toast.LENGTH_LONG).show();
+                                                    //sending to NameInput Activity
+                                                    mProgress.dismiss();
+                                                    Intent goToNameInputActivity = new Intent(PasswordInputActivity.this, NameInputActivity.class);
+                                                    goToNameInputActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                                    startActivity(goToNameInputActivity);
+                                                }
                                             } else {
-                                                mProgress.dismiss();
                                                 binding.signinButton.setEnabled(true);
-
-                                                //log event
-                                                Bundle fail_bundle = new Bundle();
-                                                fail_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
-                                                fail_bundle.putString("failure_reason", "incorrect password");
-                                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, fail_bundle);
-                                                Toast.makeText(PasswordInputActivity.this, "Incorrect password", Toast.LENGTH_LONG).show();
                                             }
-                                        }
-                                    });
-                        });
+                                        });
+
+
+                                    } else {
+                                        mProgress.dismiss();
+                                        binding.signinButton.setEnabled(true);
+
+                                        //log event
+                                        Bundle fail_bundle = new Bundle();
+                                        fail_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
+                                        fail_bundle.putString("failure_reason", "incorrect password");
+                                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, fail_bundle);
+                                        Toast.makeText(PasswordInputActivity.this, "Incorrect password", Toast.LENGTH_LONG).show();
+                                    }
+                                }));
             }
         });
-        binding.forgotPasswordTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                firebaseAuth.sendPasswordResetEmail(enteredEmail)
+        binding.forgotPasswordTextView.setOnClickListener(view -> {
+            firebaseAuth.sendPasswordResetEmail(enteredEmail)
 
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(PasswordInputActivity.this, "Password reset instructions sent via email", Toast.LENGTH_LONG).show();
-                            //log event
-                            Bundle passwordReset_bundle = new Bundle();
-                            passwordReset_bundle.putString("state", "sent");
-                            mFirebaseAnalytics.logEvent("password_reset_email", passwordReset_bundle);
-                        })
-                        .addOnFailureListener(e -> {
-                            Toast.makeText(PasswordInputActivity.this, "Email Not Sent" + e.getMessage(), Toast.LENGTH_LONG).show();
-                            //log event
-                            Bundle failed_bundle = new Bundle();
-                            failed_bundle.putString("state", "failed");
-                            mFirebaseAnalytics.logEvent("password_reset_email", failed_bundle);
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(PasswordInputActivity.this, "Password reset instructions sent via email", Toast.LENGTH_LONG).show();
+                        //log event
+                        Bundle passwordReset_bundle = new Bundle();
+                        passwordReset_bundle.putString("state", "sent");
+                        mFirebaseAnalytics.logEvent("password_reset_email", passwordReset_bundle);
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(PasswordInputActivity.this, "Email Not Sent" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        //log event
+                        Bundle failed_bundle = new Bundle();
+                        failed_bundle.putString("state", "failed");
+                        mFirebaseAnalytics.logEvent("password_reset_email", failed_bundle);
 
-                        });
-                new CountDownTimer(60000, 1000) {
+                    });
+            new CountDownTimer(60000, 1000) {
 
-                    public void onTick(long millisUntilFinished) {
-                        binding.forgotPasswordTextView.setEnabled(false);
-                        binding.forgotPasswordTextView.setText("Resend in " + new SimpleDateFormat("ss").format(new Date(millisUntilFinished)) + "s");
-                    }
+                public void onTick(long millisUntilFinished) {
+                    binding.forgotPasswordTextView.setEnabled(false);
+                    binding.forgotPasswordTextView.setText("Resend in " + new SimpleDateFormat("ss").format(new Date(millisUntilFinished)) + "s");
+                }
 
-                    public void onFinish() {
-                        binding.forgotPasswordTextView.setText("Forgot Password?");
-                        binding.forgotPasswordTextView.setEnabled(true);
+                public void onFinish() {
+                    binding.forgotPasswordTextView.setText("Forgot Password?");
+                    binding.forgotPasswordTextView.setEnabled(true);
 
-                    }
-                }.start();
-            }
-
+                }
+            }.start();
         });
     }
 
@@ -194,16 +183,9 @@ public class PasswordInputActivity extends AppCompatActivity {
         userRegistrationTokenInfo.put("uid", uid);
         db.collection("registrationTokens").document(uid)
                 .set(userRegistrationTokenInfo)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                    }
+                .addOnSuccessListener(aVoid -> {
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-
-                    }
+                .addOnFailureListener(e -> {
                 });
     }
 

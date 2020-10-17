@@ -25,6 +25,7 @@ class NewPasswordInputActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         mFirebaseAnalytics = Firebase.analytics
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        binding.enterNewPassword.requestFocus()
         binding.backButton.setOnClickListener { onBackPressed() }
         binding.newPasswordNextButton.setOnClickListener {
             val password = binding.enterNewPassword.text.toString().trim()

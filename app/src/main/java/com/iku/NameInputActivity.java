@@ -98,7 +98,7 @@ public class NameInputActivity extends AppCompatActivity {
                 public void onTick(long millisUntilFinished) {
                     binding.resendEmailButton.setEnabled(false);
                     binding.resendEmailButton.setText("Resend in " + new SimpleDateFormat("ss").format(new Date(millisUntilFinished)) + "s");
-                    binding.resendEmailButton.setTextColor(getResources().getColor(R.color.colorTextSecondary));
+                    binding.resendEmailButton.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.colorTextSecondary));
                 }
 
                 public void onFinish() {
