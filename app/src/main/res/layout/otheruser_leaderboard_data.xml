@@ -25,18 +25,18 @@
             android:padding="8dp" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/firstname"
+            android:id="@+id/otherUserName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/pointsText"
+            android:layout_toStartOf="@+id/otherUserPoints"
             android:layout_toEndOf="@id/badge"
             android:maxLines="1"
             android:textColor="@android:color/black"
             android:textSize="16dp" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/pointsText"
+            android:id="@+id/otherUserPoints"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

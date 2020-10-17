@@ -70,6 +70,7 @@ import com.iku.adapter.ChatAdapter;
 import com.iku.databinding.FragmentChatBinding;
 import com.iku.models.ChatModel;
 import com.iku.models.UserModel;
+import com.iku.ui.LeaderBoardActivity;
 import com.soulsurfer.android.PageInfo;
 import com.soulsurfer.android.PageInfoListener;
 import com.soulsurfer.android.SoulSurfer;
@@ -217,7 +218,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     private void initButtons() {
 
         binding.groupIcon.setOnClickListener(view -> {
-            Intent goToLeaderboard = new Intent(getActivity(), LeaderboardActivity.class);
+            Intent goToLeaderboard = new Intent(getActivity(), LeaderBoardActivity.class);
             startActivity(goToLeaderboard);
 
             /*Log event*/

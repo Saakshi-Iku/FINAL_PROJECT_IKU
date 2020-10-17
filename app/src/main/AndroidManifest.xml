@@ -19,7 +19,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FeatureUpvoteActivity"></activity>
+        <activity android:name=".FeatureUpvoteActivity" />
         <activity
             android:name=".EditProfileActivity"
             android:windowSoftInputMode="adjustResize" />
@@ -65,7 +65,7 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".LeaderboardActivity"
+            android:name=".ui.LeaderBoardActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".SettingsActivity"

@@ -50,5 +50,6 @@
     <string name="edit_message">Edit message</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="edit_profile_icon">Edit Profile Icon</string>
+    <string name="user_full_name">%1$s </string>
 
 </resources>
