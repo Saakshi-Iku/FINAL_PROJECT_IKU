@@ -51,5 +51,7 @@
     <string name="edit_profile">Edit Profile</string>
     <string name="edit_profile_icon">Edit Profile Icon</string>
     <string name="user_full_name">%1$s </string>
+    <string name="resend_email_timer_text">Resend in %1$ss</string>
+    <string name="forgot_password_question">Forgot Password?</string>
 
 </resources>
