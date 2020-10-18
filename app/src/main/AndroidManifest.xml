@@ -19,9 +19,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FeatureUpvoteActivity" />
+        <activity
+            android:name=".FeatureUpvoteActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".EditProfileActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".SplashActivity"
@@ -37,7 +40,9 @@
             android:name=".HabitsActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".EmailInputActivity" />
-        <activity android:name=".ViewPostActivity" />
+        <activity
+            android:name=".ViewPostActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ReportBugActivity"
             android:screenOrientation="portrait"
