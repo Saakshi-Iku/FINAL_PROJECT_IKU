@@ -21,6 +21,7 @@
     <color name="scrollViewBG">#EBEBEB</color>
     <color name="commentBoxBG"></color>
     <color name="jumpToBottomButtonBG"></color>
+    <color name="dateContainerBG">#D3E9F4</color>
 
     <!--light theme colours-->
 
