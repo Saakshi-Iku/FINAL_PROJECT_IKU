@@ -8,6 +8,23 @@
     android:orientation="vertical"
     tools:context=".NameInputActivity">
 
+    <!--disconnected to network-->
+    <TextView
+        android:id="@+id/networkDisconnected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Not connected to internet."
+        android:textStyle="italic|bold"
+        android:textSize="10sp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:background="@android:color/holo_red_dark"
+        android:padding="5dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <ImageView
         android:id="@+id/iku_earth"
         android:layout_width="100dp"
@@ -16,7 +33,7 @@
         android:layout_marginTop="52dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/networkDisconnected"
         app:srcCompat="@drawable/iku" />
 
 

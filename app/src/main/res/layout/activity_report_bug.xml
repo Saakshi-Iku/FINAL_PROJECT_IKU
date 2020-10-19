@@ -1,196 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!--disconnected to network-->
+    <TextView
+        android:id="@+id/networkDisconnected"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ReportBugActivity">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Not connected to internet."
+        android:textStyle="italic|bold"
+        android:textSize="10sp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:background="@android:color/holo_red_dark"
+        android:padding="5dp"
+        android:visibility="gone"/>
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/topBar"
+    <!--Top bar-->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/networkDisconnected">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <com.google.android.material.appbar.MaterialToolbar
-                    android:id="@+id/topAppBar"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:background="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
+                app:layout_constraintEnd_toEndOf="@+id/topAppBar"
+                app:layout_constraintStart_toStartOf="@+id/topAppBar"
+                app:layout_constraintTop_toTopOf="@+id/topAppBar">
 
-                <LinearLayout
-                    android:id="@+id/linearLayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
-                    app:layout_constraintEnd_toEndOf="@+id/topAppBar"
-                    app:layout_constraintStart_toStartOf="@+id/topAppBar"
-                    app:layout_constraintTop_toTopOf="@+id/topAppBar">
+                <ImageView
+                    android:id="@+id/group_icon"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_bug_report_24"
+                    tools:layout_editor_absoluteX="114dp"
+                    tools:layout_editor_absoluteY="13dp" />
 
-                    <ImageView
-                        android:id="@+id/group_icon"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:padding="6dp"
-                        android:src="@drawable/ic_bug_report_24"
-                        tools:layout_editor_absoluteX="114dp"
-                        tools:layout_editor_absoluteY="13dp" />
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="Report a bug"
-                        android:textSize="16sp"
-                        tools:layout_editor_absoluteX="152dp"
-                        tools:layout_editor_absoluteY="16dp" />
-                </LinearLayout>
-
-                <!--Back button-->
-                <FrameLayout
-                    android:id="@+id/backButtonContainer"
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="8dp"
-                    android:background="@drawable/bg_oval_transparent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:text="Report a bug"
+                    android:textSize="16sp"
+                    tools:layout_editor_absoluteX="152dp"
+                    tools:layout_editor_absoluteY="16dp" />
+            </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/back_button"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/back_button_content_desc"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_arrow_back_24" />
-                </FrameLayout>
+            <!--Back button-->
+            <FrameLayout
+                android:id="@+id/backButtonContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_oval_transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/back_button"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/back_button_content_desc"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_arrow_back_24" />
+            </FrameLayout>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
+    <!--Rest of the page-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/topBar">
 
-        <EditText
-            android:id="@+id/feedbackText"
-            android:layout_width="0dp"
-            android:layout_height="300dp"
-            android:layout_margin="20dp"
-            android:background="@drawable/feedback_edittext_border"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="Your message (1000 characters)"
-            android:inputType="textMultiLine"
-            android:padding="10dp"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topBar" />
-
-        <RelativeLayout
-            android:id="@+id/relativeLayout3"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/feedbackText">
+            android:layout_height="wrap_content"
+            tools:context=".ReportBugActivity">
 
-            <ImageView
-                android:id="@+id/firstImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp" />
-
-            <ImageView
-                android:id="@+id/secondImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerInParent="true"
-                android:layout_toRightOf="@+id/firstImage" />
-
-            <ImageView
-                android:id="@+id/thirdImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:layout_toRightOf="@+id/secondImage" />
-
-            <ImageView
-                android:id="@+id/hiddenImageView"
+            <EditText
+                android:id="@+id/feedbackText"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:visibility="invisible" />
+                android:layout_height="300dp"
+                android:layout_margin="20dp"
+                android:background="@drawable/feedback_edittext_border"
+                android:ems="10"
+                android:gravity="start|top"
+                android:hint="Your message (1000 characters)"
+                android:inputType="textMultiLine"
+                android:padding="10dp"
+                android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/delete1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/firstImage"
-                android:layout_alignTop="@id/firstImage"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="-8dp"
-                android:src="@drawable/ic_baseline_cancel_24" />
+            <RelativeLayout
+                android:id="@+id/relativeLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/feedbackText">
 
-            <ImageView
-                android:id="@+id/delete2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/secondImage"
-                android:layout_alignTop="@id/secondImage"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="-8dp"
-                android:src="@drawable/ic_baseline_cancel_24" />
+                <ImageView
+                    android:id="@+id/firstImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="20dp" />
 
-            <ImageView
-                android:id="@+id/delete3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@id/thirdImage"
-                android:layout_alignTop="@id/thirdImage"
-                android:layout_marginStart="64dp"
-                android:layout_marginTop="-8dp"
-                android:src="@drawable/ic_baseline_cancel_24" />
-        </RelativeLayout>
+                <ImageView
+                    android:id="@+id/secondImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true"
+                    android:layout_toRightOf="@+id/firstImage" />
+
+                <ImageView
+                    android:id="@+id/thirdImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="20dp"
+                    android:layout_toRightOf="@+id/secondImage" />
+
+                <ImageView
+                    android:id="@+id/hiddenImageView"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible" />
+
+                <ImageView
+                    android:id="@+id/delete1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/firstImage"
+                    android:layout_alignTop="@id/firstImage"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="-8dp"
+                    android:src="@drawable/ic_baseline_cancel_24" />
+
+                <ImageView
+                    android:id="@+id/delete2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/secondImage"
+                    android:layout_alignTop="@id/secondImage"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="-8dp"
+                    android:src="@drawable/ic_baseline_cancel_24" />
+
+                <ImageView
+                    android:id="@+id/delete3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@id/thirdImage"
+                    android:layout_alignTop="@id/thirdImage"
+                    android:layout_marginStart="64dp"
+                    android:layout_marginTop="-8dp"
+                    android:src="@drawable/ic_baseline_cancel_24" />
+            </RelativeLayout>
 
 
-        <Button
-            android:id="@+id/submitButton"
-            android:layout_width="150dp"
-            android:layout_height="40dp"
-            android:layout_marginBottom="30dp"
-            android:background="@drawable/feed_back_button_border"
-            android:backgroundTint="@android:color/white"
-            android:contentDescription="@string/submit"
-            android:text="@string/submit"
-            android:textAllCaps="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/relativeLayout3" />
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="30dp"
+                android:background="@drawable/feed_back_button_border"
+                android:backgroundTint="@android:color/white"
+                android:contentDescription="@string/submit"
+                android:text="@string/submit"
+                android:textAllCaps="false"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/relativeLayout3" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+    </ScrollView>
+
+</RelativeLayout>

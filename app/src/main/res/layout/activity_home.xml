@@ -44,10 +44,27 @@
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>-->
 
+    <!--disconnected to network-->
+    <TextView
+        android:id="@+id/networkDisconnected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Not connected to internet."
+        android:textStyle="italic|bold"
+        android:textSize="10sp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:background="@android:color/holo_red_dark"
+        android:padding="5dp"
+        android:visibility="gone"/>
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/networkDisconnected"
         android:layout_above="@id/animatedBottomBar" />
 
     <nl.joery.animatedbottombar.AnimatedBottomBar

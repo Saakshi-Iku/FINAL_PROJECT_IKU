@@ -9,6 +9,22 @@
     android:background="@android:color/black"
     tools:context=".ViewPostActivity">
 
+    <!--disconnected to network-->
+    <TextView
+        android:id="@+id/networkDisconnected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="Not connected to internet."
+        android:textStyle="italic|bold"
+        android:textSize="10sp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:background="@android:color/holo_red_dark"
+        android:padding="5dp"
+        android:visibility="gone"/>
+
     <!--top bar-->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/appBar"
@@ -17,9 +33,7 @@
         android:background="#50000000"
         android:translationZ="1dp"
         app:contentInsetStart="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_below="@id/networkDisconnected">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

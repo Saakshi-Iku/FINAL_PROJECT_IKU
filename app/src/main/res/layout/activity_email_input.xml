@@ -8,6 +8,22 @@
     android:orientation="vertical"
     tools:context=".EmailInputActivity">
 
+    <!--disconnected to network-->
+    <TextView
+        android:id="@+id/networkDisconnected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Not connected to internet."
+        android:textStyle="italic|bold"
+        android:textSize="10sp"
+        android:textColor="@color/white"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:background="@android:color/holo_red_dark"
+        android:padding="5dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <!--Back button-->
     <FrameLayout
         android:id="@+id/backButtonContainer"
@@ -18,7 +34,7 @@
         android:layout_marginTop="2dp"
         android:background="@drawable/bg_oval_transparent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/networkDisconnected">
 
         <ImageView
             android:id="@+id/back_button"
@@ -39,9 +55,8 @@
         android:background="?android:selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/networkDisconnected"
         app:srcCompat="@drawable/iku" />
-
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/email_next_button"
