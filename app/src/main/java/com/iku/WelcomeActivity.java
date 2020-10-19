@@ -35,6 +35,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.iku.databinding.ActivityWelcomeBinding;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -218,6 +219,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     userInfo.put("firstMessage", false);
                     userInfo.put("firstImage", false);
                     userInfo.put("signUpTime", FieldValue.serverTimestamp());
+                    userInfo.put("signUpTimestamp", new Date().getTime());
                     userInfo.put("role", "member");
                     userInfo.put("appVersion", BuildConfig.VERSION_NAME);
 

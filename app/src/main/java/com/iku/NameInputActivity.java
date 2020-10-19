@@ -153,10 +153,7 @@ public class NameInputActivity extends AppCompatActivity {
                     if (!task.isSuccessful()) {
                         return;
                     }
-
-                    // Get new Instance ID token
                     String token = task.getResult().getToken();
-                    // Create the arguments to the callable function.
                     Map<String, Object> userInfo = new HashMap<>();
                     userInfo.put("firstName", firstName);
                     userInfo.put("lastName", lastName);
@@ -165,6 +162,7 @@ public class NameInputActivity extends AppCompatActivity {
                     userInfo.put("points", 0);
                     userInfo.put("firstMessage", false);
                     userInfo.put("firstImage", false);
+                    userInfo.put("signUpTimestamp", new Date().getTime());
                     userInfo.put("signUpTime", FieldValue.serverTimestamp());
                     userInfo.put("role", "member");
                     userInfo.put("appVersion", BuildConfig.VERSION_NAME);
@@ -208,7 +206,6 @@ public class NameInputActivity extends AppCompatActivity {
                                     signup_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, signup_bundle);
                                     Toast.makeText(NameInputActivity.this, "Welcome to the community", Toast.LENGTH_LONG).show();
-
                                 })
                                 .addOnFailureListener(e -> {
                                     /*Log event*/
@@ -216,7 +213,6 @@ public class NameInputActivity extends AppCompatActivity {
                                     failed_bundle.putString(FirebaseAnalytics.Param.METHOD, "Email");
                                     failed_bundle.putString("failure_reason", "DB write failed");
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, failed_bundle);
-
                                 });
 
                         db.collection("registrationTokens").document(userID)
