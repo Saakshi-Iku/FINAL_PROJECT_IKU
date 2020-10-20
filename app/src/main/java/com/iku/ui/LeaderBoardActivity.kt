@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
+import com.iku.HabitsActivity
 import com.iku.R
 import com.iku.UserProfileActivity
 import com.iku.viewmodel.LeaderBoardViewModel
@@ -39,6 +40,7 @@ class LeaderBoardActivity : AppCompatActivity(), RecyclerView.OnItemTouchListene
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_leaderboard)
         back_button.setOnClickListener { onBackPressed() }
+        hofButton.setOnClickListener { startActivity(Intent(this,HallOfFameActivity::class.java)) }
         tapDetector = GestureDetector(this, TapListener())
         firebaseAnalytics = Firebase.analytics
         FirebaseFirestore.getInstance().collection("users").get().addOnCompleteListener { task: Task<QuerySnapshot> ->

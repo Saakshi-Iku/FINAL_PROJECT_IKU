@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".LeaderboardActivity">
+    tools:context=".ui.LeaderBoardActivity">
 
     <!--Confetti-->
     <nl.dionsegijn.konfetti.KonfettiView
@@ -96,6 +96,28 @@
                     android:contentDescription="@string/back_button_content_desc"
                     android:padding="10dp"
                     android:src="@drawable/ic_arrow_back_24" />
+            </FrameLayout>
+
+            <!-- Hall of fame button -->
+            <FrameLayout
+                android:id="@+id/hofButtonContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_oval_transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/hofButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/back_button_content_desc"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_baseline_view_carousel_24" />
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

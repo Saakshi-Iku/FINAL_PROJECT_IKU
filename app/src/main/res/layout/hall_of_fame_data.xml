@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="500dp"
     android:layout_gravity="center"
-    android:layout_margin="40dp"
+    android:layout_margin="50dp"
     android:background="@android:color/transparent"
     app:cardCornerRadius="8dp">
 
@@ -23,6 +23,8 @@
             android:padding="10dp"
             android:text="August 2020"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <!--leaderboard toppers-->
@@ -44,7 +46,7 @@
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="3">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/runnerUp1Image"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
@@ -66,13 +68,25 @@
                     app:layout_constraintEnd_toEndOf="@id/runnerUp1Image" />
 
                 <TextView
-                    android:id="@+id/runnerUpName"
+                    android:id="@+id/runnerUp1Name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:textSize="12sp"
                     android:textStyle="bold"
+                    android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@id/runnerUp1Image" />
+
+                <TextView
+                    android:id="@+id/runnerUp1Hearts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="10sp"
+                    android:text="Hearts won:"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/runnerUp1Name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -84,7 +98,7 @@
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="4">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/winnerImage"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
@@ -112,7 +126,19 @@
                     android:layout_marginTop="5dp"
                     android:textSize="12sp"
                     android:textStyle="bold"
+                    android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@id/winnerImage" />
+
+                <TextView
+                    android:id="@+id/winnerHearts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="10sp"
+                    android:text="Hearts won:"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/winnerName" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -124,7 +150,7 @@
                 android:layout_marginHorizontal="5dp"
                 android:layout_weight="3">
 
-                <de.hdodenhof.circleimageview.CircleImageView
+                <ImageView
                     android:id="@+id/runnerUp2Image"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
@@ -152,7 +178,19 @@
                     android:layout_marginTop="5dp"
                     android:textSize="12sp"
                     android:textStyle="bold"
+                    android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@id/runnerUp2Image" />
+
+                <TextView
+                    android:id="@+id/runnerUp2Hearts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:textSize="10sp"
+                    android:text="Hearts won:"
+                    android:textColor="@color/colorPrimary"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/runnerUp2Name" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -160,14 +198,16 @@
 
         <!--month details-->
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:background="#10000000"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/leaderboardToppers">
+            app:layout_constraintTop_toBottomOf="@id/leaderboardToppers"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -179,14 +219,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:text="Posts:"
+                android:text="Messages:"
+                android:visibility="gone"
                 android:textColor="@color/colorPrimary"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="35"
+                android:visibility="gone"
                 android:textStyle="bold" />
 
             <HorizontalScrollView
@@ -219,7 +260,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="159"
                 android:textStyle="bold" />
 
 

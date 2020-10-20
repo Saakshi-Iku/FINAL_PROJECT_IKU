@@ -101,22 +101,10 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--Rest of the page-->
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/appBar"
-        android:background="@color/scrollViewBG"
-        android:orientation="horizontal">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/hofRecyclerView"
+    <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/hofRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
+            android:layout_below="@id/appBar"
             android:orientation="vertical" />
-
-    </LinearLayout>
-
 </RelativeLayout>
