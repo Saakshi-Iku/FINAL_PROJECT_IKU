@@ -72,6 +72,17 @@
         app:layout_constraintStart_toEndOf="@id/profileImage"
         app:layout_constraintTop_toBottomOf="@id/commentorDetails" />
 
+    <!--flag to show message is edited-->
+    <TextView
+        android:id="@+id/editFlag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/comment"
+        app:layout_constraintStart_toStartOf="@id/comment"
+        android:text="• Edited"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/commentsHearts"

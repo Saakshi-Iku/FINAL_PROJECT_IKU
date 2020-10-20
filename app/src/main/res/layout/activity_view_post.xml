@@ -15,25 +15,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:text="Not connected to internet."
-        android:textStyle="italic|bold"
-        android:textSize="10sp"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textAllCaps="false"
         android:background="@android:color/holo_red_dark"
         android:padding="5dp"
-        android:visibility="gone"/>
+        android:text="Not connected to internet."
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:textStyle="italic|bold"
+        android:visibility="gone" />
 
     <!--top bar-->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_below="@id/networkDisconnected"
         android:background="#50000000"
         android:translationZ="1dp"
-        app:contentInsetStart="0dp"
-        android:layout_below="@id/networkDisconnected">
+        app:contentInsetStart="0dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -92,19 +92,30 @@
                 app:layout_constraintStart_toEndOf="@+id/backButtonContainer"
                 app:layout_constraintTop_toBottomOf="@id/user_name" />
 
-            <ImageView
-                android:id="@+id/moreOptionsButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:contentDescription="@string/back_button_content_desc"
-                android:elevation="0dp"
-                android:padding="16dp"
-                android:src="@drawable/ic_baseline_more_vert_24"
-                android:visibility="gone"
+            <!--More options-->
+            <FrameLayout
+                android:id="@+id/optionsButtonContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_oval_transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@android:color/white" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/optionsButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:padding="10dp"
+                    android:contentDescription="@string/options_button_content_desc"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_baseline_more_vert_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:tint="@android:color/white" />
+            </FrameLayout>
 
             <ImageView
                 android:id="@+id/sharePostButton"
@@ -118,7 +129,7 @@
                 android:translationX="10dp"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/moreOptionsButton"
+                app:layout_constraintEnd_toStartOf="@id/optionsButtonContainer"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/white" />
 
