@@ -5,6 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.text.InputFilter;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -52,6 +53,26 @@ public class NameInputActivity extends AppCompatActivity {
             email = user.getEmail();
 
         db = FirebaseFirestore.getInstance();
+
+        binding.enterFirstName.setFilters(new InputFilter[]{(cs, start, end, spanned, dStart, dEnd) -> {
+            if (cs.equals("")) {
+                return cs;
+            }
+            if (cs.toString().matches("[a-zA-Z ]+")) {
+                return cs;
+            }
+            return "";
+        }});
+
+        binding.enterLastName.setFilters(new InputFilter[]{(cs, start, end, spanned, dStart, dEnd) -> {
+            if (cs.equals("")) {
+                return cs;
+            }
+            if (cs.toString().matches("[a-zA-Z ]+")) {
+                return cs;
+            }
+            return "";
+        }});
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
