@@ -273,7 +273,6 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
             if (containedUrls.size() == 1) {
                 Toast.makeText(getActivity(), "Add some description.", Toast.LENGTH_SHORT).show();
-                messageTextField.setText(message);
             } else {
                 chatBoxLinkPreviewLayout.setVisibility(View.GONE);
                 if (!message.isEmpty()) {
