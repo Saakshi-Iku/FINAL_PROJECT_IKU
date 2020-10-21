@@ -277,8 +277,8 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
             final String message = viewPostBinding.messageTextField.getText().toString().trim();
             if (!message.isEmpty()) {
                 sendComment(message);
-                viewPostBinding.messageTextField.setText("");
-                viewPostBinding.messageTextField.clearFocus();
+                viewPostBinding.messageTextField.getText().clear();
+                viewPostBinding.messageTextField.requestFocus();
             }
         });
 

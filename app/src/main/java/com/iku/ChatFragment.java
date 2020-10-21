@@ -281,7 +281,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     }
-                    messageTextField.setText("");
+                    messageTextField.getText().clear();
                     messageTextField.requestFocus();
                 }
             }
@@ -404,22 +404,16 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         map.put("readableMessageUpdateTime", FieldValue.serverTimestamp());
         db.collection("iku_earth_messages").document(messageDocumentID)
                 .update(map)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        chatadapter.notifyItemChanged(position);
-                        messageTextField.setText("");
-                        messageTextField.requestFocus();
-                        editTextStatus = 0;
-                        initSendButton();
-                    }
+                .addOnSuccessListener(aVoid -> {
+                    chatadapter.notifyItemChanged(position);
+                    messageTextField.setText("");
+                    messageTextField.requestFocus();
+                    editTextStatus = 0;
+                    initSendButton();
                 })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        editTextStatus = 0;
-                        initSendButton();
-                    }
+                .addOnFailureListener(e -> {
+                    editTextStatus = 0;
+                    initSendButton();
                 });
     }
 
