@@ -81,6 +81,8 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
 
     private int parentHeight;
 
+    private int editTextStatus = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -311,6 +313,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         Map<String, Object> data = new HashMap<>();
         data.put("postAuthorUid", authorUid);
         data.put("comment", comment);
+        data.put("edited", false);
         data.put("uid", user.getUid());
         data.put("commenterName", user.getDisplayName());
         data.put("heartsCount", 0);
@@ -832,6 +835,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                 RelativeLayout profileView = parentView.findViewById(R.id.profile_layout);
                 RelativeLayout deleteMessageView = parentView.findViewById(R.id.delete_layout);
                 RelativeLayout addCommentView = parentView.findViewById(R.id.comment_layout);
+                RelativeLayout updateMessageView = parentView.findViewById(R.id.edit_option_layout);
                 RelativeLayout reportView = parentView.findViewById(R.id.report_layout);
                 ConstraintLayout heartsArea = parentView.findViewById(R.id.heartsArea);
                 MaterialTextView deleteHeader = parentView.findViewById(R.id.delete_header);
@@ -868,6 +872,34 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                     });
                     bottomSheetDialog.setContentView(parentView);
                     bottomSheetDialog.show();
+                    if (!(adapter.getItem(position).getTimestamp() < System.currentTimeMillis() - (60 * 60 * 1000))) {
+                        updateMessageView.setVisibility(View.VISIBLE);
+                        updateMessageView.setOnClickListener(view12 -> {
+                            viewPostBinding.editWarningLayout.setVisibility(View.VISIBLE);
+                            viewPostBinding.cancelEditButton.setOnClickListener(view1 -> {
+                                editTextStatus = 0;
+//                                initSendButton();
+                                viewPostBinding.editWarningLayout.setVisibility(View.GONE);
+                                viewPostBinding.messageTextField.setText("");
+                                viewPostBinding.messageTextField.clearFocus();
+                            });
+
+                            viewPostBinding.messageTextField.setText(adapter.getItem(position).getComment());
+                            viewPostBinding.messageTextField.setSelection(viewPostBinding.messageTextField.getText().length());
+                                bottomSheetDialog.dismiss();
+                                editTextStatus = 1;
+                                if (editTextStatus == 1) {
+                                    viewPostBinding.sendMessageButton.setOnClickListener(view121 -> {
+                                        viewPostBinding.editWarningLayout.setVisibility(View.GONE);
+                                        editTextStatus = 0;
+                                        updateMessage(documentID, position, viewPostBinding.messageTextField.getText().toString().trim());
+                                        viewPostBinding.messageTextField.getText().clear();
+                                        viewPostBinding.messageTextField.requestFocus();
+                                    });
+                                }
+
+                        });
+                    }
                 } else {
                     profileView.setVisibility(View.VISIBLE);
                     SharedPreferences pref = view.getContext().getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
@@ -987,5 +1019,28 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
             animateHeight();
             return super.onSingleTapConfirmed(e);
         }
+    }
+
+    private void updateMessage(String messageDocumentID, int position, String message) {
+        Date d = new Date();
+        long timestamp = d.getTime();
+        Map<String, Object> map = new HashMap<>();
+        map.put("comment", message);
+        map.put("edited", true);
+        map.put("commentUpdateTime", timestamp);
+        map.put("readableCommentUpdateTime", FieldValue.serverTimestamp());
+        db.collection("iku_earth_messages").document(messageId)
+                .collection("comments").document(messageDocumentID).update(map)
+                .addOnSuccessListener(aVoid -> {
+                    adapter.notifyItemChanged(position);
+                    viewPostBinding.messageTextField.getText().clear();
+                    viewPostBinding.messageTextField.requestFocus();
+                    editTextStatus = 0;
+//                    initSendButton();
+                })
+                .addOnFailureListener(e -> {
+                    editTextStatus = 0;
+//                    initSendButton();
+                });
     }
 }

@@ -31,12 +31,19 @@ public class CommentModel {
     private boolean deleted;
     @PropertyName("deletedBy")
     private String deletedBy;
+    @PropertyName("edited")
+    private boolean edited;
+    @PropertyName("commentUpdateTime")
+    private long commentUpdateTime;
+    @PropertyName("readableCommentUpdateTime")
+    private Timestamp readableCommentUpdateTime;
 
     private CommentModel() {
 
     }
 
-    public CommentModel(String comment, String uid, String commenterName, long timestamp, int heartsCount, ArrayList<String> heartsArray, Timestamp readableTimestamp, boolean spam, int spamCount, ArrayList<String> spamReportedBy, boolean deleted, String deletedBy) {
+
+    public CommentModel(String comment, String uid, String commenterName, long timestamp, int heartsCount, ArrayList<String> heartsArray, Timestamp readableTimestamp, boolean spam, int spamCount, ArrayList<String> spamReportedBy, boolean deleted, String deletedBy, boolean edited, long commentUpdateTime, Timestamp readableCommentUpdateTime) {
         this.comment = comment;
         this.uid = uid;
         this.commenterName = commenterName;
@@ -49,6 +56,9 @@ public class CommentModel {
         this.spamReportedBy = spamReportedBy;
         this.deleted = deleted;
         this.deletedBy = deletedBy;
+        this.edited = edited;
+        this.commentUpdateTime = commentUpdateTime;
+        this.readableCommentUpdateTime = readableCommentUpdateTime;
     }
 
     public String getComment() {
@@ -117,6 +127,30 @@ public class CommentModel {
 
     public void setDeletedBy(String deletedBy) {
         this.deletedBy = deletedBy;
+    }
+
+    public boolean isEdited() {
+        return edited;
+    }
+
+    public void setEdited(boolean edited) {
+        this.edited = edited;
+    }
+
+    public long getCommentUpdateTime() {
+        return commentUpdateTime;
+    }
+
+    public void setCommentUpdateTime(long commentUpdateTime) {
+        this.commentUpdateTime = commentUpdateTime;
+    }
+
+    public Timestamp getReadableCommentUpdateTime() {
+        return readableCommentUpdateTime;
+    }
+
+    public void setReadableCommentUpdateTime(Timestamp readableCommentUpdateTime) {
+        this.readableCommentUpdateTime = readableCommentUpdateTime;
     }
 
 }

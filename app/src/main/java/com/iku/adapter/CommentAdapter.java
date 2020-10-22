@@ -16,6 +16,7 @@ import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -117,6 +118,12 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
             } else
                 commentViewHolder.heartImage.setImageResource(R.drawable.ic_heart_unfilled);
         }
+
+        if(commentModel.isEdited()){
+            commentViewHolder.editedTextView.setVisibility(View.VISIBLE);
+        } else {
+            commentViewHolder.editedTextView.setVisibility(View.GONE);
+        }
     }
 
     @NonNull
@@ -140,6 +147,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
         private final TextView commentHeartCountTextView;
         private final ImageView profileImageView;
         private final ImageView heartImage;
+        private final TextView editedTextView;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -149,6 +157,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
             timestampTextView = itemView.findViewById(R.id.timestamp);
             heartImage = itemView.findViewById(R.id.heartUpButton);
             commentHeartCountTextView = itemView.findViewById(R.id.commentHeartCount);
+            editedTextView = itemView.findViewById(R.id.editFlag);
 
             commenterNameTextView.setOnClickListener(view -> {
                 if (mListener != null) {
