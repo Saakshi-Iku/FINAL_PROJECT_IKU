@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
@@ -92,6 +94,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         initItems();
         setDetails();
         initButtons();
+        initSendButton();
         initialEmoticons(messageId);
         reactions(messageId);
         initCommentsView();
@@ -275,14 +278,6 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
     @SuppressLint("ClickableViewAccessibility")
     private void initButtons() {
         viewPostBinding.backButton.setOnClickListener(view -> onBackPressed());
-        viewPostBinding.sendMessageButton.setOnClickListener(view -> {
-            final String message = viewPostBinding.messageTextField.getText().toString().trim();
-            if (!message.isEmpty()) {
-                sendComment(message);
-                viewPostBinding.messageTextField.getText().clear();
-                viewPostBinding.messageTextField.requestFocus();
-            }
-        });
 
         viewPostBinding.viewHandle.setOnTouchListener((view, e) -> {
             swipeDetector.onTouchEvent(e);
@@ -302,6 +297,17 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                     userProfileIntent.putExtra("EXTRA_PERSON_UID", uid);
                     startActivity(userProfileIntent);
                 }
+            }
+        });
+    }
+
+    private void initSendButton() {
+        viewPostBinding.sendMessageButton.setOnClickListener(view -> {
+            final String message = viewPostBinding.messageTextField.getText().toString().trim();
+            if (!message.isEmpty()) {
+                sendComment(message);
+                viewPostBinding.messageTextField.getText().clear();
+                viewPostBinding.messageTextField.requestFocus();
             }
         });
     }
@@ -876,28 +882,27 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                         updateMessageView.setVisibility(View.VISIBLE);
                         updateMessageView.setOnClickListener(view12 -> {
                             viewPostBinding.editWarningLayout.setVisibility(View.VISIBLE);
+                            viewPostBinding.messageTextField.requestFocus();
                             viewPostBinding.cancelEditButton.setOnClickListener(view1 -> {
                                 editTextStatus = 0;
-//                                initSendButton();
+                                initSendButton();
                                 viewPostBinding.editWarningLayout.setVisibility(View.GONE);
                                 viewPostBinding.messageTextField.setText("");
                                 viewPostBinding.messageTextField.clearFocus();
                             });
-
                             viewPostBinding.messageTextField.setText(adapter.getItem(position).getComment());
                             viewPostBinding.messageTextField.setSelection(viewPostBinding.messageTextField.getText().length());
-                                bottomSheetDialog.dismiss();
-                                editTextStatus = 1;
-                                if (editTextStatus == 1) {
-                                    viewPostBinding.sendMessageButton.setOnClickListener(view121 -> {
-                                        viewPostBinding.editWarningLayout.setVisibility(View.GONE);
-                                        editTextStatus = 0;
-                                        updateMessage(documentID, position, viewPostBinding.messageTextField.getText().toString().trim());
-                                        viewPostBinding.messageTextField.getText().clear();
-                                        viewPostBinding.messageTextField.requestFocus();
-                                    });
-                                }
-
+                            bottomSheetDialog.dismiss();
+                            editTextStatus = 1;
+                            if (editTextStatus == 1) {
+                                viewPostBinding.sendMessageButton.setOnClickListener(view121 -> {
+                                    viewPostBinding.editWarningLayout.setVisibility(View.GONE);
+                                    editTextStatus = 0;
+                                    updateMessage(documentID, position, viewPostBinding.messageTextField.getText().toString().trim());
+                                    viewPostBinding.messageTextField.getText().clear();
+                                    viewPostBinding.messageTextField.requestFocus();
+                                });
+                            }
                         });
                     }
                 } else {
@@ -1036,11 +1041,11 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                     viewPostBinding.messageTextField.getText().clear();
                     viewPostBinding.messageTextField.requestFocus();
                     editTextStatus = 0;
-//                    initSendButton();
+                    initSendButton();
                 })
                 .addOnFailureListener(e -> {
                     editTextStatus = 0;
-//                    initSendButton();
+                    initSendButton();
                 });
     }
 }
