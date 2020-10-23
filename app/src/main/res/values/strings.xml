@@ -38,7 +38,7 @@
     <string name="choose">choose</string>
     <string name="hearts_won">Hearts won</string>
     <string name="delete_comment">Delete comment</string>
-    <string name="delete_message">Delete message</string>
+    <string name="delete_message">Delete</string>
     <string name="view_profile">View profile</string>
     <string name="profile">Profile</string>
     <string name="check_your_inbox_for_verification_email_nclick_the_link_to_verify_your_email_before_proceeding">Check your inbox for verification email.\nClick the link to verify your email before proceeding</string>
@@ -47,8 +47,9 @@
     <string name="message_deleted">Message was deleted.</string>
     <string name="comment_deleted">Comment was deleted.</string>
     <string name="upvoted">Upvoted: </string>
-    <string name="report_message">Report message</string>
-    <string name="edit_message">Edit message</string>
+    <string name="report_message">Report</string>
+    <string name="edit_message">Edit</string>
+    <string name="edit_comment">Edit comment</string>
     <string name="edit_profile">Edit Profile</string>
     <string name="edit_profile_icon">Edit Profile Icon</string>
     <string name="user_full_name">%1$s </string>
