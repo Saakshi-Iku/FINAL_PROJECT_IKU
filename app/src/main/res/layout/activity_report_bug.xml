@@ -58,6 +58,7 @@
                     android:layout_height="45dp"
                     android:padding="6dp"
                     android:src="@drawable/ic_bug_report_24"
+                    app:tint="@color/iconColor"
                     tools:layout_editor_absoluteX="114dp"
                     tools:layout_editor_absoluteY="13dp" />
 

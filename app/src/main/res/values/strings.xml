@@ -57,4 +57,7 @@
     <string name="forgot_password_question">Forgot Password?</string>
     <string name="swipe_to_select"><![CDATA[<<< Swipe to select >>>]]></string>
 
+    <!--Page descriptions-->
+    <string name="hall_of_fame_description">Top iku-logists and their efforts:</string>
+
 </resources>

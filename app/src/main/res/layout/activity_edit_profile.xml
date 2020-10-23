@@ -60,6 +60,7 @@
                     android:contentDescription="@string/edit_profile_icon"
                     android:padding="6dp"
                     android:src="@drawable/ic_circle_account"
+                    app:tint="@color/iconColor"
                     tools:layout_editor_absoluteX="114dp"
                     tools:layout_editor_absoluteY="13dp" />
 

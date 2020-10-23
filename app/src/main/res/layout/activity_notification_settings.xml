@@ -83,7 +83,8 @@
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:padding="10dp"
-                        android:src="@drawable/ic_baseline_settings_24" />
+                        android:src="@drawable/ic_baseline_settings_24"
+                        app:tint="@color/iconColor"/>
 
                     <!--Page title-->
                     <com.google.android.material.textview.MaterialTextView

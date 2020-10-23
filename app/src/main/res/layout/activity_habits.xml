@@ -57,7 +57,8 @@
                     android:id="@+id/group_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/shield" />
+                    android:src="@drawable/ic_baseline_timer_36"
+                    app:tint="@color/iconColor"/>
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"

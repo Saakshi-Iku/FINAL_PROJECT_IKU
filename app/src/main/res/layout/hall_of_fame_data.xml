@@ -2,16 +2,16 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="500dp"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="5dp"
+    android:layout_marginHorizontal="30dp"
     android:layout_gravity="center"
-    android:layout_margin="50dp"
-    android:background="@android:color/transparent"
     app:cardCornerRadius="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+        android:background="@color/colorPrimary"
         android:padding="10dp">
 
         <!--month-->
@@ -21,8 +21,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:padding="10dp"
-            android:text="August 2020"
             android:textStyle="bold"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -32,6 +32,7 @@
             android:id="@+id/leaderboardToppers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxWidth="500dp"
             android:layout_marginTop="25dp"
             android:gravity="bottom"
             android:orientation="horizontal"
@@ -44,17 +45,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:layout_weight="3">
+                android:layout_weight="2.5">
 
                 <ImageView
                     android:id="@+id/runnerUp1Image"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:background="@drawable/hearts_button_background_selected"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1"
+                    android:background="@drawable/hearts_button_background"
                     android:padding="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/runnerUp1Name"/>
 
                 <ImageView
                     android:id="@+id/runnerUp1Badge"
@@ -63,28 +66,34 @@
                     android:layout_margin="0dp"
                     android:background="@drawable/hearts_button_background_selected"
                     android:padding="6dp"
-                    android:src="@drawable/shield"
+                    android:src="@drawable/second"
                     app:layout_constraintBottom_toBottomOf="@id/runnerUp1Image"
-                    app:layout_constraintEnd_toEndOf="@id/runnerUp1Image" />
+                    app:layout_constraintEnd_toEndOf="@id/runnerUp1Image"
+                    android:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/runnerUp1Name"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold"
-                    android:gravity="center"
-                    app:layout_constraintTop_toBottomOf="@id/runnerUp1Image" />
+                    android:gravity="top|center_horizontal"
+                    android:minLines="2"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    app:layout_constraintTop_toBottomOf="@id/runnerUp1Image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/runnerUp1Hearts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textSize="10sp"
-                    android:text="Hearts won:"
-                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
                     android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@id/runnerUp1Name" />
 
@@ -96,17 +105,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:layout_weight="4">
+                android:layout_weight="5">
 
                 <ImageView
                     android:id="@+id/winnerImage"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:background="@drawable/hearts_button_background_selected"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1"
+                    android:background="@drawable/hearts_button_background"
                     android:padding="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/winnerName"/>
 
                 <ImageView
                     android:id="@+id/winnerBadge"
@@ -115,28 +126,33 @@
                     android:layout_margin="0dp"
                     android:background="@drawable/hearts_button_background_selected"
                     android:padding="6dp"
-                    android:src="@drawable/shield"
+                    android:src="@drawable/first"
                     app:layout_constraintBottom_toBottomOf="@id/winnerImage"
                     app:layout_constraintEnd_toEndOf="@id/winnerImage" />
 
                 <TextView
                     android:id="@+id/winnerName"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold"
-                    android:gravity="center"
-                    app:layout_constraintTop_toBottomOf="@id/winnerImage" />
+                    android:gravity="top|center_horizontal"
+                    android:minLines="2"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    app:layout_constraintTop_toBottomOf="@id/winnerImage"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/winnerHearts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textSize="10sp"
-                    android:text="Hearts won:"
-                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
                     android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@id/winnerName" />
 
@@ -148,13 +164,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:layout_weight="3">
+                android:layout_weight="2.5">
 
                 <ImageView
                     android:id="@+id/runnerUp2Image"
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:background="@drawable/hearts_button_background_selected"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    app:layout_constraintDimensionRatio="1"
+                    android:background="@drawable/hearts_button_background"
                     android:padding="1dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -167,28 +184,33 @@
                     android:layout_margin="0dp"
                     android:background="@drawable/hearts_button_background_selected"
                     android:padding="6dp"
-                    android:src="@drawable/shield"
+                    android:src="@drawable/third"
                     app:layout_constraintBottom_toBottomOf="@id/runnerUp2Image"
                     app:layout_constraintEnd_toEndOf="@id/runnerUp2Image" />
 
                 <TextView
                     android:id="@+id/runnerUp2Name"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:textColor="@color/white"
                     android:textSize="12sp"
                     android:textStyle="bold"
-                    android:gravity="center"
-                    app:layout_constraintTop_toBottomOf="@id/runnerUp2Image" />
+                    android:gravity="top|center_horizontal"
+                    android:minLines="2"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    app:layout_constraintTop_toBottomOf="@id/runnerUp2Image"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
 
                 <TextView
                     android:id="@+id/runnerUp2Hearts"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:textSize="10sp"
-                    android:text="Hearts won:"
-                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
                     android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@id/runnerUp2Name" />
 
@@ -199,9 +221,10 @@
         <!--month details-->
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
             android:layout_marginTop="10dp"
-            android:background="#10000000"
+            android:background="#25000000"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -213,21 +236,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Community Activity"
-                android:textStyle="bold" />
+                android:textColor="@color/white"
+                android:textSize="12sp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="25dp"
+                android:layout_marginTop="10dp"
                 android:text="Messages:"
-                android:visibility="gone"
-                android:textColor="@color/colorPrimary"
+                android:visibility="visible"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/messagesCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:textColor="@color/white"
+
+                android:visibility="visible"
                 android:textStyle="bold" />
 
             <HorizontalScrollView
@@ -252,16 +279,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:text="Hearts won:"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/heartsCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/white"
                 android:textStyle="bold" />
-
 
         </LinearLayout>
 

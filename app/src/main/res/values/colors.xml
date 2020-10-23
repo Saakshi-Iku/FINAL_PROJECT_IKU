@@ -8,6 +8,7 @@
     <color name="white">#ffffff</color>
     <color name="colorTextSecondary">#757575</color>
     <color name="colorBackground">#FFFFFF</color>
+    <color name="iconColor">#4F4F4F</color>
 
     <!--text colours-->
     <color name="chatLeftText">#4A4A4A</color>
@@ -21,6 +22,7 @@
     <color name="commentBoxBG"></color>
     <color name="jumpToBottomButtonBG"></color>
     <color name="dateContainerBG">#D3E9F4</color>
+    <color name="rightChatBG">#66B2B2</color>
 
     <!--flair colors-->
     <color name="defaultchipcolour">#d1D1D1</color>
