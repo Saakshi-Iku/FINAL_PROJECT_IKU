@@ -110,20 +110,157 @@
         android:id="@+id/chatRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/messageArea"
+        android:layout_above="@id/flairs"
         android:layout_below="@id/appBar"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingTop="4dp" />
+        android:paddingVertical="5dp" />
+
+    <!--Flairs scroll view-->
+    <LinearLayout
+        android:id="@+id/flairs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/messageArea"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!--header text-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:gravity="center_horizontal"
+            android:weightSum="3"
+            app:layout_constraintTop_toBottomOf="@id/text1">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_gravity="bottom"
+                android:paddingHorizontal="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Post Flair:"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/swipe_to_select"
+                    android:textSize="10sp"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_weight="1"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:background="@color/colorPrimary" />
+
+        </LinearLayout>
+
+        <!--flairs scroll view-->
+        <HorizontalScrollView
+            android:id="@+id/flairsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:translationZ="1dp">
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:paddingHorizontal="5dp"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/actsFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Acts"
+                    android:textColor="@color/chatLeftText"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/actsFlair"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/challengesFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Challenges"
+                    android:textColor="@color/chatLeftText"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/challengesFlair"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/questionsFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Question"
+                    android:textColor="@color/chatLeftText"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/questionFlair"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/educationalFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Educational"
+                    android:textColor="@color/chatLeftText"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/educationalFlair"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/othersFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Others"
+                    android:textColor="@color/chatLeftText"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/othersFlair"
+                    app:chipStrokeWidth="1dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+    </LinearLayout>
 
     <!--Button to jump to bottom of scroll-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/scrollToBottomButton"
         android:layout_width="45dp"
         android:layout_height="45dp"
-        android:layout_above="@id/messageArea"
+        android:layout_above="@id/flairs"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="7dp"
@@ -173,6 +310,7 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_marginBottom="5dp"
+            android:paddingBottom="5dp"
             android:background="@drawable/url_preview_background"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/chatbox"
@@ -186,6 +324,7 @@
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:text="Editing Message"
+                android:textSize="12sp"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -197,6 +336,7 @@
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:text="Cancel"
+                android:textSize="12sp"
                 android:textColor="#009E9E" />
 
         </RelativeLayout>
@@ -260,31 +400,10 @@
                 android:padding="1dp"
                 android:textColor="#80000000"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@id/linkSourceDomain"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
-                app:layout_constraintTop_toBottomOf="@id/linkTitle" />
-
-            <!--Link source domain-->
-            <TextView
-                android:id="@+id/linkSourceDomain"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:autoLink="none"
-                android:ellipsize="end"
-                android:linksClickable="false"
-                android:maxLines="1"
-                android:padding="1dp"
-                android:textColor="#80000000"
-                android:textSize="12sp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/linkPreviewImage"
-                app:layout_constraintTop_toBottomOf="@id/linkPreviewDescription"
-                app:layout_constraintVertical_bias="1.0" />
-
+                app:layout_constraintTop_toBottomOf="@id/linkTitle" />
 
             <ImageButton
                 android:id="@+id/close"

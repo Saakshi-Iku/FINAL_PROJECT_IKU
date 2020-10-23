@@ -22,55 +22,86 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!--Sent image is shown here-->
-        <ImageView
-            android:id="@+id/sentImage"
+        <!--header section-->
+        <RelativeLayout
+            android:id="@+id/headerSection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="10dp"
+            android:paddingHorizontal="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--post flair-->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/postFlair"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_alignParentEnd="true"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:chipBackgroundColor="@color/white" />
+
+        </RelativeLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/sentImageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:elevation="0dp"
-            android:fitsSystemWindows="true"
-            android:scaleType="centerCrop"
-            android:visibility="invisible"
-            app:layout_constraintDimensionRatio="1"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="@id/constraintLayout"
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@id/constraintLayout" />
+            app:layout_constraintTop_toBottomOf="@id/headerSection">
 
-        <ProgressBar
-            android:id="@+id/chatRightProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:elevation="0dp"
-            android:indeterminate="true"
-            android:indeterminateTint="@color/white"
-            android:indeterminateTintMode="src_atop"
-            app:layout_constraintBottom_toBottomOf="@id/sentImage"
-            app:layout_constraintDimensionRatio="1"
-            app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-            app:layout_constraintStart_toStartOf="@id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@id/constraintLayout" />
+            <!--Sent image is shown here-->
+            <ImageView
+                android:id="@+id/sentImage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:elevation="0dp"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:visibility="invisible"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <!--View post button-->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/viewPostButton"
-            style="@style/AppTheme"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:background="#60ffffff"
-            android:elevation="1dp"
-            android:gravity="center|bottom"
-            android:text="View"
-            android:textAllCaps="false"
-            app:backgroundTint="@android:color/black"
-            app:icon="@drawable/ic_next_36"
-            app:iconGravity="textEnd"
-            app:iconPadding="10dp"
-            app:iconSize="15dp"
-            app:layout_constraintBottom_toBottomOf="@id/sentImage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <!--progress wheel-->
+            <ProgressBar
+                android:id="@+id/chatRightProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                android:indeterminate="true"
+                android:indeterminateTint="@color/white"
+                android:indeterminateTintMode="src_atop"
+                app:layout_constraintBottom_toBottomOf="@id/sentImage"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--View post button-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/viewPostButton"
+                style="@style/AppTheme"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="#60ffffff"
+                android:elevation="1dp"
+                android:gravity="center|bottom"
+                android:text="View"
+                android:textAllCaps="false"
+                app:backgroundTint="@android:color/black"
+                app:icon="@drawable/ic_next_36"
+                app:iconGravity="textEnd"
+                app:iconPadding="10dp"
+                app:iconSize="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--Message container-->
         <RelativeLayout
@@ -80,7 +111,7 @@
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/viewPostButton">
+            app:layout_constraintTop_toBottomOf="@id/sentImageView">
 
             <!--Message body-->
             <TextView
@@ -107,13 +138,12 @@
                 android:visibility="gone" />
         </RelativeLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/addnView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:layout_marginBottom="5dp"
-            android:gravity="center_vertical"
+            android:paddingBottom="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -125,7 +155,8 @@
                 android:id="@+id/editFlag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:text="• Edited"
                 android:textColor="@color/white"
                 android:textSize="10sp"
@@ -136,12 +167,13 @@
                 android:id="@+id/message_time2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:visibility="gone" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--Comments preview-->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -149,9 +181,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:layout_marginBottom="5dp"
+            android:paddingBottom="5dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/constraintLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addnView">

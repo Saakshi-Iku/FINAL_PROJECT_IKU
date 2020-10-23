@@ -16,14 +16,20 @@
     <color name="linkColorDarkBG">#11b7b7</color>
     <color name="deletedTextLight">#D8D8D8</color>
 
-    <!--Container colours-->
-    <color name="urlPreviewBG">#DADADA</color>
+    <!--Container colours-->    <color name="urlPreviewBG">#DADADA</color>
     <color name="scrollViewBG">#EBEBEB</color>
     <color name="commentBoxBG"></color>
     <color name="jumpToBottomButtonBG"></color>
     <color name="dateContainerBG">#D3E9F4</color>
 
-    <!--light theme colours-->
-
-    <!--dark theme colours-->
+    <!--flair colors-->
+    <color name="defaultchipcolour">#d1D1D1</color>
+    <color name="actsFlair">#59A96A</color>
+    <color name="challengesFlair">#2176AE</color>
+    <color name="questionFlair">#54414E</color>
+    <color name="educationalFlair">#BE5A38</color>
+    <color name="othersFlair">#15616D</color>
+    <color name="flair6">#BE7C4D</color>
+    <color name="flair7">#777DA7</color>
+    <color name="flair8">#495159</color>
 </resources>

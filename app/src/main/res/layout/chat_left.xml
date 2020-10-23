@@ -16,9 +16,94 @@
         android:elevation="1dp"
         android:minWidth="160dp"
         android:minHeight="30dp"
-        android:padding="5dp"
+        android:paddingHorizontal="5dp"
+        android:paddingBottom="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerSection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minHeight="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/flairView"
+            app:layout_constraintEnd_toStartOf="@id/flairView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0">
+
+            <!--Sender's name-->
+            <TextView
+                android:id="@+id/sender_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginVertical="5dp"
+                android:layout_marginEnd="20dp"
+                android:ellipsize="end"
+                android:minWidth="80dp"
+                android:singleLine="true"
+                android:textColor="#009E9E"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/flairView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--post flair-->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/postFlair"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/message_time"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--Primary view for timestamp-->
+            <TextView
+                android:id="@+id/message_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginVertical="5dp"
+                android:textColor="#4A4A4A"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/postFlair"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--
+        <TextView
+            android:id="@+id/sender_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:textColor="#009E9E"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/linkPreview"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+            -->
 
         <!--Link preview container-->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -29,11 +114,9 @@
             android:backgroundTint="#15000000"
             android:padding="5dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/message"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/sender_name"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@id/headerSection"
             app:layout_constraintWidth_min="250dp">
 
             <!--Link image-->
@@ -111,18 +194,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <!--Sender name-->
-        <TextView
-            android:id="@+id/sender_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="#009E9E"
-            android:visibility="visible"
-            app:layout_constraintBottom_toTopOf="@id/linkPreview"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <!--Message body-->
         <TextView
             android:id="@+id/message"
@@ -132,14 +203,13 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/chatLeftText"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@id/message_time"
             app:layout_constraintEnd_toStartOf="@id/message_time2"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linkPreview"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@id/linkPreview" />
 
-        <!--Primary view for message timestamp-->
+        <!--
+        Primary view for message timestamp
         <TextView
             android:id="@+id/message_time"
             android:layout_width="wrap_content"
@@ -154,6 +224,7 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/sender_name"
             app:layout_constraintTop_toTopOf="@+id/sender_name" />
+        -->
 
         <!--Secondary view for message timestamp-->
         <TextView
@@ -162,7 +233,6 @@
             android:layout_height="wrap_content"
             android:gravity="end"
             android:paddingStart="10dp"
-            android:text="12:34 PM"
             android:textColor="#4A4A4A"
             android:textSize="12sp"
             android:visibility="gone"
@@ -173,11 +243,10 @@
             app:layout_constraintTop_toTopOf="@id/message"
             app:layout_constraintVertical_bias="1.0" />
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/addnView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
             app:layout_constraintTop_toBottomOf="@id/message">
 
             <!--Tertiary view for message timestamp-->
@@ -185,24 +254,26 @@
                 android:id="@+id/message_time3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:text="12:34 PM"
                 android:textColor="#4A4A4A"
                 android:textSize="12sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!--flag to show message is edited-->
             <TextView
                 android:id="@+id/editFlag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:text="• Edited"
                 android:textColor="#4A4A4A"
                 android:textSize="10sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--Comments preview-->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -211,7 +282,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addnView">

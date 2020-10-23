@@ -72,7 +72,7 @@
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@id/postTime"
-                app:layout_constraintEnd_toStartOf="@id/sharePostButton"
+                app:layout_constraintEnd_toStartOf="@id/sharePostButtonContainer"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/backButtonContainer"
                 app:layout_constraintTop_toTopOf="parent"
@@ -87,7 +87,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/sharePostButton"
+                app:layout_constraintEnd_toStartOf="@id/sharePostButtonContainer"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toEndOf="@+id/backButtonContainer"
                 app:layout_constraintTop_toBottomOf="@id/user_name" />
@@ -101,37 +101,42 @@
                 android:background="@drawable/bg_oval_transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/optionsButton"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:padding="10dp"
-                    android:contentDescription="@string/options_button_content_desc"
                     android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/options_button_content_desc"
+                    android:padding="10dp"
                     android:src="@drawable/ic_baseline_more_vert_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     app:tint="@android:color/white" />
             </FrameLayout>
 
-            <ImageView
-                android:id="@+id/sharePostButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:contentDescription="@string/back_button_content_desc"
-                android:elevation="-1dp"
-                android:padding="16dp"
-                android:rotation="-45"
-                android:src="@drawable/ic_send"
-                android:translationX="10dp"
-                android:visibility="gone"
+            <FrameLayout
+                android:id="@+id/sharePostButtonContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/bg_oval_transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/optionsButtonContainer"
                 app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/white" />
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/sharePostButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/back_button_content_desc"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_share"
+                    app:tint="@color/white" />
+
+            </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -503,6 +508,7 @@
             android:layout_height="35dp"
             android:layout_marginBottom="5dp"
             android:background="@drawable/url_preview_background"
+            android:backgroundTint="@android:color/black"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/chatbox"
             app:layout_constraintCircleRadius="5dp">
@@ -514,8 +520,9 @@
                 android:layout_centerVertical="true"
                 android:gravity="center_vertical"
                 android:padding="5dp"
-                android:text="Editing Message"
-                android:textColor="@android:color/black" />
+                android:text="Editing Comment"
+                android:textSize="12sp"
+                android:textColor="@android:color/white" />
 
             <TextView
                 android:id="@+id/cancelEditButton"
@@ -526,6 +533,7 @@
                 android:gravity="center_vertical"
                 android:padding="5dp"
                 android:text="Cancel"
+                android:textSize="12sp"
                 android:textColor="#009E9E" />
 
         </RelativeLayout>

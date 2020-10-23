@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="4dp"
@@ -19,82 +20,134 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!--Sender's name-->
-        <TextView
-            android:id="@+id/sender_name"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/headerSection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:singleLine="true"
-            android:textColor="#009E9E"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="@id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@id/constraintLayout" />
+            android:minHeight="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/flairView"
+            app:layout_constraintEnd_toStartOf="@id/flairView"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <!--Primary view for timestamp-->
-        <TextView
-            android:id="@+id/message_time"
+            <!--Sender's name-->
+            <TextView
+                android:id="@+id/sender_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginVertical="5dp"
+                android:layout_marginEnd="20dp"
+                android:ellipsize="end"
+                android:minWidth="80dp"
+                android:singleLine="true"
+                android:textColor="#009E9E"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/flairView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
             android:layout_marginEnd="5dp"
-            android:gravity="end|bottom"
-            android:textColor="#4A4A4A"
-            android:textSize="12sp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/sender_name"
-            app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/sender_name"
-            app:layout_constraintTop_toTopOf="@+id/sender_name" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--post flair-->
+            <com.google.android.material.chip.Chip
+                android:id="@+id/postFlair"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:layout_marginStart="5dp"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/message_time"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--Primary view for timestamp-->
+            <TextView
+                android:id="@+id/message_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginVertical="5dp"
+                android:textColor="#4A4A4A"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/postFlair"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--Received image is shown here-->
-        <ImageView
-            android:id="@+id/receivedImage"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/receivedImageView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:visibility="visible"
             android:layout_marginTop="5dp"
-            android:elevation="0dp"
-            android:fitsSystemWindows="true"
-            android:scaleType="centerCrop"
-            android:visibility="invisible"
-            app:layout_constraintDimensionRatio="1"
             app:layout_constraintEnd_toEndOf="@id/constraintLayout"
             app:layout_constraintStart_toStartOf="@id/constraintLayout"
-            app:layout_constraintTop_toBottomOf="@+id/sender_name" />
+            app:layout_constraintTop_toBottomOf="@id/headerSection">
 
-        <ProgressBar
-            android:id="@+id/chatLeftProgress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:elevation="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/receivedImage"
-            app:layout_constraintDimensionRatio="1"
-            app:layout_constraintEnd_toEndOf="@id/constraintLayout"
-            app:layout_constraintStart_toStartOf="@id/constraintLayout"
-            app:layout_constraintTop_toTopOf="@+id/receivedImage" />
+            <ImageView
+                android:id="@+id/receivedImage"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:elevation="0dp"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                android:visibility="invisible"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginTop="10dp" />
 
-        <!--View post button-->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/viewPostButton"
-            style="@style/AppTheme"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:background="#60ffffff"
-            android:elevation="1dp"
-            android:gravity="center|bottom"
-            android:text="View"
-            android:textAllCaps="false"
-            app:backgroundTint="@android:color/black"
-            app:icon="@drawable/ic_next_36"
-            app:iconGravity="textEnd"
-            app:iconPadding="10dp"
-            app:iconSize="15dp"
-            app:layout_constraintBottom_toBottomOf="@id/receivedImage"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <!--progress wheel-->
+            <ProgressBar
+                android:id="@+id/chatLeftProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                app:layout_constraintBottom_toBottomOf="@id/receivedImage"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--View post button-->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/viewPostButton"
+                style="@style/AppTheme"
+                android:layout_width="0dp"
+                android:layout_height="35dp"
+                android:background="#60ffffff"
+                android:elevation="1dp"
+                android:gravity="center|bottom"
+                android:text="View"
+                android:textAllCaps="false"
+                app:backgroundTint="@android:color/black"
+                app:icon="@drawable/ic_next_36"
+                app:iconGravity="textEnd"
+                app:iconPadding="10dp"
+                app:iconSize="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--Message container-->
         <RelativeLayout
@@ -104,7 +157,7 @@
             android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/viewPostButton">
+            app:layout_constraintTop_toBottomOf="@id/receivedImageView">
 
             <!--Message body-->
             <TextView
@@ -134,13 +187,13 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/addnView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:layout_marginBottom="5dp"
-            android:gravity="center_vertical"
+            android:paddingBottom="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -152,24 +205,26 @@
                 android:id="@+id/message_time3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:text="12:34 PM"
                 android:textColor="#4A4A4A"
                 android:textSize="12sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <!--flag to show message is edited-->
             <TextView
                 android:id="@+id/editFlag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
                 android:text="• Edited"
                 android:textColor="#4A4A4A"
                 android:textSize="10sp"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!--Comments preview-->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -177,9 +232,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
-            android:layout_marginBottom="5dp"
+            android:paddingBottom="5dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addnView">

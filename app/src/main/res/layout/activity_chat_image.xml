@@ -15,16 +15,16 @@
         android:id="@+id/networkDisconnected"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Not connected to internet."
-        android:textStyle="italic|bold"
-        android:textSize="10sp"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textAllCaps="false"
         android:background="@android:color/holo_red_dark"
         android:padding="5dp"
+        android:text="Not connected to internet."
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:textStyle="italic|bold"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--Top bar contents-->
     <com.google.android.material.appbar.AppBarLayout
@@ -67,9 +67,86 @@
                     android:padding="10dp"
                     android:src="@drawable/ic_arrow_back_24"
                     app:tint="@android:color/white" />
+
             </FrameLayout>
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
+
+    <!--tag a question-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/questionTagButtonView"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_alignParentStart="true"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="7dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/topBar">
+
+        <ImageButton
+            android:id="@+id/questionTagButton"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:background="@android:color/transparent"
+            android:elevation="2dp"
+            android:src="@drawable/ic_question"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--Add more images-->
+    <LinearLayout
+        android:id="@+id/addImageView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@id/flairs"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/addImageButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_margin="5dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_add"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!--divider visible only when 2 or more images are present-->
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"
+            android:layout_marginVertical="5dp"
+            android:visibility="gone"/>
+
+        <!--scroll through added images-->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            app:layout_constraintEnd_toStartOf="@id/addImageButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/addImageButton"
+            android:overScrollMode="never"
+            android:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/addedImagesRecyclerView"
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:paddingEnd="10dp"/>
+
+        </HorizontalScrollView>
+
+    </LinearLayout>
 
     <!--Image to be displayed-->
     <com.github.chrisbanes.photoview.PhotoView
@@ -80,8 +157,147 @@
         android:isScrollContainer="false"
         android:scaleType="centerCrop"
         android:transitionName="openStoreImageActivity"
-        app:layout_constraintBottom_toTopOf="@id/messageArea"
+        app:layout_constraintBottom_toTopOf="@id/addImageView"
         app:layout_constraintTop_toBottomOf="@id/topBar" />
+
+    <!--Flairs scroll view-->
+    <LinearLayout
+        android:id="@+id/flairs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/messageArea">
+
+        <!--header text-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:gravity="center_horizontal"
+            android:weightSum="3"
+            app:layout_constraintTop_toBottomOf="@id/text1">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="Post Flair:"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/swipe_to_select"
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary" />
+
+        </LinearLayout>
+
+        <!--flairs scroll view-->
+        <HorizontalScrollView
+            android:id="@+id/flairsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:translationZ="1dp">
+
+            <com.google.android.material.chip.ChipGroup
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:paddingHorizontal="5dp"
+                app:singleLine="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/actsFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" Acts "
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/actsFlair"
+                    app:chipStrokeColor="@color/actsFlair"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/challengesFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Challenges"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/challengesFlair"
+                    app:chipStrokeColor="@color/challengesFlair"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/questionsFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Question"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/questionFlair"
+                    app:chipStrokeColor="@color/questionFlair"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/educationalFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Educational"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/educationalFlair"
+                    app:chipStrokeColor="@color/educationalFlair"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/othersFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Others"
+                    android:textColor="@color/white"
+                    android:textSize="12sp"
+                    app:chipBackgroundColor="@color/othersFlair"
+                    app:chipStrokeColor="@color/othersFlair"
+                    app:chipStrokeWidth="1dp" />
+
+            </com.google.android.material.chip.ChipGroup>
+        </HorizontalScrollView>
+
+
+    </LinearLayout>
 
     <!--Message area-->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -94,6 +310,44 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <!--Editing message warning-->
+        <RelativeLayout
+            android:id="@+id/editWarning"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/url_preview_background"
+            android:backgroundTint="@android:color/black"
+            android:paddingBottom="5dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/chatbox"
+            app:layout_constraintCircleRadius="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="Editing Message"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/cancel_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:padding="5dp"
+                android:text="Cancel"
+                android:textColor="#009E9E"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
 
         <!--Message composer-->
         <androidx.constraintlayout.widget.ConstraintLayout
