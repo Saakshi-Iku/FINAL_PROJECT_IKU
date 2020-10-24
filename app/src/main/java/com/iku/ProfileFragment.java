@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.MetadataChanges;
+import com.iku.app.AppConfig;
 import com.iku.databinding.FragmentProfileBinding;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -156,7 +157,7 @@ public class ProfileFragment extends Fragment {
             Map<String, Object> docData = new HashMap<>();
             docData.put("imageUrl", photoUrl);
 
-            db.collection("users").document(user.getUid())
+            db.collection(AppConfig.USERS_COLLECTION).document(user.getUid())
                     .update(docData)
                     .addOnSuccessListener(aVoid -> {
 
@@ -172,7 +173,7 @@ public class ProfileFragment extends Fragment {
 
     private void getUserDetails() {
         if (user != null) {
-            db.collection("users").whereEqualTo("uid", user.getUid())
+            db.collection(AppConfig.USERS_COLLECTION).whereEqualTo("uid", user.getUid())
                     .addSnapshotListener(MetadataChanges.INCLUDE, (querySnapshot, e) -> {
                         if (e != null) {
                             return;

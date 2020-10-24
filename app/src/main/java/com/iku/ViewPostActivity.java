@@ -40,6 +40,7 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.iku.adapter.CommentAdapter;
+import com.iku.app.AppConfig;
 import com.iku.databinding.ActivityViewPostBinding;
 import com.iku.models.CommentModel;
 import com.iku.models.UserModel;
@@ -101,7 +102,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
     }
 
     private void initCommentsView() {
-        Query query = db.collection("iku_earth_messages").document(messageId).collection("comments").orderBy("timestamp", Query.Direction.ASCENDING);
+        Query query = db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId).collection("comments").orderBy("timestamp", Query.Direction.ASCENDING);
         FirestoreRecyclerOptions<CommentModel> options = new FirestoreRecyclerOptions.Builder<CommentModel>()
                 .setQuery(query, CommentModel.class)
                 .build();
@@ -146,7 +147,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                             }
                         }
                         if (!isLiked) {
-                            db.collection("iku_earth_messages").document(messageId).collection("comments").document(documentID)
+                            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId).collection("comments").document(documentID)
                                     .update("heartsCount", commentModel.getHeartsCount() + 1,
                                             "heartsArray", FieldValue.arrayUnion(myUID))
                                     .addOnSuccessListener(aVoid -> {
@@ -161,7 +162,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                                     .addOnFailureListener(e -> {
                                     });
                         } else {
-                            db.collection("iku_earth_messages").document(messageId).collection("comments").document(documentID)
+                            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId).collection("comments").document(documentID)
                                     .update("heartsCount", commentModel.getHeartsCount() - 1,
                                             "heartsArray", FieldValue.arrayRemove(myUID))
                                     .addOnSuccessListener(aVoid -> {
@@ -334,10 +335,10 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         data.put("spam", false);
         data.put("deleted", false);
 
-        db.collection("iku_earth_messages").document(messageId)
+        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId)
                 .collection("comments").add(data)
                 .addOnSuccessListener(documentReference -> {
-                    db.collection("iku_earth_messages").document(messageId)
+                    db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId)
                             .update("postCommentCount", FieldValue.increment(1))
                             .addOnSuccessListener(documentReferenceObj -> {
                             });
@@ -356,7 +357,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
     }
 
     private void initialEmoticons(String messageId) {
-        DocumentReference docRef = db.collection("iku_earth_messages").document(messageId);
+        DocumentReference docRef = db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -446,7 +447,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
     }
 
     public void userVote(String messageDocumentID, String emoji) {
-        DocumentReference docRef = db.collection("iku_earth_messages").document(messageDocumentID);
+        DocumentReference docRef = db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -535,16 +536,16 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         if (currentEmoji.equals(previousEmoji)) {
             if (currentEmoji.equals("upvoters") || currentEmoji.equals("emoji1") || currentEmoji.equals("emoji2") || currentEmoji.equals("emoji3") || currentEmoji.equals("emoji4")) {
                 if (!authorOfMessage.equals(user.getUid())) {
-                    db.collection("users").document(authorOfMessage)
+                    db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                             .get()
                             .addOnSuccessListener(documentSnapshot -> {
-                                db.collection("users").document(authorOfMessage)
+                                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                         .update("points", FieldValue.increment(-1))
                                         .addOnSuccessListener(aVoid -> {
                                         });
                             });
                 }
-                db.collection("iku_earth_messages").document(messageDocumentID)
+                db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                         .update("upvoteCount", upvotesCount - 1,
                                 currentEmoji, FieldValue.arrayRemove(user.getUid()))
                         .addOnSuccessListener(aVoid -> {
@@ -569,16 +570,16 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                         }).addOnFailureListener(e -> disableEmoticonButtons(true));
             } else if (currentEmoji.equals("downvoters")) {
                 if (!authorOfMessage.equals(user.getUid())) {
-                    db.collection("users").document(authorOfMessage).get()
+                    db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
                             .addOnSuccessListener(documentSnapshot -> {
                                 final UserModel usersData = documentSnapshot.toObject(UserModel.class);
-                                db.collection("users").document(authorOfMessage)
+                                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                         .update("points", FieldValue.increment(1))
                                         .addOnSuccessListener(aVoid -> {
                                         });
                             });
                 }
-                db.collection("iku_earth_messages").document(messageDocumentID)
+                db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                         .update("downvoteCount", downvotesCount - 1,
                                 currentEmoji, FieldValue.arrayRemove(user.getUid()))
                         .addOnSuccessListener(aVoid -> {
@@ -589,15 +590,15 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
 
         } else if ((!currentEmoji.equals(previousEmoji)) && (currentEmoji.equals("downvoters"))) {
             if (!authorOfMessage.equals(user.getUid())) {
-                db.collection("users").document(authorOfMessage).get()
+                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            db.collection("users").document(authorOfMessage)
+                            db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                     .update("points", FieldValue.increment(-2))
                                     .addOnSuccessListener(aVoid -> {
                                     });
                         });
             }
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(previousEmoji, FieldValue.arrayRemove(user.getUid()),
                             currentEmoji, FieldValue.arrayUnion(user.getUid()),
                             "upvoteCount", upvotesCount - 1,
@@ -609,15 +610,15 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
 
         } else if ((previousEmoji.equals("downvoters")) && (!currentEmoji.equals(previousEmoji))) {
             if (!authorOfMessage.equals(user.getUid())) {
-                db.collection("users").document(authorOfMessage).get()
+                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            db.collection("users").document(authorOfMessage)
+                            db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                     .update("points", FieldValue.increment(2))
                                     .addOnSuccessListener(aVoid -> {
                                     });
                         });
             }
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(previousEmoji, FieldValue.arrayRemove(user.getUid()),
                             currentEmoji, FieldValue.arrayUnion(user.getUid()),
                             "upvoteCount", upvotesCount + 1,
@@ -628,7 +629,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                         disableEmoticonButtons(true);
                     }).addOnFailureListener(e -> disableEmoticonButtons(true));
         } else {
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(previousEmoji, FieldValue.arrayRemove(user.getUid()),
                             currentEmoji, FieldValue.arrayUnion(user.getUid()))
                     .addOnSuccessListener(aVoid -> {
@@ -641,16 +642,16 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
     private void newLikeOrDislike(String messageDocumentID, String emoji, long UpvotesCount, long DownvotesCount, String authorOfMessage) {
         if (emoji.equals("downvoters")) {
             if (!authorOfMessage.equals(user.getUid())) {
-                db.collection("users").document(authorOfMessage).get()
+                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            db.collection("users").document(authorOfMessage)
+                            db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                     .update("points", FieldValue.increment(-1))
                                     .addOnSuccessListener(aVoid -> {
 
                                     });
                         });
             }
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(emoji, FieldValue.arrayUnion(user.getUid()),
                             "downvoteCount", DownvotesCount + 1)
                     .addOnSuccessListener(aVoid -> {
@@ -659,15 +660,15 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                     }).addOnFailureListener(e -> disableEmoticonButtons(true));
         } else {
             if (!authorOfMessage.equals(user.getUid())) {
-                db.collection("users").document(authorOfMessage).get()
+                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
-                            db.collection("users").document(authorOfMessage)
+                            db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                     .update("points", FieldValue.increment(1))
                                     .addOnSuccessListener(aVoid -> {
                                     });
                         });
             }
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(emoji, FieldValue.arrayUnion(user.getUid()),
                             "upvoteCount", UpvotesCount + 1)
                     .addOnSuccessListener(aVoid -> {
@@ -775,12 +776,12 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         map.put("deletedBy", deletedBy);
         if (deletedBy.equals("admin"))
             map.put("spam", true);
-        db.collection("iku_earth_messages").document(messageId).collection("comments").document(commentDocumentID)
+        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId).collection("comments").document(commentDocumentID)
                 .update(map)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        db.collection("iku_earth_messages").document(messageId)
+                        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId)
                                 .update("postCommentCount", FieldValue.increment(-1))
                                 .addOnSuccessListener(documentReferenceObj -> {
                                 });
@@ -949,7 +950,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                                 materialAlertDialogBuilder.setTitle("Report Comment");
                                 materialAlertDialogBuilder.setMessage("You are about to report this comment. Are you sure?");
                                 materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
-                                    DocumentReference docRef = db.collection("iku_earth_messages").document(messageId).collection("comments").document(documentID);
+                                    DocumentReference docRef = db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId).collection("comments").document(documentID);
                                     docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -969,7 +970,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                                                             map.put("deletedBy", "users");
                                                             deleteComment(documentID, "users");
                                                         }
-                                                        db.collection("iku_earth_messages").document(messageId).collection("comments").document(documentID)
+                                                        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId).collection("comments").document(documentID)
                                                                 .update(map)
                                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                     @Override
@@ -1034,7 +1035,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         map.put("edited", true);
         map.put("commentUpdateTime", timestamp);
         map.put("readableCommentUpdateTime", FieldValue.serverTimestamp());
-        db.collection("iku_earth_messages").document(messageId)
+        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId)
                 .collection("comments").document(messageDocumentID).update(map)
                 .addOnSuccessListener(aVoid -> {
                     adapter.notifyItemChanged(position);

@@ -30,6 +30,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.iku.app.AppConfig;
 import com.iku.databinding.ActivityChatImageBinding;
 import com.squareup.picasso.Picasso;
 
@@ -173,10 +174,10 @@ public class ChatImageActivity extends AppCompatActivity {
                     Map<String, Object> normalMessage = new HashMap<>();
                     normalMessage.put("firstImage", true);
 
-                    db.collection("iku_earth_messages")
+                    db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION)
                             .add(docData)
                             .addOnSuccessListener(documentReference -> {
-                                db.collection("users").document(user.getUid()).get()
+                                db.collection(AppConfig.USERS_COLLECTION).document(user.getUid()).get()
                                         .addOnCompleteListener(task -> {
                                             if (task.isSuccessful()) {
                                                 DocumentSnapshot document = task.getResult();
@@ -184,7 +185,7 @@ public class ChatImageActivity extends AppCompatActivity {
                                                     Boolean isFirstImage = (Boolean) document.get("firstImage");
                                                     if (!isFirstImage) {
                                                         Toast.makeText(ChatImageActivity.this, "Aren't you the best", Toast.LENGTH_LONG).show();
-                                                        db.collection("users").document(user.getUid())
+                                                        db.collection(AppConfig.USERS_COLLECTION).document(user.getUid())
                                                                 .update(normalMessage)
                                                                 .addOnSuccessListener(aVoid -> {
                                                                     //Log event
@@ -300,7 +301,7 @@ public class ChatImageActivity extends AppCompatActivity {
         map.put("edited", true);
         map.put("messageUpdateTime", timestamp);
         map.put("readableMessageUpdateTime", FieldValue.serverTimestamp());
-        db.collection("iku_earth_messages").document(messageDocumentID)
+        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                 .update(map)
                 .addOnSuccessListener(aVoid -> {
                     messageEntered.setText("");

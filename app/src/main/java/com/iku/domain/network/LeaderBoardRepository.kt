@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.iku.app.AppConfig
 import com.iku.models.UserModel
 
 class LeaderBoardRepository {
     fun getUserData():LiveData<MutableList<UserModel>>{
         val mutableData = MutableLiveData<MutableList<UserModel>>()
-        FirebaseFirestore.getInstance().collection("users").orderBy("points", Query.Direction.DESCENDING).get().addOnSuccessListener { result->
+        FirebaseFirestore.getInstance().collection(AppConfig.USERS_COLLECTION).orderBy("points", Query.Direction.DESCENDING).get().addOnSuccessListener { result->
             val listData = mutableListOf<UserModel>()
             for (document in result){
                 val firstName=document.getString("firstName")

@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.iku.R;
+import com.iku.app.AppConfig;
 import com.iku.models.CommentModel;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -187,7 +188,7 @@ public class CommentAdapter extends FirestoreRecyclerAdapter<CommentModel, Comme
 
         public void setImage(final CommentModel commentModel) {
             FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("users").document(commentModel.getUid()).get()
+            db.collection(AppConfig.USERS_COLLECTION).document(commentModel.getUid()).get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentSnapshot> task) {

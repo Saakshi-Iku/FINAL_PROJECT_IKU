@@ -19,6 +19,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.ktx.Firebase
+import com.iku.app.AppConfig
 import com.iku.databinding.ActivityPasswordInputBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -58,7 +59,7 @@ class PasswordInputActivity : AppCompatActivity() {
                                 // Token
                                 val token = it.result.token
                                 user = mAuth.currentUser!!
-                                db.collection("users").document(user.uid).get().addOnCompleteListener { task: Task<DocumentSnapshot> ->
+                                db.collection(AppConfig.USERS_COLLECTION).document(user.uid).get().addOnCompleteListener { task: Task<DocumentSnapshot> ->
                                     if (task.isSuccessful) {
                                         if (task.result.exists()) {
                                             sendRegistrationToken(token, user.uid)
@@ -138,6 +139,6 @@ class PasswordInputActivity : AppCompatActivity() {
                 "registrationToken" to token,
                 "uid" to uid
         )
-        db.collection("registrationTokens").document(uid).set(data).addOnSuccessListener { }.addOnFailureListener { }
+        db.collection(AppConfig.REGISTRATION_TOKENS_COLLECTION).document(uid).set(data).addOnSuccessListener { }.addOnFailureListener { }
     }
 }

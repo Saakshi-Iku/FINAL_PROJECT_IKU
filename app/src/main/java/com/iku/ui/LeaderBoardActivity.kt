@@ -23,6 +23,7 @@ import com.google.firebase.ktx.Firebase
 import com.iku.HabitsActivity
 import com.iku.R
 import com.iku.UserProfileActivity
+import com.iku.app.AppConfig
 import com.iku.viewmodel.LeaderBoardViewModel
 import kotlinx.android.synthetic.main.activity_leaderboard.*
 import nl.dionsegijn.konfetti.models.Shape
@@ -43,7 +44,7 @@ class LeaderBoardActivity : AppCompatActivity(), RecyclerView.OnItemTouchListene
         hofButton.setOnClickListener { startActivity(Intent(this,HallOfFameActivity::class.java)) }
         tapDetector = GestureDetector(this, TapListener())
         firebaseAnalytics = Firebase.analytics
-        FirebaseFirestore.getInstance().collection("users").get().addOnCompleteListener { task: Task<QuerySnapshot> ->
+        FirebaseFirestore.getInstance().collection(AppConfig.USERS_COLLECTION).get().addOnCompleteListener { task: Task<QuerySnapshot> ->
             if (task.isSuccessful) {
                 for (document in task.result) {
                     totalPlayers++

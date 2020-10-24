@@ -21,6 +21,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.iku.app.AppConfig
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
@@ -88,7 +89,7 @@ class EditProfileActivity : AppCompatActivity() {
                         val profileUpdates = userProfileChangeRequest {
                             displayName = name
                         }
-                        db.collection("users").document(user.uid).get().addOnCompleteListener { task ->
+                        db.collection(AppConfig.USERS_COLLECTION).document(user.uid).get().addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 val document = task.result
                                 if (document.exists()) {
@@ -101,7 +102,7 @@ class EditProfileActivity : AppCompatActivity() {
                                                 "nameUpdatedTime" to FieldValue.serverTimestamp()
                                         )
                                         user.updateProfile(profileUpdates).addOnCompleteListener {
-                                            db.collection("users").document(user.uid)
+                                            db.collection(AppConfig.USERS_COLLECTION).document(user.uid)
                                                     .update(nameData).addOnSuccessListener { }
                                         }
                                     }
@@ -120,7 +121,7 @@ class EditProfileActivity : AppCompatActivity() {
                 "userBioLink" to link,
                 "bioLastUpdateOn" to FieldValue.serverTimestamp()
         )
-        db.collection("users").document(uid)
+        db.collection(AppConfig.USERS_COLLECTION).document(uid)
                 .update(data).addOnSuccessListener { onBackPressed() }.addOnFailureListener {
                     firebaseAnalytics.logEvent("profile_update") {
                         param(FirebaseAnalytics.Param.METHOD, "User tried updating Info")
@@ -133,7 +134,7 @@ class EditProfileActivity : AppCompatActivity() {
         if (user != null) {
             editUserNameField.setText(user.displayName)
             userName.text = user.displayName
-            db.collection("users").document(user.uid).get().addOnCompleteListener { task ->
+            db.collection(AppConfig.USERS_COLLECTION).document(user.uid).get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val document = task.result
                     if (document.exists()) {
@@ -150,7 +151,7 @@ class EditProfileActivity : AppCompatActivity() {
                     progress_circular.visibility = View.GONE
                 }
             }
-            db.collection("users").document(user.uid).get().addOnCompleteListener { task ->
+            db.collection(AppConfig.USERS_COLLECTION).document(user.uid).get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val document = task.result
                     if (document.exists()) {

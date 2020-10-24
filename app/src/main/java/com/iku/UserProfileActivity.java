@@ -18,6 +18,7 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.MetadataChanges;
+import com.iku.app.AppConfig;
 import com.iku.databinding.ActivityUserPofileBinding;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -72,7 +73,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void getPicture(String uid) {
-        db.collection("users").document(uid).get()
+        db.collection(AppConfig.USERS_COLLECTION).document(uid).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -122,7 +123,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void getUserDetails(String uid) {
-        db.collection("users").whereEqualTo("uid", uid)
+        db.collection(AppConfig.USERS_COLLECTION).whereEqualTo("uid", uid)
                 .addSnapshotListener(MetadataChanges.INCLUDE, (querySnapshot, e) -> {
                     if (e != null) {
                         return;

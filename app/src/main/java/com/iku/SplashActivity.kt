@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.iku.app.AppConfig
 
 class SplashActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
@@ -32,7 +33,7 @@ class SplashActivity : AppCompatActivity() {
         val sharedPref = this@SplashActivity.getPreferences(Context.MODE_PRIVATE)
         val previouslyStarted = sharedPref.getBoolean(getString(R.string.prev_started), false)
         if (user != null) {
-            db.collection("users").document(user.uid).get().addOnCompleteListener { task ->
+            db.collection(AppConfig.USERS_COLLECTION).document(user.uid).get().addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val document = task.result
                     if (document.exists()) {
@@ -63,9 +64,9 @@ class SplashActivity : AppCompatActivity() {
                     "Version Name" to BuildConfig.VERSION_NAME,
                     "Version Code" to BuildConfig.VERSION_CODE
             )
-            db.collection("usersVerifiedInfo").document(mAuth.uid!!)
+            db.collection(AppConfig.USER_VERIFIED_COLLECTION).document(mAuth.uid!!)
                     .update(userDevInfo).addOnSuccessListener { }.addOnFailureListener { }
-            db.collection("users").document(mAuth.uid!!).update("appVersion", BuildConfig.VERSION_NAME).addOnSuccessListener {
+            db.collection(AppConfig.USERS_COLLECTION).document(mAuth.uid!!).update("appVersion", BuildConfig.VERSION_NAME).addOnSuccessListener {
                 firebaseAnalytics.logEvent("profile_update") {
                     param(FirebaseAnalytics.Param.METHOD, "user_updated_app")
                     param("app_update", "good ikulogist update app on " + FieldValue.serverTimestamp())

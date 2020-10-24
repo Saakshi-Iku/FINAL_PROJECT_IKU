@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.iku.adapter.HabitsAdapter
+import com.iku.app.AppConfig
 import com.iku.databinding.ActivityHabitsBinding
 import com.iku.models.HabitsModel
 import kotlinx.android.synthetic.main.activity_habits.*
@@ -176,7 +177,7 @@ class HabitsActivity : AppCompatActivity() {
                     "createdOn" to FieldValue.serverTimestamp()
             )
             if (user != null) {
-                db.collection("users").document(user.uid).collection("habits").document()
+                db.collection(AppConfig.USERS_COLLECTION).document(user.uid).collection("habits").document()
                         .set(data).addOnSuccessListener {
                             Log.i("habits", "saved: Remind on $frequency $week $day $time")
                         }.addOnFailureListener {

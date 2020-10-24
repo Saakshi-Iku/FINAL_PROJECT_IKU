@@ -32,6 +32,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.iku.app.AppConfig;
 import com.iku.databinding.ActivityWelcomeBinding;
 
 import java.util.Arrays;
@@ -228,7 +229,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     if (userID != null) {
                         sendRegistrationToken(token, userID);
 
-                        DocumentReference docRef = db.collection("users").document(mAuth.getUid());
+                        DocumentReference docRef = db.collection(AppConfig.USERS_COLLECTION).document(mAuth.getUid());
                         docRef.get().addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
                                 DocumentSnapshot document = task1.getResult();
@@ -243,7 +244,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                     user_bundle.putString("user_status", "Previous user authenticated via social media");
                                     mFirebaseAnalytics.logEvent("who_is_this_user", user_bundle);
                                 } else {
-                                    db.collection("users").document(mAuth.getUid())
+                                    db.collection(AppConfig.USERS_COLLECTION).document(mAuth.getUid())
                                             .set(userInfo)
                                             .addOnSuccessListener(aVoid -> {
                                                 Map<String, Object> userDevInfo = new HashMap<>();
@@ -255,7 +256,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                                 userDevInfo.put("Version Name", BuildConfig.VERSION_NAME);
                                                 userDevInfo.put("Version Code", BuildConfig.VERSION_CODE);
                                                 userDevInfo.put("infoTime", FieldValue.serverTimestamp());
-                                                db.collection("usersVerifiedInfo").document(userID)
+                                                db.collection(AppConfig.USER_VERIFIED_COLLECTION).document(userID)
                                                         .set(userDevInfo)
                                                         .addOnSuccessListener(aVoid2 -> {
                                                         })
@@ -288,7 +289,7 @@ public class WelcomeActivity extends AppCompatActivity {
         Map<String, Object> userRegistrationTokenInfo = new HashMap<>();
         userRegistrationTokenInfo.put("registrationToken", token);
         userRegistrationTokenInfo.put("uid", uid);
-        db.collection("registrationTokens").document(uid)
+        db.collection(AppConfig.REGISTRATION_TOKENS_COLLECTION).document(uid)
                 .set(userRegistrationTokenInfo)
                 .addOnSuccessListener(aVoid -> {
                 })

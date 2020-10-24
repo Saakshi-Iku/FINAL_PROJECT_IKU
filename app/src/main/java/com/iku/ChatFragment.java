@@ -67,6 +67,7 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.iku.adapter.ChatAdapter;
+import com.iku.app.AppConfig;
 import com.iku.databinding.FragmentChatBinding;
 import com.iku.models.ChatModel;
 import com.iku.models.UserModel;
@@ -178,7 +179,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         map.put("deletedBy", deletedBy);
         if (deletedBy.equals("admin"))
             map.put("spam", true);
-        db.collection("iku_earth_messages").document(messageDocumentID)
+        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                 .update(map)
                 .addOnSuccessListener(aVoid -> {
                     //Log event
@@ -290,7 +291,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
     private void initRecyclerView() {
 
-        Query query = db.collection("iku_earth_messages").orderBy("timestamp", Query.Direction.DESCENDING);
+        Query query = db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).orderBy("timestamp", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<ChatModel> options = new FirestoreRecyclerOptions.Builder<ChatModel>()
                 .setQuery(query, ChatModel.class)
@@ -402,7 +403,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         map.put("edited", true);
         map.put("messageUpdateTime", timestamp);
         map.put("readableMessageUpdateTime", FieldValue.serverTimestamp());
-        db.collection("iku_earth_messages").document(messageDocumentID)
+        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                 .update(map)
                 .addOnSuccessListener(aVoid -> {
                     chatadapter.notifyItemChanged(position);
@@ -558,9 +559,9 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
             Map<String, Object> normalMessage = new HashMap<>();
             normalMessage.put("firstMessage", true);
 
-            db.collection("iku_earth_messages")
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION)
                     .add(docData)
-                    .addOnSuccessListener(documentReference -> db.collection("users").document(user.getUid()).get()
+                    .addOnSuccessListener(documentReference -> db.collection(AppConfig.USERS_COLLECTION).document(user.getUid()).get()
                             .addOnCompleteListener(task -> {
                                 if (task.isSuccessful()) {
                                     Activity temp = getActivity();
@@ -610,7 +611,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                     if (document.exists()) {
                                         Boolean isFirstMessage = (Boolean) document.get("firstMessage");
                                         if (!isFirstMessage) {
-                                            db.collection("users").document(user.getUid())
+                                            db.collection(AppConfig.USERS_COLLECTION).document(user.getUid())
                                                     .update(normalMessage)
                                                     .addOnSuccessListener(aVoid -> {
                                                         editTextStatus = 0;
@@ -644,7 +645,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     }
 
     public void userVote(String messageDocumentID, String emoji, int position) {
-        DocumentReference docRef = db.collection("iku_earth_messages").document(messageDocumentID);
+        DocumentReference docRef = db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID);
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -732,26 +733,26 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         if (currentEmoji.equals(previousEmoji)) {
             if (currentEmoji.equals("upvoters") || currentEmoji.equals("emoji1") || currentEmoji.equals("emoji2") || currentEmoji.equals("emoji3") || currentEmoji.equals("emoji4")) {
                 if (!authorOfMessage.equals(user.getUid())) {
-                    db.collection("users").document(authorOfMessage).get()
-                            .addOnSuccessListener(documentSnapshot -> db.collection("users").document(authorOfMessage)
+                    db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
+                            .addOnSuccessListener(documentSnapshot -> db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                     .update("points", FieldValue.increment(-1))
                                     .addOnSuccessListener(aVoid -> {
                                     }));
                 }
-                db.collection("iku_earth_messages").document(messageDocumentID)
+                db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                         .update("upvoteCount", FieldValue.increment(-1),
                                 currentEmoji, FieldValue.arrayRemove(user.getUid()))
                         .addOnSuccessListener(aVoid -> {
                         });
             } else if (currentEmoji.equals("downvoters")) {
                 if (!authorOfMessage.equals(user.getUid())) {
-                    db.collection("users").document(authorOfMessage).get()
-                            .addOnSuccessListener(documentSnapshot -> db.collection("users").document(authorOfMessage)
+                    db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
+                            .addOnSuccessListener(documentSnapshot -> db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                     .update("points", FieldValue.increment(1))
                                     .addOnSuccessListener(aVoid -> {
                                     }));
                 }
-                db.collection("iku_earth_messages").document(messageDocumentID)
+                db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                         .update("downvoteCount", FieldValue.increment(-1),
                                 currentEmoji, FieldValue.arrayRemove(user.getUid()))
                         .addOnSuccessListener(aVoid -> {
@@ -760,13 +761,13 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
         } else if ((currentEmoji != previousEmoji) && (currentEmoji.equals("downvoters"))) {
             if (!authorOfMessage.equals(user.getUid())) {
-                db.collection("users").document(authorOfMessage).get()
-                        .addOnSuccessListener(documentSnapshot -> db.collection("users").document(authorOfMessage)
+                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
+                        .addOnSuccessListener(documentSnapshot -> db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                 .update("points", FieldValue.increment(-2))
                                 .addOnSuccessListener(aVoid -> {
                                 }));
             }
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(previousEmoji, FieldValue.arrayRemove(user.getUid()),
                             currentEmoji, FieldValue.arrayUnion(user.getUid()),
                             "upvoteCount", upvotesCount - 1,
@@ -776,11 +777,11 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
         } else if ((previousEmoji.equals("downvoters")) && (currentEmoji != previousEmoji)) {
             if (!authorOfMessage.equals(user.getUid())) {
-                db.collection("users").document(authorOfMessage).get()
+                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
                             final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                             if (usersData != null) {
-                                db.collection("users").document(authorOfMessage)
+                                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                         .update("points", usersData.getPoints() + 2)
                                         .addOnSuccessListener(aVoid -> {
 
@@ -788,7 +789,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                             }
                         });
             }
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(previousEmoji, FieldValue.arrayRemove(user.getUid()),
                             currentEmoji, FieldValue.arrayUnion(user.getUid()),
                             "upvoteCount", upvotesCount + 1,
@@ -797,7 +798,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     .addOnSuccessListener(aVoid -> {
                     });
         } else {
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(previousEmoji, FieldValue.arrayRemove(user.getUid()),
                             currentEmoji, FieldValue.arrayUnion(user.getUid()))
                     .addOnSuccessListener(aVoid -> {
@@ -810,32 +811,32 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
         if (emoji.equals("downvoters")) {
 
             if (!authorOfMessage.equals(user.getUid())) {
-                db.collection("users").document(authorOfMessage).get()
+                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
                             final UserModel usersData = documentSnapshot.toObject(UserModel.class);
-                            db.collection("users").document(authorOfMessage)
+                            db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                     .update("points", usersData.getPoints() - 1)
                                     .addOnSuccessListener(aVoid -> {
                                     });
                         });
             }
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(emoji, FieldValue.arrayUnion(user.getUid()),
                             "downvoteCount", DownvotesCount + 1)
                     .addOnSuccessListener(aVoid -> {
                     });
         } else {
             if (!authorOfMessage.equals(user.getUid())) {
-                db.collection("users").document(authorOfMessage).get()
+                db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage).get()
                         .addOnSuccessListener(documentSnapshot -> {
                             final UserModel usersData = documentSnapshot.toObject(UserModel.class);
-                            db.collection("users").document(authorOfMessage)
+                            db.collection(AppConfig.USERS_COLLECTION).document(authorOfMessage)
                                     .update("points", usersData.getPoints() + 1)
                                     .addOnSuccessListener(aVoid -> {
                                     });
                         });
             }
-            db.collection("iku_earth_messages").document(messageDocumentID)
+            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
                     .update(emoji, FieldValue.arrayUnion(user.getUid()),
                             "upvoteCount", UpvotesCount + 1)
                     .addOnSuccessListener(aVoid -> {
@@ -1038,7 +1039,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
 
                         DocumentSnapshot snapshot = chatadapter.getSnapshots().getSnapshot(position);
                         String documentID = snapshot.getId();
-                        db.collection("iku_earth_messages").document(documentID)
+                        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(documentID)
                                 .update(docData)
                                 .addOnSuccessListener(aVoid -> {
                                     if (chatadapter.getItem(position).getUID().equals(user.getUid())) {
@@ -1050,7 +1051,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                         heart_params.putString("action_by", user.getUid());
                                         mFirebaseAnalytics.logEvent("hearts", heart_params);
                                     } else {
-                                        db.collection("users").document(chatadapter.getItem(position).getUID()).get()
+                                        db.collection(AppConfig.USERS_COLLECTION).document(chatadapter.getItem(position).getUID()).get()
                                                 .addOnSuccessListener(documentSnapshot -> {
                                                     final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                                     if (usersData != null) {
@@ -1059,7 +1060,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                             docData1.put("points", usersData.getPoints() + 2);
                                                         else
                                                             docData1.put("points", usersData.getPoints() + 1);
-                                                        db.collection("users").document(chatadapter.getItem(position).getUID()).update(docData1)
+                                                        db.collection(AppConfig.USERS_COLLECTION).document(chatadapter.getItem(position).getUID()).update(docData1)
                                                                 .addOnSuccessListener(aVoid12 -> {
                                                                     //Log event
                                                                     Bundle heart_params = new Bundle();
@@ -1080,7 +1081,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                     } else {
                         DocumentSnapshot snapshot = chatadapter.getSnapshots().getSnapshot(position);
                         String documentID = snapshot.getId();
-                        db.collection("iku_earth_messages").document(documentID)
+                        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(documentID)
                                 .update("upvoteCount", chatadapter.getItem(position).getUpvoteCount() - 1,
                                         reactedEmojiArray, FieldValue.arrayRemove(user.getUid()))
                                 .addOnSuccessListener(aVoid -> {
@@ -1093,11 +1094,11 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                         params.putString("action_by", user.getUid());
                                         mFirebaseAnalytics.logEvent("hearts", params);
                                     } else {
-                                        db.collection("users").document(chatadapter.getItem(position).getUID()).get()
+                                        db.collection(AppConfig.USERS_COLLECTION).document(chatadapter.getItem(position).getUID()).get()
                                                 .addOnSuccessListener(documentSnapshot -> {
                                                     final UserModel usersData = documentSnapshot.toObject(UserModel.class);
                                                     if (usersData != null) {
-                                                        db.collection("users").document(chatadapter.getItem(position).getUID())
+                                                        db.collection(AppConfig.USERS_COLLECTION).document(chatadapter.getItem(position).getUID())
                                                                 .update("points", usersData.getPoints() - 1)
                                                                 .addOnSuccessListener(aVoid1 -> {
                                                                     //Log event
@@ -1325,7 +1326,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                         materialAlertDialogBuilder.setTitle("Report Message");
                                         materialAlertDialogBuilder.setMessage("You are about to report this message. The community chiefs will be notified to take action as needed. Are you sure?");
                                         materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
-                                            DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
+                                            DocumentReference docRef = db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(documentID);
                                             docRef.get().addOnCompleteListener(task -> {
                                                 if (task.isSuccessful()) {
                                                     DocumentSnapshot document = task.getResult();
@@ -1342,7 +1343,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                                     map.put("deleted", true);
                                                                     map.put("deletedBy", "users");
                                                                 }
-                                                                db.collection("iku_earth_messages").document(documentID)
+                                                                db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(documentID)
                                                                         .update(map)
                                                                         .addOnSuccessListener(aVoid -> {
                                                                         });
@@ -1477,7 +1478,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                         materialAlertDialogBuilder.setTitle("Report Message");
                                         materialAlertDialogBuilder.setMessage("You are about to report this message. The community chiefs will be notified to take action as needed. Are you sure?");
                                         materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
-                                            DocumentReference docRef = db.collection("iku_earth_messages").document(documentID);
+                                            DocumentReference docRef = db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(documentID);
                                             docRef.get().addOnCompleteListener(task -> {
                                                 if (task.isSuccessful()) {
                                                     DocumentSnapshot document = task.getResult();
@@ -1494,7 +1495,7 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                                                     map.put("deleted", true);
                                                                     map.put("deletedBy", "users");
                                                                 }
-                                                                db.collection("iku_earth_messages").document(documentID)
+                                                                db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(documentID)
                                                                         .update(map)
                                                                         .addOnSuccessListener(aVoid -> {
                                                                         });

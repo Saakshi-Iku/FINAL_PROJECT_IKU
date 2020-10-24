@@ -22,6 +22,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.iku.app.AppConfig;
 import com.iku.databinding.ActivityHomeBinding;
 
 import java.util.ArrayList;
@@ -127,7 +128,7 @@ public class HomeActivity extends AppCompatActivity {
             userInfo.put("online", false);
             userInfo.put("lastSeenTimeStamp", FieldValue.serverTimestamp());
 
-            db.collection("users").document(mAuth.getUid())
+            db.collection(AppConfig.USERS_COLLECTION).document(mAuth.getUid())
                     .update(userInfo)
                     .addOnSuccessListener(aVoid -> {
                         /*Log event*/

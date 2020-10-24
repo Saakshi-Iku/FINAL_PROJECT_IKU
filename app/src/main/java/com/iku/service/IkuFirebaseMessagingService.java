@@ -16,6 +16,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.iku.HomeActivity;
 import com.iku.R;
+import com.iku.app.AppConfig;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -80,7 +81,7 @@ public class IkuFirebaseMessagingService extends FirebaseMessagingService {
             Map<String, Object> userRegistrationTokenInfo = new HashMap<>();
             userRegistrationTokenInfo.put("registrationToken", token);
             userRegistrationTokenInfo.put("uid", user.getUid());
-            db.collection("registrationTokens").document(user.getUid())
+            db.collection(AppConfig.REGISTRATION_TOKENS_COLLECTION).document(user.getUid())
                     .set(userRegistrationTokenInfo)
                     .addOnSuccessListener(aVoid -> {
                     })

@@ -21,6 +21,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.iku.app.AppConfig;
 import com.iku.databinding.ActivityNameInputBinding;
 
 import java.text.SimpleDateFormat;
@@ -197,7 +198,7 @@ public class NameInputActivity extends AppCompatActivity {
 
                     if (userID != null) {
 
-                        db.collection("users").document(fAuth.getUid())
+                        db.collection(AppConfig.USERS_COLLECTION).document(fAuth.getUid())
                                 .set(userInfo)
                                 .addOnSuccessListener(aVoid -> {
                                     DocumentReference groupRef = db.collection("groups").document("iku_earth");
@@ -213,7 +214,7 @@ public class NameInputActivity extends AppCompatActivity {
                                     userDevInfo.put("Version Name", BuildConfig.VERSION_NAME);
                                     userDevInfo.put("Version Code", BuildConfig.VERSION_CODE);
                                     userDevInfo.put("infoTime", FieldValue.serverTimestamp());
-                                    db.collection("usersVerifiedInfo").document(userID)
+                                    db.collection(AppConfig.USER_VERIFIED_COLLECTION).document(userID)
                                             .set(userDevInfo)
                                             .addOnSuccessListener(aVoid2 -> {
                                             })
@@ -236,7 +237,7 @@ public class NameInputActivity extends AppCompatActivity {
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, failed_bundle);
                                 });
 
-                        db.collection("registrationTokens").document(userID)
+                        db.collection(AppConfig.REGISTRATION_TOKENS_COLLECTION).document(userID)
                                 .set(userRegistrationTokenInfo)
                                 .addOnSuccessListener(aVoid -> {
                                 })
