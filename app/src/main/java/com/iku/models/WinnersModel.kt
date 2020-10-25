@@ -11,4 +11,8 @@ data class WinnersModel(
         var second: HashMap<*, *>,
         @PropertyName("third")
         var third: HashMap<*, *>,
+        @PropertyName("messageCount")
+        var messageCount: Long = 0,
+        @PropertyName("heartsCount")
+        var heartsCount: Long = 0
 )

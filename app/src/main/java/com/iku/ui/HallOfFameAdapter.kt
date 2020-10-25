@@ -44,6 +44,8 @@ class HallOfFameAdapter(val context: Context) : RecyclerView.Adapter<HallOfFameA
             itemView.winnerImage.load(winner.first["imageUrl"].toString()) { transformations(CircleCropTransformation()) }
             itemView.runnerUp1Image.load(winner.second["imageUrl"].toString()) { transformations(CircleCropTransformation()) }
             itemView.runnerUp2Image.load(winner.third["imageUrl"].toString()) { transformations(CircleCropTransformation()) }
+            itemView.messagesCount.text = winner.messageCount.toString()
+            itemView.heartsCount.text = winner.heartsCount.toString()
         }
     }
 }

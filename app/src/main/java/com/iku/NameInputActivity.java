@@ -201,7 +201,7 @@ public class NameInputActivity extends AppCompatActivity {
                         db.collection(AppConfig.USERS_COLLECTION).document(fAuth.getUid())
                                 .set(userInfo)
                                 .addOnSuccessListener(aVoid -> {
-                                    DocumentReference groupRef = db.collection("groups").document("iku_earth");
+                                    DocumentReference groupRef = db.collection("groups").document("aD4dmKaHhQmEJ0yqeyLQ");
                                     groupRef.update("members", FieldValue.arrayUnion(userID));
                                     UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                             .setDisplayName(firstName + " " + lastName).build();

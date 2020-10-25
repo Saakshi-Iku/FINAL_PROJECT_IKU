@@ -144,7 +144,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void verifyAdmin() {
         SharedPreferences prefs = getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
-        DocumentReference docRef = db.collection("groups").document("iku_earth");
+        DocumentReference docRef = db.collection("groups").document("aD4dmKaHhQmEJ0yqeyLQ");
         if (mAuth.getUid() != null) {
             docRef.get().addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {

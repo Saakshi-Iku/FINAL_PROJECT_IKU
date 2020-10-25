@@ -263,7 +263,7 @@ public class WelcomeActivity extends AppCompatActivity {
                                                         .addOnFailureListener(e -> {
                                                         });
                                                 FirebaseUser user = mAuth.getCurrentUser();
-                                                DocumentReference groupRef = db.collection("groups").document("iku_earth");
+                                                DocumentReference groupRef = db.collection("groups").document("aD4dmKaHhQmEJ0yqeyLQ");
                                                 groupRef.update("members", FieldValue.arrayUnion(userID));
                                                 updateUI(user);
                                                 Toast.makeText(WelcomeActivity.this, "Welcome to the community", Toast.LENGTH_LONG).show();
