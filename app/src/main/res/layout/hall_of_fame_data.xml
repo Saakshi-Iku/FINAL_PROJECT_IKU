@@ -20,7 +20,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="5dp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxWidth="500dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="15dp"
             android:gravity="bottom"
             android:orientation="horizontal"
             android:weightSum="10"
@@ -97,6 +98,15 @@
                     android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@id/runnerUp1Name" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hearts won"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/runnerUp1Hearts" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--Winner-->
@@ -156,6 +166,15 @@
                     android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@id/winnerName" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hearts won"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/winnerHearts" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!--second runner up-->
@@ -214,6 +233,15 @@
                     android:gravity="center"
                     app:layout_constraintTop_toBottomOf="@id/runnerUp2Name" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Hearts won"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    app:layout_constraintTop_toBottomOf="@id/runnerUp2Hearts" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
@@ -237,7 +265,8 @@
                 android:layout_height="wrap_content"
                 android:text="Community Activity"
                 android:textColor="@color/white"
-                android:textSize="12sp"/>
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -245,17 +274,14 @@
                 android:layout_marginTop="10dp"
                 android:text="Messages:"
                 android:visibility="visible"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/messagesCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-
-                android:visibility="visible"
-                android:textStyle="bold" />
+                android:visibility="visible" />
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
@@ -281,15 +307,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:text="Hearts won:"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:textColor="@color/white" />
 
             <TextView
                 android:id="@+id/heartsCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

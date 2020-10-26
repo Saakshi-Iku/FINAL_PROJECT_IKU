@@ -58,6 +58,9 @@
     <string name="swipe_to_select"><![CDATA[<<< Swipe to select >>>]]></string>
 
     <!--Page descriptions-->
-    <string name="hall_of_fame_description">Top iku-logists and their efforts:</string>
+    <string name="hall_of_fame_description">Top the leaderboard of the month to enter hall of fame.\nRecent top iku-logists of the community:</string>
+
+    <!--Placeholder texts-->
+    <string name="hof_placeholder">Hall of fame winners are announced at the ned of every month.\n(Eligibility: Minimum 10 players required in the community.)</string>
 
 </resources>
