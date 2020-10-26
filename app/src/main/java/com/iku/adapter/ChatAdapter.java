@@ -1336,6 +1336,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
+                messageTime.setVisibility(View.GONE);
                 messageTime2.setVisibility(View.VISIBLE);
             } else {
                 edited.setVisibility(View.GONE);
@@ -1505,6 +1506,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<ChatModel, RecyclerVie
 
             if (chatModel.isEdited()) {
                 edited.setVisibility(View.VISIBLE);
+                messageTime.setVisibility(View.GONE);
                 messageTime2.setVisibility(View.VISIBLE);
             } else {
                 edited.setVisibility(View.GONE);

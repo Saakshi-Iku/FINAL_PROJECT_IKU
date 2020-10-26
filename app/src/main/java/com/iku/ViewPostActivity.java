@@ -11,6 +11,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 
@@ -18,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,6 +32,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -48,6 +52,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -362,15 +367,25 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-                    long upvotesCount, downvotesCount;
+                    long upvotesCount, downvotesCount, timestamp, spamCount;
+                    boolean isDeleted;
+                    String UID, message, messageType, name;
                     ArrayList<String> HeartUpArray = (ArrayList) document.get("upvoters");
                     ArrayList<String> emoji1Array = (ArrayList) document.get("emoji1");
                     ArrayList<String> emoji2Array = (ArrayList) document.get("emoji2");
                     ArrayList<String> emoji3Array = (ArrayList) document.get("emoji3");
                     ArrayList<String> emoji4Array = (ArrayList) document.get("emoji4");
                     ArrayList<String> HeartDownArray = (ArrayList) document.get("downvoters");
+                    ArrayList<String> SpamReportedByArray = (ArrayList) document.get("spamReportedBy");
                     upvotesCount = (long) document.get("upvoteCount");
                     downvotesCount = (long) document.get("downvoteCount");
+                    isDeleted = (boolean) document.get("deleted");
+                    UID = (String) document.get("uid");
+                    message = (String) document.get("message");
+                    timestamp = (long) document.get("timestamp");
+                    spamCount = (long) document.get("spamCount");
+                    name = (String) document.get("userName");
+                    messageType = (String) document.get("type");
 
                     if (upvotesCount >= 0) {
                         for (String element : HeartUpArray) {
@@ -413,6 +428,353 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                         }
                     }
 
+                    viewPostBinding.optionsButton.setOnClickListener(view -> {
+                        if (view != null) {
+                            if (!isDeleted) {
+
+                                SharedPreferences pref = view.getContext().getSharedPreferences("iku_earth", Context.MODE_PRIVATE);
+                                boolean isAdmin = pref.getBoolean("isAdmin", false);
+
+                                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(view.getContext());
+                                View parentView = getLayoutInflater().inflate(R.layout.user_bottom_sheet, null);
+                                RelativeLayout profileView = parentView.findViewById(R.id.profile_layout);
+                                RelativeLayout updateMessageView = parentView.findViewById(R.id.edit_option_layout);
+                                RelativeLayout deleteMessageView = parentView.findViewById(R.id.delete_layout);
+                                RelativeLayout addCommentView = parentView.findViewById(R.id.comment_layout);
+                                RelativeLayout reportView = parentView.findViewById(R.id.report_layout);
+
+                                ImageButton heartUpView = parentView.findViewById(R.id.chooseHeart);
+                                MaterialButton emoji1View = parentView.findViewById(R.id.choose1);
+                                MaterialButton emoji2View = parentView.findViewById(R.id.choose2);
+                                MaterialButton emoji3View = parentView.findViewById(R.id.choose3);
+                                MaterialButton emoji4View = parentView.findViewById(R.id.choose4);
+                                MaterialButton heartDownView = parentView.findViewById(R.id.choose6);
+
+                                FrameLayout heartupLayout = parentView.findViewById(R.id.heartUp);
+                                FrameLayout emoji1Layout = parentView.findViewById(R.id.emoji1);
+                                FrameLayout emoji2Layout = parentView.findViewById(R.id.emoji2);
+                                FrameLayout emoji3Layout = parentView.findViewById(R.id.emoji3);
+                                FrameLayout emoji4Layout = parentView.findViewById(R.id.emoji4);
+                                FrameLayout heartdownLayout = parentView.findViewById(R.id.heartDown);
+
+                                for (String element : HeartUpArray) {
+                                    if (element.contains(user.getUid())) {
+                                        heartupLayout.setBackground(ResourcesCompat.getDrawable(view.getContext().getResources(), R.drawable.hearts_button_background_selected, view.getContext().getTheme()));
+                                        break;
+                                    }
+                                }
+                                for (String element : emoji1Array) {
+                                    if (element.contains(user.getUid())) {
+                                        emoji1Layout.setBackground(ResourcesCompat.getDrawable(view.getContext().getResources(), R.drawable.hearts_button_background_selected, view.getContext().getTheme()));
+                                        break;
+                                    }
+                                }
+                                for (String element : emoji2Array) {
+                                    if (element.contains(user.getUid())) {
+                                        emoji2Layout.setBackground(ResourcesCompat.getDrawable(view.getContext().getResources(), R.drawable.hearts_button_background_selected, view.getContext().getTheme()));
+                                        break;
+                                    }
+                                }
+                                for (String element : emoji3Array) {
+                                    if (element.contains(user.getUid())) {
+                                        emoji3Layout.setBackground(ResourcesCompat.getDrawable(view.getContext().getResources(), R.drawable.hearts_button_background_selected, view.getContext().getTheme()));
+                                        break;
+                                    }
+                                }
+                                for (String element : emoji4Array) {
+                                    if (element.contains(user.getUid())) {
+                                        emoji4Layout.setBackground(ResourcesCompat.getDrawable(view.getContext().getResources(), R.drawable.hearts_button_background_selected, view.getContext().getTheme()));
+                                        break;
+                                    }
+                                }
+                                for (String element : HeartDownArray) {
+                                    if (element.contains(user.getUid())) {
+                                        heartdownLayout.setBackground(ResourcesCompat.getDrawable(view.getContext().getResources(), R.drawable.hearts_button_background_selected, view.getContext().getTheme()));
+                                        break;
+                                    }
+                                }
+
+                                heartUpView.setOnClickListener(v -> {
+                                    userVote(messageId, "upvoters");
+                                    bottomSheetDialog.dismiss();
+                                });
+                                emoji1View.setOnClickListener(v -> {
+                                    userVote(messageId, "emoji1");
+                                    bottomSheetDialog.dismiss();
+                                });
+                                emoji2View.setOnClickListener(v -> {
+                                    userVote(messageId, "emoji2");
+                                    bottomSheetDialog.dismiss();
+                                });
+                                emoji3View.setOnClickListener(v -> {
+                                    userVote(messageId, "emoji3");
+                                    bottomSheetDialog.dismiss();
+                                });
+                                emoji4View.setOnClickListener(v -> {
+                                    userVote(messageId, "emoji4");
+                                    bottomSheetDialog.dismiss();
+                                });
+                                heartDownView.setOnClickListener(v -> {
+                                    userVote(messageId, "downvoters");
+                                    bottomSheetDialog.dismiss();
+                                });
+
+                                if (isAdmin) {
+                                    addCommentView.setOnClickListener(view1 -> {
+                                        bottomSheetDialog.dismiss();
+                                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
+                                        params.addRule(RelativeLayout.BELOW, R.id.appBar);
+                                        viewPostBinding.imageContainer.setLayoutParams(params);
+                                        viewPostBinding.imageContainer.setMaxHeight(parentHeight);
+                                        viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
+                                        viewPostBinding.seeIcon.setRotation(90);
+                                        viewPostBinding.seeType.setText(R.string.see_less);
+                                        viewPostBinding.messageArea.setVisibility(View.VISIBLE);
+                                        viewPostBinding.postDescriptionPreview.setVisibility(View.GONE);
+                                        viewPostBinding.messageTextField.requestFocus();
+                                        scrollStatus = 1;
+                                    });
+                                    deleteMessageView.setVisibility(View.VISIBLE);
+                                    deleteMessageView.setOnClickListener(view1 -> {
+                                        bottomSheetDialog.dismiss();
+                                        MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
+                                        materialAlertDialogBuilder.setTitle("Delete Message");
+                                        materialAlertDialogBuilder.setMessage("You are about to delete this message for everyone. Are you sure?");
+                                        materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
+                                            deleteMessage(messageId, "admin");
+                                            //log event
+                                            Bundle delete_bundle = new Bundle();
+                                            delete_bundle.putString("uid", user.getUid());
+                                            mFirebaseAnalytics.logEvent("message_deleted", delete_bundle);
+                                        }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                            bottomSheetDialog.setContentView(parentView);
+                                            bottomSheetDialog.show();
+                                        }).show();
+                                    });
+                                    if (UID.equals(user.getUid())) {
+                                        profileView.setVisibility(View.GONE);
+                                        if (!(timestamp < System.currentTimeMillis() - (60 * 60 * 1000))) {
+                                            updateMessageView.setVisibility(View.VISIBLE);
+                                            updateMessageView.setOnClickListener(view12 -> {
+                                                viewPostBinding.editWarningLayout.setVisibility(View.VISIBLE);
+                                                viewPostBinding.editWarningText.setText("Editing Message");
+                                                viewPostBinding.messageTextField.requestFocus();
+                                                viewPostBinding.cancelEditButton.setOnClickListener(view1 -> {
+                                                    editTextStatus = 0;
+                                                    viewPostBinding.messageTextField.setHint("Add a comment");
+                                                    initSendButton();
+                                                    viewPostBinding.editWarningLayout.setVisibility(View.GONE);
+                                                    viewPostBinding.messageTextField.setText("");
+                                                    viewPostBinding.messageTextField.clearFocus();
+                                                });
+                                                viewPostBinding.messageTextField.setText(message);
+                                                viewPostBinding.messageTextField.setSelection(viewPostBinding.messageTextField.getText().length());
+                                                bottomSheetDialog.dismiss();
+                                                editTextStatus = 1;
+                                                if (editTextStatus == 1) {
+                                                    viewPostBinding.messageTextField.setHint("Enter message");
+                                                    viewPostBinding.sendMessageButton.setOnClickListener(view121 -> {
+                                                        viewPostBinding.editWarningLayout.setVisibility(View.GONE);
+                                                        editTextStatus = 0;
+                                                        if (!viewPostBinding.messageTextField.getText().toString().trim().isEmpty()) {
+                                                            updateMessage(messageId, viewPostBinding.messageTextField.getText().toString().trim());
+                                                            viewPostBinding.messageTextField.getText().clear();
+                                                            viewPostBinding.messageTextField.requestFocus();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    } else {
+                                        profileView.setVisibility(View.VISIBLE);
+                                        boolean isReported = false;
+                                        if (SpamReportedByArray != null) {
+                                            for (String element : SpamReportedByArray) {
+                                                if (element.contains(user.getUid())) {
+                                                    isReported = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (!isReported) {
+                                                reportView.setVisibility(View.VISIBLE);
+                                                reportView.setOnClickListener(view13 -> {
+                                                    bottomSheetDialog.dismiss();
+                                                    MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
+                                                    materialAlertDialogBuilder.setTitle("Report Message");
+                                                    materialAlertDialogBuilder.setMessage("You are about to report this message. The community chiefs will be notified to take action as needed. Are you sure?");
+                                                    materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
+
+                                                    if (SpamReportedByArray != null) {
+                                                        if (!SpamReportedByArray.contains(user.getUid())) {
+                                                            Map<String, Object> map = new HashMap<>();
+                                                            map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
+                                                            map.put("spamCount", spamCount + 1);
+                                                            if (spamCount >= 4) {
+                                                                map.put("spam", true);
+                                                                map.put("deleted", true);
+                                                                map.put("deletedBy", "users");
+                                                            }
+                                                            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId)
+                                                                    .update(map)
+                                                                    .addOnSuccessListener(aVoid -> {
+                                                                    });
+                                                        }
+                                                    }
+                                                        //log event
+                                                        Bundle spam_bundle = new Bundle();
+                                                        spam_bundle.putString("uid", user.getUid());
+                                                        mFirebaseAnalytics.logEvent("message_reported_spam", spam_bundle);
+                                                    }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                                        bottomSheetDialog.setContentView(parentView);
+                                                        bottomSheetDialog.show();
+                                                    }).show();
+                                                });
+                                            }
+                                        }
+
+                                        profileView.setOnClickListener(view2 -> {
+                                            Intent userProfileIntent = new Intent(this, UserProfileActivity.class);
+                                            if (name != null) {
+                                                userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
+                                                userProfileIntent.putExtra("EXTRA_PERSON_UID", UID);
+                                                this.startActivity(userProfileIntent);
+                                            } else
+                                                return;
+                                            bottomSheetDialog.dismiss();
+                                        });
+                                    }
+                                } else {
+                                    addCommentView.setOnClickListener(view1 -> {
+                                        bottomSheetDialog.dismiss();
+                                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) viewPostBinding.imageContainer.getLayoutParams();
+                                        params.addRule(RelativeLayout.BELOW, R.id.appBar);
+                                        viewPostBinding.imageContainer.setLayoutParams(params);
+                                        viewPostBinding.imageContainer.setMaxHeight(parentHeight);
+                                        viewPostBinding.seeIcon.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_next_36));
+                                        viewPostBinding.seeIcon.setRotation(90);
+                                        viewPostBinding.seeType.setText(R.string.see_less);
+                                        viewPostBinding.messageArea.setVisibility(View.VISIBLE);
+                                        viewPostBinding.postDescriptionPreview.setVisibility(View.GONE);
+                                        viewPostBinding.messageTextField.requestFocus();
+                                        scrollStatus = 1;
+                                    });
+                                    if (UID.equals(user.getUid())) {
+                                        profileView.setVisibility(View.GONE);
+                                        reportView.setVisibility(View.GONE);
+                                        if (!(timestamp < System.currentTimeMillis() - (60 * 60 * 1000))) {
+                                            updateMessageView.setVisibility(View.VISIBLE);
+                                            updateMessageView.setOnClickListener(view12 -> {
+                                                viewPostBinding.editWarningLayout.setVisibility(View.VISIBLE);
+                                                viewPostBinding.editWarningText.setText("Editing Message");
+                                                viewPostBinding.messageTextField.requestFocus();
+                                                viewPostBinding.cancelEditButton.setOnClickListener(view1 -> {
+                                                    editTextStatus = 0;
+                                                    viewPostBinding.messageTextField.setHint("Add a comment");
+                                                    initSendButton();
+                                                    viewPostBinding.editWarningLayout.setVisibility(View.GONE);
+                                                    viewPostBinding.messageTextField.setText("");
+                                                    viewPostBinding.messageTextField.clearFocus();
+                                                });
+                                                viewPostBinding.messageTextField.setText(message);
+                                                viewPostBinding.messageTextField.setHint("Enter message");
+                                                viewPostBinding.messageTextField.setSelection(viewPostBinding.messageTextField.getText().length());
+                                                bottomSheetDialog.dismiss();
+                                                editTextStatus = 1;
+                                                if (editTextStatus == 1) {
+                                                        viewPostBinding.sendMessageButton.setOnClickListener(view121 -> {
+                                                            viewPostBinding.editWarningLayout.setVisibility(View.GONE);
+                                                            editTextStatus = 0;
+                                                            if (!viewPostBinding.messageTextField.getText().toString().trim().isEmpty()) {
+                                                                updateMessage(messageId, viewPostBinding.messageTextField.getText().toString().trim());
+                                                                viewPostBinding.messageTextField.getText().clear();
+                                                                viewPostBinding.messageTextField.requestFocus();
+                                                            }
+                                                        });
+                                                }
+                                            });
+                                            deleteMessageView.setVisibility(View.VISIBLE);
+                                            deleteMessageView.setOnClickListener(view1 -> {
+                                                bottomSheetDialog.dismiss();
+                                                MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view1.getContext());
+                                                materialAlertDialogBuilder.setTitle("Delete Message");
+                                                materialAlertDialogBuilder.setMessage("You are about to delete this message for everyone. Are you sure?");
+                                                materialAlertDialogBuilder.setPositiveButton("Delete", (dialogInterface, i) -> {
+                                                    deleteMessage(messageId, "author");
+                                                    //log event
+                                                    Bundle delete_bundle = new Bundle();
+                                                    delete_bundle.putString("uid", user.getUid());
+                                                    mFirebaseAnalytics.logEvent("message_deleted", delete_bundle);
+                                                }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                                    bottomSheetDialog.setContentView(parentView);
+                                                    bottomSheetDialog.show();
+                                                }).show();
+                                            });
+                                        }
+                                    } else {
+                                        profileView.setVisibility(View.VISIBLE);
+                                        boolean isReported = false;
+                                        if (SpamReportedByArray != null) {
+                                            for (String element : SpamReportedByArray) {
+                                                if (element.contains(user.getUid())) {
+                                                    isReported = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (!isReported) {
+                                                reportView.setVisibility(View.VISIBLE);
+                                                reportView.setOnClickListener(view13 -> {
+                                                    bottomSheetDialog.dismiss();
+                                                    MaterialAlertDialogBuilder materialAlertDialogBuilder = new MaterialAlertDialogBuilder(view13.getContext());
+                                                    materialAlertDialogBuilder.setTitle("Report Message");
+                                                    materialAlertDialogBuilder.setMessage("You are about to report this message. The community chiefs will be notified to take action as needed. Are you sure?");
+                                                    materialAlertDialogBuilder.setPositiveButton("Report", (dialogInterface, i) -> {
+                                                    if (SpamReportedByArray != null) {
+                                                        if (!SpamReportedByArray.contains(user.getUid())) {
+                                                            Map<String, Object> map = new HashMap<>();
+                                                            map.put("spamReportedBy", FieldValue.arrayUnion(user.getUid()));
+                                                            map.put("spamCount", spamCount + 1);
+                                                            if (spamCount >= 4) {
+                                                                map.put("spam", true);
+                                                                map.put("deleted", true);
+                                                                map.put("deletedBy", "users");
+                                                            }
+                                                            db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageId)
+                                                                    .update(map)
+                                                                    .addOnSuccessListener(aVoid -> {
+                                                                    });
+                                                        }
+                                                    }
+
+                                                        //log event
+                                                        Bundle spam_bundle = new Bundle();
+                                                        spam_bundle.putString("uid", user.getUid());
+                                                        mFirebaseAnalytics.logEvent("message_reported_spam", spam_bundle);
+                                                    }).setNegativeButton("Cancel", (dialogInterface, i) -> {
+                                                        bottomSheetDialog.setContentView(parentView);
+                                                        bottomSheetDialog.show();
+                                                    }).show();
+                                                });
+                                            }
+                                        }
+
+                                        profileView.setOnClickListener(view2 -> {
+                                            Intent userProfileIntent = new Intent(this, UserProfileActivity.class);
+
+                                            if (name != null) {
+                                                userProfileIntent.putExtra("EXTRA_PERSON_NAME", name);
+                                                userProfileIntent.putExtra("EXTRA_PERSON_UID", UID);
+                                                this.startActivity(userProfileIntent);
+                                            } else
+                                                return;
+                                            bottomSheetDialog.dismiss();
+                                        });
+                                    }
+                                }
+                                bottomSheetDialog.setContentView(parentView);
+                                bottomSheetDialog.show();
+                            }
+                        }
+                    });
                 }
             }
         });
@@ -899,9 +1261,11 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                                 viewPostBinding.sendMessageButton.setOnClickListener(view121 -> {
                                     viewPostBinding.editWarningLayout.setVisibility(View.GONE);
                                     editTextStatus = 0;
-                                    updateMessage(documentID, position, viewPostBinding.messageTextField.getText().toString().trim());
-                                    viewPostBinding.messageTextField.getText().clear();
-                                    viewPostBinding.messageTextField.requestFocus();
+                                    if (!viewPostBinding.messageTextField.getText().toString().trim().isEmpty()) {
+                                        updateComment(documentID, position, viewPostBinding.messageTextField.getText().toString().trim());
+                                        viewPostBinding.messageTextField.getText().clear();
+                                        viewPostBinding.messageTextField.requestFocus();
+                                    }
                                 });
                             }
                         });
@@ -1027,7 +1391,7 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
         }
     }
 
-    private void updateMessage(String messageDocumentID, int position, String message) {
+    private void updateComment(String messageDocumentID, int position, String message) {
         Date d = new Date();
         long timestamp = d.getTime();
         Map<String, Object> map = new HashMap<>();
@@ -1047,6 +1411,52 @@ public class ViewPostActivity extends AppCompatActivity implements RecyclerView.
                 .addOnFailureListener(e -> {
                     editTextStatus = 0;
                     initSendButton();
+                });
+    }
+
+    private void updateMessage(String messageDocumentID, String message) {
+        Date d = new Date();
+        long timestamp = d.getTime();
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", message);
+        map.put("edited", true);
+        map.put("messageUpdateTime", timestamp);
+        map.put("readableMessageUpdateTime", FieldValue.serverTimestamp());
+        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
+                .update(map)
+                .addOnSuccessListener(aVoid -> {
+                    viewPostBinding.messageTextField.setText("");
+                    viewPostBinding.messageTextField.requestFocus();
+                    viewPostBinding.postDescription.setText(message);
+                    viewPostBinding.postDescriptionPreview.setText(message);
+                    viewPostBinding.messageTextField.setHint("Add a comment");
+                    editTextStatus = 0;
+                    initSendButton();
+                })
+                .addOnFailureListener(e -> {
+                    editTextStatus = 0;
+                    viewPostBinding.messageTextField.setHint("Add a comment");
+                    initSendButton();
+                });
+    }
+
+    private void deleteMessage(String messageDocumentID, String deletedBy) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("deleted", true);
+        map.put("deletedBy", deletedBy);
+        if (deletedBy.equals("admin"))
+            map.put("spam", true);
+        db.collection(AppConfig.GROUPS_MESSAGES_COLLECTION).document(AppConfig.GROUPS_DOCUMENT).collection(AppConfig.MESSAGES_SUB_COLLECTION).document(messageDocumentID)
+                .update(map)
+                .addOnSuccessListener(aVoid -> {
+                    //Log event
+                    Bundle delete_bundle = new Bundle();
+                    delete_bundle.putString("UID", user.getUid());
+                    delete_bundle.putString("Name", user.getDisplayName());
+                    mFirebaseAnalytics.logEvent("deleted_message", delete_bundle);
+                    onBackPressed();
+                })
+                .addOnFailureListener(e -> {
                 });
     }
 }
