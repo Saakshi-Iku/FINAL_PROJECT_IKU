@@ -7,12 +7,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-
+import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
-
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -26,7 +24,6 @@ import com.iku.databinding.FragmentProfileBinding;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,8 +36,8 @@ public class ProfileFragment extends Fragment {
     private FirebaseUser user;
     private FirebaseAnalytics mFirebaseAnalytics;
     private String photoUrl;
-    private ImageView userBioIcon, userLinkIcon;
-    private MaterialTextView userHeartsTextView, userBioTextView, userLinkTextView;
+    private MaterialTextView userHeartsTextView, userHeartsAddnTextView, userBioTextView, userLinkTextView;
+    private LinearLayout userBioView, userLinkView;
     private FragmentProfileBinding profileBinding;
 
     public ProfileFragment() {
@@ -61,10 +58,11 @@ public class ProfileFragment extends Fragment {
         user = mAuth.getCurrentUser();
 
         userHeartsTextView = view.findViewById(R.id.userHearts);
+        userHeartsAddnTextView = view.findViewById(R.id.addnTextView);
         userBioTextView = view.findViewById(R.id.userBio);
         userLinkTextView = view.findViewById(R.id.linkInBio);
-        userBioIcon = view.findViewById(R.id.userBioIcon);
-        userLinkIcon = view.findViewById(R.id.linkInBioIcon);
+        userBioView = view.findViewById(R.id.userBioView);
+        userLinkView = view.findViewById(R.id.linkInBioView);
 
         initButtons();
         getUserDetails();
@@ -88,11 +86,20 @@ public class ProfileFragment extends Fragment {
         });
 
         profileBinding.linkInBio.setOnClickListener(view -> {
+            Uri page;
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             CustomTabsIntent customTabsIntent = builder.build();
-            customTabsIntent.launchUrl(view.getContext(), Uri.parse(profileBinding.linkInBio.getText().toString().trim()));
+            if (!profileBinding.linkInBio.getText().toString().trim().startsWith("http://") && !profileBinding.linkInBio.getText().toString().trim().startsWith("https://")) {
+                page = Uri.parse("http://" + profileBinding.linkInBio.getText().toString().trim());
+                customTabsIntent.launchUrl(view.getContext(), page);
+            } else
+                customTabsIntent.launchUrl(view.getContext(), Uri.parse(profileBinding.linkInBio.getText().toString().trim()));
         });
 
+        profileBinding.addHabitButton.setOnClickListener(view -> {
+            Intent goToHabitsPage = new Intent(getActivity(), HabitsActivity.class);
+            startActivity(goToHabitsPage);
+        });
     }
 
     private void getProfileDetails() {
@@ -185,19 +192,19 @@ public class ProfileFragment extends Fragment {
                                     String bio = (String) change.getDocument().get("userBio");
                                     String link = (String) change.getDocument().get("userBioLink");
                                     if (bio != null && !bio.equals("")) {
-                                        userBioIcon.setVisibility(View.VISIBLE);
-                                        userBioTextView.setVisibility(View.VISIBLE);
+                                        userBioView.setVisibility(View.VISIBLE);
                                         userBioTextView.setText(bio);
                                     }
                                     if (link != null && !link.equals("")) {
-                                        userLinkIcon.setVisibility(View.VISIBLE);
-                                        userLinkTextView.setVisibility(View.VISIBLE);
+                                        userLinkView.setVisibility(View.VISIBLE);
                                         userLinkTextView.setText(link);
                                     }
-                                    if (points == 0)
-                                        userHeartsTextView.setText(R.string.yet_to_win_hearts);
-                                    else
-                                        userHeartsTextView.setText("Hearts won: " + points);
+
+                                    if (points == 0) {
+                                        userHeartsTextView.setVisibility(View.GONE);
+                                        userHeartsAddnTextView.setText(R.string.yet_to_win_hearts);
+                                    } else
+                                        userHeartsTextView.setText(String.valueOf(change.getDocument().getLong("points")));
                                 }
                             }
                         }
