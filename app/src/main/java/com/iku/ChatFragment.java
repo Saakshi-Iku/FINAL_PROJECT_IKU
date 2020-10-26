@@ -1289,11 +1289,14 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                         editTextStatus = 1;
                                         if (editTextStatus == 1) {
                                             binding.sendMessageButton.setOnClickListener(view121 -> {
-                                                editWarningLayout.setVisibility(View.GONE);
-                                                editTextStatus = 0;
-                                                updateMessage(documentID, position, messageTextField.getText().toString().trim());
-                                                messageTextField.setText("");
-                                                messageTextField.requestFocus();
+                                                if (!messageTextField.getText().toString().trim().isEmpty()) {
+                                                    editWarningLayout.setVisibility(View.GONE);
+                                                    editTextStatus = 0;
+                                                    updateMessage(documentID, position, messageTextField.getText().toString().trim());
+                                                    messageTextField.setText("");
+                                                    messageTextField.requestFocus();
+                                                } else
+                                                    Toast.makeText(getActivity(), "Caption such empty..much wow!", Toast.LENGTH_SHORT).show();
                                             });
                                         }
                                     } else if (chatadapter.getItem(position).getType().equals("image")) {
@@ -1423,11 +1426,15 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
                                         editTextStatus = 1;
                                         if (editTextStatus == 1) {
                                             binding.sendMessageButton.setOnClickListener(view121 -> {
-                                                editWarningLayout.setVisibility(View.GONE);
-                                                editTextStatus = 0;
-                                                updateMessage(documentID, position, messageTextField.getText().toString().trim());
-                                                messageTextField.setText("");
-                                                messageTextField.requestFocus();
+                                                if (!messageTextField.getText().toString().trim().isEmpty()) {
+                                                    editWarningLayout.setVisibility(View.GONE);
+                                                    editTextStatus = 0;
+                                                    updateMessage(documentID, position, messageTextField.getText().toString().trim());
+                                                    messageTextField.setText("");
+                                                    messageTextField.requestFocus();
+                                                } else
+                                                    Toast.makeText(getActivity(), "Caption such empty..much wow!", Toast.LENGTH_SHORT).show();
+
                                             });
                                         }
                                     } else if (chatadapter.getItem(position).getType().equals("image")) {
