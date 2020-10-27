@@ -14,6 +14,7 @@ import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
 
 import com.amulyakhare.textdrawable.TextDrawable;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -88,8 +89,6 @@ public class ProfileFragment extends Fragment {
             startActivity(goToEditPage);
         });
 
-        profileBinding.addHabitButton.setOnClickListener(view -> startActivity(new Intent(getContext(), HabitsActivity.class)));
-
         profileBinding.linkInBio.setOnClickListener(view -> {
             Uri page;
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
@@ -102,8 +101,10 @@ public class ProfileFragment extends Fragment {
         });
 
         profileBinding.addHabitButton.setOnClickListener(view -> {
-            Intent goToHabitsPage = new Intent(getActivity(), HabitsActivity.class);
-            startActivity(goToHabitsPage);
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(view.getContext());
+            View parentView = getLayoutInflater().inflate(R.layout.add_habit, null);
+            bottomSheetDialog.setContentView(parentView);
+            bottomSheetDialog.show();
         });
     }
 

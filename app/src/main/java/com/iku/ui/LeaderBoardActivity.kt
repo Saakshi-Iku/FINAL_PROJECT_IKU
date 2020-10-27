@@ -20,7 +20,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.ktx.Firebase
-import com.iku.HabitsActivity
 import com.iku.R
 import com.iku.UserProfileActivity
 import com.iku.app.AppConfig

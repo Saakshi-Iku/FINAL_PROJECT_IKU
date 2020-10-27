@@ -21,7 +21,9 @@ class HallOfFameActivity : AppCompatActivity() {
         setContentView(binding.root)
         back_button.setOnClickListener { onBackPressed() }
         adapter = HallOfFameAdapter(this)
-        hofRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        val linearLayoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        linearLayoutManager.stackFromEnd = true
+        hofRecyclerView.layoutManager = linearLayoutManager
         val snapHelper: SnapHelper = PagerSnapHelper()
         snapHelper.attachToRecyclerView(hofRecyclerView)
         hofRecyclerView.adapter = adapter
