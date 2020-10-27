@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.HallOfFameActivity"></activity>
+        <activity
+            android:name=".ui.HallOfFameActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".FeatureUpvoteActivity"
             android:screenOrientation="portrait" />
@@ -30,9 +32,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HabitsActivity"
+            android:name=".EmailInputActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".EmailInputActivity" />
         <activity
             android:name=".ViewPostActivity"
             android:screenOrientation="portrait" />
@@ -122,6 +123,7 @@
             </intent-filter>
         </service>
     </application>
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

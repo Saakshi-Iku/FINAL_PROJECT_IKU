@@ -6,6 +6,85 @@
     android:layout_height="match_parent"
     tools:context=".UserProfileActivity">
 
+    <!--Top bar-->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
+                app:layout_constraintEnd_toEndOf="@+id/topAppBar"
+                app:layout_constraintStart_toStartOf="@+id/topAppBar"
+                app:layout_constraintTop_toTopOf="@+id/topAppBar">
+
+                <!--Page icon-->
+                <ImageView
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:contentDescription="@string/edit_profile_icon"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_circle_account"
+                    app:tint="@color/iconColor"
+                    tools:layout_editor_absoluteX="114dp"
+                    tools:layout_editor_absoluteY="13dp" />
+
+                <!--Page title-->
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/profile"
+                    android:textSize="18sp"
+                    tools:layout_editor_absoluteX="152dp"
+                    tools:layout_editor_absoluteY="16dp" />
+            </LinearLayout>
+
+            <!--Back button-->
+            <FrameLayout
+                android:id="@+id/backButtonContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_oval_transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/back_button"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/back_button_content_desc"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_arrow_back_24" />
+            </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
     <!--Rest of the page-->
     <ScrollView
         android:layout_width="match_parent"
@@ -307,84 +386,5 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-    <!--Top bar-->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <RelativeLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
-                app:layout_constraintEnd_toEndOf="@+id/topAppBar"
-                app:layout_constraintStart_toStartOf="@+id/topAppBar"
-                app:layout_constraintTop_toTopOf="@+id/topAppBar">
-
-                <!--Back button-->
-                <FrameLayout
-                    android:id="@+id/backButtonContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_gravity="center"
-                    android:background="@drawable/bg_oval_transparent">
-
-                    <ImageView
-                        android:id="@+id/back_button"
-                        android:layout_width="45dp"
-                        android:layout_height="45dp"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/back_button_content_desc"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_arrow_back_24" />
-                </FrameLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true">
-
-                    <!--Page icon-->
-                    <ImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:padding="10dp"
-                        android:src="@drawable/ic_circle_account" />
-
-                    <!--Page title-->
-                    <com.google.android.material.textview.MaterialTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="@string/profile"
-                        android:textSize="18sp" />
-
-                </LinearLayout>
-
-            </RelativeLayout>
-
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBar"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:background="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
 
 </RelativeLayout>
