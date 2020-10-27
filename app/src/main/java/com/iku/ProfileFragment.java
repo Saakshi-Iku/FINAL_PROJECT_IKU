@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.fragment.app.Fragment;
+
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -24,6 +26,7 @@ import com.iku.databinding.FragmentProfileBinding;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -84,6 +87,8 @@ public class ProfileFragment extends Fragment {
             goToEditPage.putExtra("EXTRA_PROFILE_NAME", user.getDisplayName());
             startActivity(goToEditPage);
         });
+
+        profileBinding.addHabitButton.setOnClickListener(view -> startActivity(new Intent(getContext(), HabitsActivity.class)));
 
         profileBinding.linkInBio.setOnClickListener(view -> {
             Uri page;

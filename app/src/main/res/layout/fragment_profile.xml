@@ -224,7 +224,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:isScrollContainer="false"
-                android:weightSum="1"
+                android:weightSum="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/profileDetailsLayout">
@@ -264,8 +264,7 @@
                     android:layout_width="1dp"
                     android:layout_height="match_parent"
                     android:layout_marginVertical="5dp"
-                    android:background="@android:color/darker_gray"
-                    android:visibility="gone" />
+                    android:background="@android:color/darker_gray" />
 
                 <!--Habits count-->
                 <LinearLayout
@@ -276,8 +275,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:paddingVertical="5dp"
-                    android:visibility="gone">
+                    android:paddingVertical="5dp">
 
                     <TextView
                         android:id="@+id/userHabits"
@@ -409,7 +407,6 @@
                 android:layout_height="50dp"
                 android:background="#66DCDCDC"
                 android:gravity="center"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/recyclerView"
                 app:layout_constraintTop_toBottomOf="@id/badgesView">
 
@@ -441,7 +438,6 @@
                 android:background="#66DCDCDC"
                 android:minHeight="20dp"
                 android:paddingHorizontal="8dp"
-                android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@id/endOfListText"
                 app:layout_constraintTop_toBottomOf="@id/addHabitButton" />
 
@@ -455,7 +451,6 @@
                 android:paddingVertical="5dp"
                 android:text="That's All Folks!"
                 android:textSize="10sp"
-                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/recyclerView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
