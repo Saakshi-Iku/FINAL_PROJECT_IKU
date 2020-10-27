@@ -6,44 +6,13 @@
     android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet">
 
-    <!--Header-->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/headerSection"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="8dp"
-        android:elevation="2dp"
-        android:gravity="center">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Edit habit:"
-            android:textColor="@color/colorPrimary"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="0"
-            android:background="@color/fui_transparent"
-            android:rotation="90"
-            android:src="@drawable/ic_next_36"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <!--Rest of the page-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/habitCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/headerSection"
         android:layout_margin="8dp"
-        android:padding="5dp">
+        android:padding="5dp"
+        android:background="@color/scrollViewBG">
 
         <!--Edit habit-->
         <androidx.constraintlayout.widget.ConstraintLayout

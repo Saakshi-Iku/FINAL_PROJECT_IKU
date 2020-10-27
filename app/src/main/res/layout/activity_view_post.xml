@@ -295,6 +295,20 @@
                 android:textColorLink="@color/linkColorDarkBG"
                 android:textSize="12sp" />
 
+            <!--flag to show message is edited-->
+            <TextView
+                android:id="@+id/editFlag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="• Edited"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:visibility="gone"
+                android:paddingStart="10dp"
+                android:paddingVertical="2dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
             <!--To upvote or downvote-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/heartsArea"

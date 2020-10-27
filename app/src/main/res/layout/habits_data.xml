@@ -9,12 +9,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:backgroundTint="#50DCDCDC"
+        android:backgroundTint="@color/profileLayoutBG"
         app:cardCornerRadius="8dp"
         app:cardElevation="2dp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -24,10 +25,11 @@
             <!--Habit preview-->
             <LinearLayout
                 android:id="@+id/habitPreview"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:visibility="visible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
@@ -53,38 +55,63 @@
             <!--Habit level info-->
             <RelativeLayout
                 android:id="@+id/progress"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:paddingVertical="5dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/habitPreview">
 
-                <!--Level info-->
-                <TextView
-                    android:id="@+id/streakInformation"
-                    android:layout_width="wrap_content"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignStart="@id/supportHabit"
-                    android:layout_alignBottom="@id/supportHabit"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_toStartOf="@+id/supportHabit"
-                    android:text="On streak since 12 Jan 2020!"
-                    android:textSize="12dp" />
-
-                <!--progress bar-->
-                <androidx.core.widget.ContentLoadingProgressBar
-                    android:id="@+id/progressBar"
-                    android:layout_width="0dp"
-                    android:layout_height="36dp"
-                    android:layout_alignStart="@id/supportHabit"
-                    android:layout_alignParentStart="true"
+                    android:padding="5dp"
+                    android:layout_centerVertical="true"
                     android:layout_alignParentTop="true"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_toStartOf="@+id/supportHabit"
-                    android:progressBackgroundTint="@color/colorPrimary" />
+                    android:layout_alignParentStart="true"
+                    android:layout_toStartOf="@+id/supportHabit">
+
+                    <!--Level info-->
+                    <TextView
+                        android:id="@+id/currentLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="10dp"
+                        android:text="Lvl:1"
+                        android:textSize="11sp" />
+
+                    <TextView
+                        android:id="@+id/nextLevel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginEnd="10dp"
+                        android:text="Lvl:2"
+                        android:textSize="11sp" />
+
+                    <!--progress bar-->
+                    <androidx.core.widget.ContentLoadingProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        app:layout_constraintTop_toBottomOf="@id/currentLevel"
+                        android:progressBackgroundTint="@color/colorPrimary" />
+
+                    <TextView
+                        android:id="@+id/streakInformation"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toBottomOf="@id/progressBar"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="10dp"
+                        android:text="On streak since 12 Jan 2020!"
+                        android:textSize="12dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <!--Habits support-->
                 <LinearLayout
@@ -92,18 +119,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:visibility="gone"
-                    android:orientation="vertical">
+                    android:layout_centerVertical="true"
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <!--Heart button-->
                     <ImageButton
                         android:id="@+id/supportHabitButton"
                         android:layout_width="36dp"
                         android:layout_height="36dp"
-                        android:padding="6dp"
                         android:background="@color/fui_transparent"
-                        android:src="@drawable/ic_fire_filled"
-                        android:visibility="visible"/>
+                        android:padding="6dp"
+                        android:src="@drawable/ic_fire_filled" />
 
                     <!--Hearts for habits-->
                     <TextView
@@ -118,28 +145,28 @@
 
             </RelativeLayout>
 
-            <!--Edit button-->
-            <com.google.android.material.button.MaterialButton
+            <!--DO NOT USE THIS Edit button-->
+            <TextView
                 android:id="@+id/materialButton2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/white"
+                android:backgroundTint="@color/profileLayoutBG"
+                android:paddingHorizontal="25dp"
+                android:paddingVertical="5dp"
                 android:text="Edit"
                 android:textAllCaps="false"
                 android:textColor="@color/colorPrimary"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/progress"
-                app:strokeColor="@color/colorPrimary"
-                app:strokeWidth="2px" />
+                app:layout_constraintTop_toBottomOf="@id/progress" />
 
             <!--Timer-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:visibility="gone"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -149,14 +176,13 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_baseline_timer_24"
-                    app:tint="@color/colorPrimary" />
+                    app:tint="@color/iconColor" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:text="6d:23h"
-                    android:textColor="@color/colorPrimary" />
+                    android:text="6d:23h" />
 
             </LinearLayout>
 
@@ -165,9 +191,9 @@
                 android:id="@+id/CTA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:hapticFeedbackEnabled="true"
                 android:text="Start"
                 android:textAllCaps="false"
-                android:hapticFeedbackEnabled="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/progress" />

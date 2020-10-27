@@ -16,13 +16,19 @@
     <color name="linkColor">#343493</color>
     <color name="linkColorDarkBG">#11b7b7</color>
     <color name="deletedTextLight">#D8D8D8</color>
+    <color name="lightPrimary">#009E9E</color>
+
+    <!--Button colours-->
+    <color name="buttonLightBG">#15000000</color>
 
     <!--Container colours-->    <color name="urlPreviewBG">#DADADA</color>
-    <color name="scrollViewBG">#EBEBEB</color>
+    <color name="scrollViewBG">#F5F5F5</color>
     <color name="commentBoxBG"></color>
     <color name="jumpToBottomButtonBG"></color>
     <color name="dateContainerBG">#D3E9F4</color>
     <color name="rightChatBG">#66B2B2</color>
+    <color name="leftChatBG">#DCDCDC</color>
+    <color name="profileLayoutBG">#66DCDCDC</color>
 
     <!--flair colors-->
     <color name="defaultchipcolour">#d1D1D1</color>

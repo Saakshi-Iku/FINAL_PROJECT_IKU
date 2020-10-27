@@ -134,7 +134,7 @@
             android:layout_marginHorizontal="10dp"
             android:gravity="center_horizontal"
             android:weightSum="3"
-            app:layout_constraintTop_toBottomOf="@id/text1">
+            app:layout_constraintTop_toTopOf="parent">
 
             <View
                 android:layout_width="match_parent"

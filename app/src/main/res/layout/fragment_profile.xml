@@ -72,8 +72,8 @@
                     android:visibility="invisible"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <!--new notification indicator-->
                 <ImageView
@@ -95,16 +95,19 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/appBar">
+        android:layout_below="@id/appBar"
+        android:background="@color/profileLayoutBG">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!--profile details-->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/profileDetailsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/white"
                 android:padding="5dp"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -222,8 +225,9 @@
                 android:id="@+id/headlineNumbers"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:background="@color/white"
                 android:isScrollContainer="false"
+                android:paddingTop="10dp"
                 android:weightSum="2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -400,15 +404,25 @@
 
             </LinearLayout>
 
-            <!--Add habit button-->
+            <!--recycler view-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                app:layout_constraintBottom_toTopOf="@id/addHabitButton"
+                app:layout_constraintTop_toBottomOf="@id/badgesView" />
+
+            <!--Habit button-->
             <LinearLayout
                 android:id="@+id/addHabitButton"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="#66DCDCDC"
+                android:layout_height="40dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/url_preview_background"
+                android:backgroundTint="@color/leftChatBG"
                 android:gravity="center"
-                app:layout_constraintBottom_toTopOf="@id/recyclerView"
-                app:layout_constraintTop_toBottomOf="@id/badgesView">
+                app:layout_constraintTop_toBottomOf="@id/recyclerView">
 
                 <ImageView
                     android:id="@+id/buttonIcon"
@@ -417,41 +431,29 @@
                     android:gravity="center"
                     android:paddingEnd="5dp"
                     android:src="@drawable/ic_baseline_edit_24"
-                    app:tint="@color/colorPrimary" />
+                    app:tint="@color/lightPrimary" />
 
                 <TextView
                     android:id="@+id/buttonTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="Add / edit habits"
-                    android:textColor="@color/colorPrimary"
+                    android:text="Add a habit"
+                    android:textColor="@color/lightPrimary"
                     android:textSize="14sp" />
 
             </LinearLayout>
 
-            <!--recycler view-->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#66DCDCDC"
-                android:minHeight="20dp"
-                android:paddingHorizontal="8dp"
-                app:layout_constraintBottom_toTopOf="@id/endOfListText"
-                app:layout_constraintTop_toBottomOf="@id/addHabitButton" />
-
             <TextView
-                android:id="@+id/endOfListText"
+                android:id="@+id/text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/chat_receive_heart_bubble"
-                android:backgroundTint="#66DCDCDC"
                 android:gravity="center"
-                android:paddingVertical="5dp"
-                android:text="That's All Folks!"
+                android:padding="10dp"
+                android:text="@string/unlock_additional_habits"
                 android:textSize="10sp"
-                app:layout_constraintTop_toBottomOf="@id/recyclerView" />
+                app:layout_constraintTop_toBottomOf="@id/addHabitButton"
+                android:visibility="gone" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

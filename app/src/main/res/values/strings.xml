@@ -63,4 +63,7 @@
     <!--Placeholder texts-->
     <string name="hof_placeholder">Hall of fame winners are announced at the ned of every month.\n(Eligibility: Minimum 10 players required in the community.)</string>
 
+    <!--Additional texts-->
+    <string name="unlock_additional_habits">Complete 21 entries of any habit without breaking \nit\'s streak to unlock additional habits.</string>
+
 </resources>
