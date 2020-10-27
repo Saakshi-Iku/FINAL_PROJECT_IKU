@@ -1,0 +1,405 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet"
+    tools:context=".HabitsActivity">
+
+    <!--Header-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerSection"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:elevation="2dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Edit habit:"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:background="@color/fui_transparent"
+            android:rotation="90"
+            android:src="@drawable/ic_next_36"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--Rest of the page-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/habitCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/headerSection"
+        android:layout_margin="8dp"
+        android:padding="5dp">
+
+        <!--Edit habit-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/editHabit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!--Name of the habit-->
+            <EditText
+                android:id="@+id/editHabitName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="What sustainable habit would you like to track?"
+                android:maxLines="2"
+                android:minLines="2"
+                android:paddingVertical="15dp"
+                android:textAlignment="viewStart"
+                android:textSize="14dp"
+                android:visibility="visible"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/charCounter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingEnd="10dp"
+                android:paddingBottom="15dp"
+                android:text="140"
+                android:textSize="10dp"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="@id/editHabitName"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!--How often is habit tracked-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/frequency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="5dp"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/editHabitName">
+
+                <TextView
+                    android:id="@+id/frequencyTitle"
+                    android:layout_width="105dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:text="Remind:"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/frequencyTitle"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/frequencyChipGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        app:layout_constraintStart_toEndOf="@id/frequencyTitle"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:singleLine="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Daily"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Once in 3 days"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Once in a week"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Once in a month"
+                            android:textSize="12sp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--What week do they want to be reminded-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/weekSelection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="5dp"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/frequency">
+
+                <TextView
+                    android:id="@+id/weekSelectionTitle"
+                    android:layout_width="105dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:text="Select a week:"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/weekSelectionTitle"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/weekSelectionChipGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:singleLine="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Week 1"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Week 2"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Week 3"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Week 4"
+                            android:textSize="12sp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--What day do they want to be reminded-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/daySelection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="5dp"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/weekSelection">
+
+                <TextView
+                    android:id="@+id/daySelectionTitle"
+                    android:layout_width="105dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:text="Select a day:"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/daySelectionChipGroup"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:singleLine="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Mon"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Tue"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Wed"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Thu"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fri"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sat"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Sun"
+                            android:textSize="12sp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <!--What time slot do they want to be reminded of it-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/timeSlot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="5dp"
+                android:visibility="visible"
+                app:layout_constraintTop_toBottomOf="@id/daySelection">
+
+                <TextView
+                    android:id="@+id/timeSlotTitle"
+                    android:layout_width="105dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:text="Best time to\nremind you:"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <HorizontalScrollView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:overScrollMode="never"
+                    android:scrollbars="none"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/timeSlotTitle"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/timeSlotChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:nestedScrollingEnabled="true"
+                        android:overScrollMode="never"
+                        app:singleLine="true"
+                        app:singleSelection="true">
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Morning"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Afternoon"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Evening"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Night"
+                            android:textSize="12sp" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </HorizontalScrollView>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <!--CTA button-->
+        <Button
+            android:id="@+id/CTA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:hapticFeedbackEnabled="true"
+            android:text="Start"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editHabit" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

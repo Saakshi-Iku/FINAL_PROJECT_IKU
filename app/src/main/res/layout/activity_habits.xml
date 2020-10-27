@@ -3,113 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet"
     tools:context=".HabitsActivity">
 
-    <!--disconnected to network-->
-    <TextView
-        android:id="@+id/networkDisconnected"
+    <!--Header-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/headerSection"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:text="Not connected to internet."
-        android:textStyle="italic|bold"
-        android:textSize="10sp"
-        android:textColor="@color/white"
-        android:textAlignment="center"
-        android:textAllCaps="false"
-        android:background="@android:color/holo_red_dark"
-        android:padding="5dp"
-        android:visibility="gone"/>
+        android:layout_height="50dp"
+        android:layout_marginTop="8dp"
+        android:elevation="2dp"
+        android:gravity="center"
+        android:layout_alignParentTop="true">
 
-    <!--App Bar-->
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/networkDisconnected">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Track sustainable habits:"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.appbar.MaterialToolbar
-                android:id="@+id/topAppBar"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:background="@color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:background="@color/fui_transparent"
+            android:rotation="90"
+            android:src="@drawable/ic_next_36"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
-                app:layout_constraintEnd_toEndOf="@+id/topAppBar"
-                app:layout_constraintStart_toStartOf="@+id/topAppBar"
-                app:layout_constraintTop_toTopOf="@+id/topAppBar">
-
-                <ImageView
-                    android:id="@+id/group_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_baseline_timer_36"
-                    app:tint="@color/iconColor"/>
-
-                <com.google.android.material.textview.MaterialTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:text="Habits"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <!-- Back button -->
-            <FrameLayout
-                android:id="@+id/backButtonContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/bg_oval_transparent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/back_button"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:background="?selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/back_button_content_desc"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_arrow_back_24" />
-            </FrameLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!--Rest of the page-->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/restOfPage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appBar">
-
-        <!--List of habits being tracked-->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listHabits"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_below="@id/headerSection">
 
         <!--Add a Habit-->
         <com.google.android.material.card.MaterialCardView
@@ -120,7 +53,7 @@
             android:backgroundTint="#50DCDCDC"
             app:cardCornerRadius="5dp"
             app:cardElevation="1dp"
-            app:layout_constraintTop_toBottomOf="@id/listHabits">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -150,8 +83,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center"
                         android:text="Add a habit"
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="16sp" />
+                        android:textColor="@color/colorPrimary" />
 
                 </LinearLayout>
 
@@ -544,7 +476,8 @@
             android:padding="10dp"
             android:text="Complete 21 entries of any habit without breaking \nit's streak to unlock additional habits."
             android:textSize="10sp"
-            app:layout_constraintTop_toBottomOf="@id/addHabitCardView" />
+            app:layout_constraintTop_toBottomOf="@id/addHabitCardView"
+            android:visibility="gone" />
 
         <!--Content divider-->
         <LinearLayout
