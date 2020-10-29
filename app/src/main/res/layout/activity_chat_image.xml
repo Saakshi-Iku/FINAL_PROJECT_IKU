@@ -138,8 +138,8 @@
 
         <ImageButton
             android:id="@+id/addImageButton"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_margin="5dp"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_add"
@@ -159,16 +159,30 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
             android:overScrollMode="never"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintEnd_toStartOf="@id/addImageButton"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/addImageButton">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/addedImagesRecyclerView"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="45dp"
-                android:paddingEnd="10dp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/addedImagesRecyclerView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="65dp" />
+
+                <ImageButton
+                    android:id="@+id/galleryButton"
+                    android:layout_width="65dp"
+                    android:layout_height="65dp"
+                    android:paddingEnd="10dp"
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/ic_add" />
+
+            </LinearLayout>
 
         </HorizontalScrollView>
 
