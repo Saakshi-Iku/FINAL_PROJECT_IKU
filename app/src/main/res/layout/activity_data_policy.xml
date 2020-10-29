@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SettingsActivity">
+
+    <!--disconnected to network-->
+    <TextView
+        android:id="@+id/networkDisconnected"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@android:color/holo_red_dark"
+        android:padding="5dp"
+        android:text="Not connected to internet."
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        android:textStyle="italic|bold"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--Top bar-->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/networkDisconnected">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
+                app:layout_constraintEnd_toEndOf="@+id/topAppBar"
+                app:layout_constraintStart_toStartOf="@+id/topAppBar"
+                app:layout_constraintTop_toTopOf="@+id/topAppBar">
+
+                <ImageView
+                    android:id="@+id/settings_icon"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_baseline_timer_36"
+                    app:tint="@color/iconColor"
+                    tools:layout_editor_absoluteX="114dp"
+                    tools:layout_editor_absoluteY="13dp" />
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Data"
+                    android:textSize="16sp"
+                    tools:layout_editor_absoluteX="152dp"
+                    tools:layout_editor_absoluteY="16dp" />
+            </LinearLayout>
+
+            <!--Back button-->
+            <FrameLayout
+                android:id="@+id/backButtonContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_oval_transparent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/back_button"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/back_button_content_desc"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_arrow_back_24" />
+            </FrameLayout>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appBar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/pageIllustration"
+                android:layout_width="match_parent"
+                android:maxWidth="700dp"
+                android:layout_height="250dp"
+                android:paddingHorizontal="50dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/ic_data_policy"/>
+
+            <TextView
+                android:id="@+id/pageDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/pageIllustration"
+                android:padding="15dp"
+                android:text="@string/data_policy_page_description"
+                android:textAlignment="center" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                app:layout_constraintTop_toBottomOf="@id/pageDescription" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

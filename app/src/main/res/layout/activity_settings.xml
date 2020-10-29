@@ -313,6 +313,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/logout_button" />
 
+            <!--Report a bug-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/report_a_bug_button"
                 android:layout_width="match_parent"
@@ -357,6 +358,52 @@
 
             </androidx.cardview.widget.CardView>
 
+            <!--Data-->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/data_button"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                app:cardElevation="0dp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/report_a_bug_button">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/timer_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="24dp"
+                        android:src="@drawable/ic_baseline_timer_24" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        style="@style/FirebaseUI.Text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="12dp"
+                        android:layout_toEndOf="@id/timer_icon"
+                        android:text="Data" />
+
+                    <ImageButton
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="24dp"
+                        android:background="@drawable/ic_next_36" />
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
             <!--Feature Upvote-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/featurebtn"
@@ -366,7 +413,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/report_a_bug_button">
+                app:layout_constraintTop_toBottomOf="@id/data_button">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
