@@ -21,7 +21,8 @@
     <!--Button colours-->
     <color name="buttonLightBG">#15000000</color>
 
-    <!--Container colours-->    <color name="urlPreviewBG">#DADADA</color>
+    <!--Container colours-->
+    <color name="urlPreviewBG">#DADADA</color>
     <color name="scrollViewBG">#F5F5F5</color>
     <color name="commentBoxBG"></color>
     <color name="jumpToBottomButtonBG"></color>
@@ -40,4 +41,20 @@
     <color name="flair6">#BE7C4D</color>
     <color name="flair7">#777DA7</color>
     <color name="flair8">#495159</color>
+
+    <!--habit colors-->
+    <color name="energyCategory">#51CB20</color>
+    <color name="waterCategory">#276FBF</color>
+    <color name="transportCategory">#7B7554</color>
+    <color name="foodCategory">#F08700</color>
+    <color name="wasteCategory">#3B2C35</color>
+    <color name="gardenCategory">#23CE6B</color>
+    <color name="plasticCategory">#D62246</color>
+    <color name="shoppingCategory">#084C61</color>
+    <color name="healthCategory">#7D8CC4</color>
+    <color name="awarenessCategory">#11B7B7</color>
+
+
+
+
 </resources>

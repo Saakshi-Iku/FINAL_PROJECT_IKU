@@ -67,4 +67,17 @@
     <string name="unlock_additional_habits">Complete 21 entries of any habit without breaking \nit\'s streak to unlock additional habits.</string>
     <string name="data_policy_page_description">Your data is yours. Following are the different types of data that rightfully belongs to you. No analysis has been performed on it. \n\nOur promise to you is <u>never</u> to use this data for any purpose <u>without</u> your permission and helping you understand it's use first.</string>
 
+    <!--Habit category-->
+    <string name="energyCategory">Energy</string>
+    <string name="waterCategory">Water</string>
+    <string name="transportCategory">Transport</string>
+    <string name="foodCategory">Energy</string>
+    <string name="wasteCategory">Waste</string>
+    <string name="gardenCategory">Gardening</string>
+    <string name="plasticCategory">Plastic</string>
+    <string name="shoppingCategory">Shopping</string>
+    <string name="healthCategory">Health</string>
+    <string name="awarenessCategory">Awareness</string>
+
+
 </resources>
