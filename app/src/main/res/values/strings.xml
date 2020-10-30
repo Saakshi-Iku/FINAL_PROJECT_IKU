@@ -78,6 +78,8 @@
     <string name="shoppingCategory">Shopping</string>
     <string name="healthCategory">Health</string>
     <string name="awarenessCategory">Awareness</string>
+    <string name="customCategory">Custom</string>
+
 
 
 </resources>
