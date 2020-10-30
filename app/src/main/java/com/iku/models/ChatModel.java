@@ -110,6 +110,11 @@ public class ChatModel {
         this.postCommentCount = postCommentCount;
     }
 
+    public ChatModel(String message, long timestamp) {
+        this.message = message;
+        this.timestamp = timestamp;
+    }
+
     public String getMessage() {
         return message;
     }

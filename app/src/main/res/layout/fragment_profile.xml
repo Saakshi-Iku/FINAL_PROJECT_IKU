@@ -406,7 +406,7 @@
 
             <!--recycler view-->
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
+                android:id="@+id/userPostsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
@@ -422,7 +422,7 @@
                 android:background="@drawable/url_preview_background"
                 android:backgroundTint="@color/leftChatBG"
                 android:gravity="center"
-                app:layout_constraintTop_toBottomOf="@id/recyclerView">
+                app:layout_constraintTop_toBottomOf="@id/userPostsRecyclerView">
 
                 <ImageView
                     android:id="@+id/buttonIcon"
@@ -452,8 +452,8 @@
                 android:padding="10dp"
                 android:text="@string/unlock_additional_habits"
                 android:textSize="10sp"
-                app:layout_constraintTop_toBottomOf="@id/addHabitButton"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/addHabitButton" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
