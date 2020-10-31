@@ -415,7 +415,7 @@
 
             <!--Habit button-->
             <LinearLayout
-                android:id="@+id/addHabitButton"
+                android:id="@+id/add_a_new_habit_button"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_margin="10dp"

@@ -1,10 +1,10 @@
 package com.iku
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.amulyakhare.textdrawable.TextDrawable
+import com.firebase.ui.firestore.FirestoreRecyclerOptions
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.analytics
@@ -23,12 +24,15 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.iku.adapter.HabitsAdapter
 import com.iku.app.AppConfig
+import com.iku.models.HabitsModel
 import com.iku.ui.UserPostsAdapter
 import com.iku.viewmodel.UserPostsViewModel
 import com.squareup.picasso.Callback
 import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.add_habit.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 
 class ProfileFragment : Fragment() {
@@ -38,6 +42,7 @@ class ProfileFragment : Fragment() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var photoUrl: String
     private lateinit var adapter: UserPostsAdapter
+    private lateinit var habitsAdapter: HabitsAdapter
     private val viewModel by lazy { ViewModelProvider(this).get(UserPostsViewModel::class.java) }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         db = Firebase.firestore
@@ -58,6 +63,7 @@ class ProfileFragment : Fragment() {
         userDetails()
     }
 
+    @SuppressLint("InflateParams")
     private fun initButtons() {
         settingsButton.setOnClickListener { startActivity(Intent(activity, SettingsActivity::class.java)) }
         edit_profile_button.setOnClickListener { startActivity(Intent(activity, SettingsActivity::class.java).putExtra("EXTRA_PROFILE_URL", "photoUrl").putExtra("EXTRA_PROFILE_NAME", user.displayName)) }
@@ -66,9 +72,23 @@ class ProfileFragment : Fragment() {
             val customTabsIntent: CustomTabsIntent = builder.build()
             customTabsIntent.launchUrl(requireContext(), Uri.parse(linkInBio.text.toString().trim()))
         }
-        addHabitButton.setOnClickListener {
+        add_a_new_habit_button.setOnClickListener {
             val bottomSheet = layoutInflater.inflate(R.layout.add_habit, null)
             val dialog = BottomSheetDialog(requireContext())
+            bottomSheet.listHabitsPredefined.layoutManager = LinearLayoutManager(requireContext())
+            bottomSheet.listHabitsPredefined.setHasFixedSize(true)
+            val query = db.collection("habits")
+            val options = FirestoreRecyclerOptions.Builder<HabitsModel>().setQuery(query, HabitsModel::class.java).setLifecycleOwner(this).build()
+            habitsAdapter = HabitsAdapter(options)
+            habitsAdapter.startListening()
+            bottomSheet.listHabitsPredefined.adapter = habitsAdapter
+            bottomSheet.addHabitButton.setOnClickListener {
+                val editHabitBottomSheet = layoutInflater.inflate(R.layout.edit_habit_bottom_sheet, null)
+                val editHabitDialog = BottomSheetDialog(requireContext())
+                dialog.dismiss()
+                editHabitDialog.setContentView(editHabitBottomSheet)
+                editHabitDialog.show()
+            }
             dialog.setContentView(bottomSheet)
             dialog.show()
         }

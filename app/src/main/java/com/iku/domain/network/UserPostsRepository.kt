@@ -3,7 +3,6 @@ package com.iku.domain.network
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
 import com.iku.app.AppConfig
 import com.iku.models.ChatModel
 
