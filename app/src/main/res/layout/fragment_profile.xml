@@ -410,7 +410,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                app:layout_constraintBottom_toTopOf="@id/addHabitButton"
+                app:layout_constraintBottom_toTopOf="@id/add_a_new_habit_button"
                 app:layout_constraintTop_toBottomOf="@id/badgesView" />
 
             <!--Habit button-->
@@ -452,8 +452,7 @@
                 android:padding="10dp"
                 android:text="@string/unlock_additional_habits"
                 android:textSize="10sp"
-                android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/addHabitButton" />
+                app:layout_constraintTop_toBottomOf="@id/add_a_new_habit_button" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
