@@ -21,7 +21,8 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.PropertyName
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.iku.adapter.HabitsAdapter
@@ -34,6 +35,22 @@ import com.squareup.picasso.NetworkPolicy
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.add_habit.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+
+data class UserBio(
+        @PropertyName("userBio")
+        var userBio: String = "",
+
+        @PropertyName("userBioLink")
+        var userBioLink: String = "",
+
+        @PropertyName("points")
+        var points: Long = 0
+)
 
 class ProfileFragment : Fragment() {
     private lateinit var db: FirebaseFirestore
@@ -151,29 +168,25 @@ class ProfileFragment : Fragment() {
     }
 
     private fun userDetails() {
-        db.collection(AppConfig.USERS_COLLECTION).whereEqualTo("uid", user.uid)
-                .addSnapshotListener(MetadataChanges.INCLUDE) { querySnapshot: QuerySnapshot?, _: FirebaseFirestoreException? ->
-                    if (querySnapshot != null) {
-                        for (change in querySnapshot.documentChanges) {
-                            if (change.type == DocumentChange.Type.ADDED) {
-                                val points = change.document["points"] as Long
-                                val bio = change.document["userBio"] as String?
-                                val link = change.document["userBioLink"] as String?
-                                if (bio != null && bio != "") {
-                                    userBioView.visibility = View.VISIBLE
-                                    userBio.text = bio
-                                }
-                                if (link != null && link != "") {
-                                    linkInBioView.visibility = View.VISIBLE
-                                    linkInBio.text = link
-                                }
-                                if (points == 0L) {
-                                    userHearts.visibility = View.GONE
-                                    addnTextView!!.setText(R.string.yet_to_win_hearts)
-                                } else userHearts.text = change.document.getLong("points").toString()
-                            }
-                        }
+        val userBioDocument = db.collection(AppConfig.USERS_COLLECTION).document(user.uid)
+        GlobalScope.launch(Dispatchers.IO) {
+            val bio = userBioDocument.get().await().toObject(UserBio::class.java)
+            withContext(Dispatchers.Main) {
+                if (bio != null) {
+                    if (bio.userBio != "") {
+                        userBioView.visibility = View.VISIBLE
+                        userBio.text = bio.userBio
                     }
+                    if (bio.userBioLink != "") {
+                        linkInBioView.visibility = View.VISIBLE
+                        linkInBio.text = bio.userBioLink
+                    }
+                    if (bio.points == 0L) {
+                        userHearts.visibility = View.GONE
+                        addnTextView.setText(R.string.yet_to_win_hearts)
+                    } else userHearts.text = bio.points.toString()
                 }
+            }
+        }
     }
 }

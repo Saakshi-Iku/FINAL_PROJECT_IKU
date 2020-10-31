@@ -846,21 +846,17 @@ public class ChatFragment extends Fragment implements RecyclerView.OnItemTouchLi
     }
 
     private void getGroupMemberCount() {
-        db.collection("groups").whereEqualTo("name", "iku Experiment")
-                .addSnapshotListener(MetadataChanges.INCLUDE, new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot querySnapshot,
-                                        @Nullable FirebaseFirestoreException e) {
-                        if (e != null) {
-                            return;
-                        }
+        db.collection(AppConfig.GROUPS_COLLECTION).whereEqualTo("name", "iku_earth")
+                .addSnapshotListener(MetadataChanges.INCLUDE, (querySnapshot, e) -> {
+                    if (e != null) {
+                        return;
+                    }
 
-                        if (querySnapshot != null) {
-                            for (DocumentChange change : querySnapshot.getDocumentChanges()) {
-                                if (change.getType() == DocumentChange.Type.ADDED) {
-                                    ArrayList<String> group = (ArrayList<String>) change.getDocument().get("members");
-                                    memberCount.setText("Ikulogists: " + group.size());
-                                }
+                    if (querySnapshot != null) {
+                        for (DocumentChange change : querySnapshot.getDocumentChanges()) {
+                            if (change.getType() == DocumentChange.Type.ADDED) {
+                                ArrayList<String> group = (ArrayList<String>) change.getDocument().get("members");
+                                memberCount.setText("Ikulogists: " + group.size());
                             }
                         }
                     }
