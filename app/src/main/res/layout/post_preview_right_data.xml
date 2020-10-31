@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="2dp"
+    android:background="@drawable/chat_sender_bubble"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:id="@+id/headerSection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="5dp"
+        app:layout_constraintEnd_toStartOf="@id/viewPostButton"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintStart_toEndOf="@id/imagePreview"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--post flair-->
+        <com.google.android.material.chip.Chip
+            android:id="@+id/postFlair"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:chipBackgroundColor="@color/white" />
+
+        <!--Time Stamp-->
+        <TextView
+            android:id="@+id/message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="10dp"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imagePreview"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/url_preview_background"
+        android:backgroundTint="@color/colorPrimary"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/viewPostButton"
+        app:layout_constraintStart_toEndOf="@id/imagePreview"
+        app:layout_constraintTop_toBottomOf="@id/headerSection"
+        app:layout_constraintVertical_bias="0" />
+
+    <ImageView
+        android:id="@+id/viewPostButton"
+        android:layout_width="36dp"
+        android:layout_height="0dp"
+        android:paddingVertical="12dp"
+        android:paddingStart="20dp"
+        android:src="@drawable/ic_next_36"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/white" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

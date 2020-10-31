@@ -1,239 +1,236 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:backgroundTint="@color/profileLayoutBG"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="1dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/habitCardView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:backgroundTint="@color/profileLayoutBG"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="5dp">
+        <!--Habit preview-->
+        <LinearLayout
+            android:id="@+id/habitPreview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <!--Habit preview-->
             <LinearLayout
-                android:id="@+id/habitPreview"
-                android:layout_width="0dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:gravity="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                android:orientation="vertical">
 
-                <LinearLayout
+                <ImageView
+                    android:id="@+id/habitIllustration"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@drawable/profile_selected_tab"
+                    android:backgroundTint="@color/leftChatBG"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/habitCategory"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/habitIllustration"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:background="@drawable/profile_selected_tab"
-                        android:backgroundTint="#25000000"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/habitCategory"
-                        android:layout_width="80dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/chat_receive_heart_bubble"
-                        android:backgroundTint="@color/awarenessCategory"
-                        android:paddingVertical="1dp"
-                        android:textAlignment="center"
-                        android:textColor="@color/white"
-                        android:textSize="12sp" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/habitName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
-                        android:linksClickable="true"
-                        android:maxLines="5"
-                        android:ellipsize="end"
-                        android:paddingVertical="2dp"
-                        android:text="This is a test description for the habit"
-                        android:textSize="15sp" />
-
-                    <!--Habit level info-->
-                    <RelativeLayout
-                        android:id="@+id/progress"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="5dp"
-                        android:layout_marginStart="5dp"
-                        android:visibility="visible"
-                        android:background="@drawable/url_preview_background"
-                        android:backgroundTint="#10000000"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/habitName">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="true"
-                            android:layout_alignParentTop="true"
-                            android:layout_centerVertical="true"
-                            android:layout_toStartOf="@+id/supportHabit"
-                            android:layout_margin="5dp">
-
-                            <!--Level info-->
-                            <TextView
-                                android:id="@+id/currentLevel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:text="Lvl:1"
-                                android:textSize="11sp"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:id="@+id/nextLevel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginEnd="10dp"
-                                android:text="Lvl:2"
-                                android:textSize="11sp"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <!--progress bar-->
-                            <androidx.core.widget.ContentLoadingProgressBar
-                                android:id="@+id/progressBar"
-                                android:layout_width="match_parent"
-                                android:layout_height="20dp"
-                                android:progressBackgroundTint="@color/colorPrimary"
-                                app:layout_constraintTop_toBottomOf="@id/currentLevel" />
-
-                            <TextView
-                                android:id="@+id/streakInformation"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="On streak since 12 Jan 2020!"
-                                android:textSize="11sp"
-                                android:textAlignment="center"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@id/progressBar" />
-
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <!--Habits support-->
-                        <LinearLayout
-                            android:id="@+id/supportHabit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:orientation="vertical"
-                            android:visibility="visible">
-
-                            <!--Heart button-->
-                            <ImageView
-                                android:id="@+id/supportHabitButton"
-                                android:layout_width="36dp"
-                                android:layout_height="36dp"
-                                android:background="@color/fui_transparent"
-                                android:padding="3dp"
-                                android:src="@drawable/ic_flame_unfilled" />
-
-                            <!--Hearts for habits-->
-                            <TextView
-                                android:id="@+id/supportCount"
-                                android:layout_width="36dp"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="25"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                </LinearLayout>
+                    android:background="@drawable/chat_receive_heart_bubble"
+                    android:backgroundTint="@color/awarenessCategory"
+                    android:paddingVertical="1dp"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
-
-            <!--DO NOT USE THIS Edit button-->
-            <TextView
-                android:id="@+id/materialButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/profileLayoutBG"
-                android:paddingHorizontal="25dp"
-                android:paddingVertical="5dp"
-                android:text="Edit"
-                android:textAllCaps="false"
-                android:textColor="@color/colorPrimary"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/habitPreview" />
-
-            <!--Timer-->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:visibility="visible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintTop_toBottomOf="@id/habitPreview">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:src="@drawable/ic_baseline_timer_24"
-                    app:tint="@color/iconColor" />
+                android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/habitName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
-                    android:text="6d:23h" />
+                    android:ellipsize="end"
+                    android:linksClickable="true"
+                    android:maxLines="5"
+                    android:paddingVertical="2dp"
+                    android:text="This is a test description for the habit"
+                    android:textSize="15sp" />
+
+                <!--Habit level info-->
+                <RelativeLayout
+                    android:id="@+id/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:background="@drawable/url_preview_background"
+                    android:backgroundTint="#10000000"
+                    android:paddingVertical="5dp"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/habitName">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerVertical="true"
+                        android:layout_margin="5dp"
+                        android:layout_toStartOf="@+id/supportHabit">
+
+                        <!--Level info-->
+                        <TextView
+                            android:id="@+id/currentLevel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:text="Lvl:1"
+                            android:textSize="11sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/nextLevel"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:text="Lvl:2"
+                            android:textSize="11sp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!--progress bar-->
+                        <androidx.core.widget.ContentLoadingProgressBar
+                            android:id="@+id/progressBar"
+                            android:layout_width="match_parent"
+                            android:layout_height="20dp"
+                            android:progressBackgroundTint="@color/colorPrimary"
+                            app:layout_constraintTop_toBottomOf="@id/currentLevel" />
+
+                        <TextView
+                            android:id="@+id/streakInformation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="On streak since 12 Jan 2020!"
+                            android:textAlignment="center"
+                            android:textSize="11sp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/progressBar" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <!--Habits support-->
+                    <LinearLayout
+                        android:id="@+id/supportHabit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <!--Heart button-->
+                        <ImageView
+                            android:id="@+id/supportHabitButton"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:background="@color/fui_transparent"
+                            android:padding="3dp"
+                            android:src="@drawable/ic_flame_unfilled" />
+
+                        <!--Hearts for habits-->
+                        <TextView
+                            android:id="@+id/supportCount"
+                            android:layout_width="36dp"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="25"
+                            android:textSize="12sp" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
 
             </LinearLayout>
 
-            <!--CTA button-->
-            <Button
-                android:id="@+id/CTA"
+        </LinearLayout>
+
+
+        <!--DO NOT USE THIS Edit button-->
+        <TextView
+            android:id="@+id/materialButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/profileLayoutBG"
+            android:paddingHorizontal="25dp"
+            android:paddingVertical="5dp"
+            android:text="Edit"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/habitPreview" />
+
+        <!--Timer-->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:gravity="center"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/habitPreview">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_baseline_timer_24"
+                app:tint="@color/iconColor" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hapticFeedbackEnabled="true"
-                android:text="Start"
-                android:textAllCaps="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/habitPreview" />
+                android:layout_marginStart="5dp"
+                android:textSize="14sp"
+                android:text="6d:23h" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+        <!--CTA button-->
+        <Button
+            android:id="@+id/CTA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hapticFeedbackEnabled="true"
+            android:text="Add"
+            android:textSize="14sp"
+            android:textAllCaps="false"
+            android:backgroundTint="@android:color/holo_green_dark"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/habitPreview" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

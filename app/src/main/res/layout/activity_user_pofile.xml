@@ -59,6 +59,33 @@
                     tools:layout_editor_absoluteY="16dp" />
             </LinearLayout>
 
+            <!--menu button-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/menuButtonLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_oval_transparent"
+                app:layout_constraintBottom_toBottomOf="@+id/topAppBar"
+                app:layout_constraintEnd_toEndOf="@+id/topAppBar"
+                app:layout_constraintTop_toTopOf="@+id/topAppBar">
+
+                <ImageView
+                    android:id="@+id/menuButton"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginBottom="5dp"
+                    android:padding="10dp"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:src="@drawable/ic_baseline_more_vert_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
             <!--Back button-->
             <FrameLayout
                 android:id="@+id/backButtonContainer"
@@ -312,7 +339,6 @@
                     android:text="Award a badge"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
-
 
             </LinearLayout>
 

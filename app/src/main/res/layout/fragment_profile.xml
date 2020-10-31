@@ -100,7 +100,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="15dp">
 
             <!--profile details-->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -431,7 +432,7 @@
                     android:gravity="center"
                     android:paddingEnd="5dp"
                     android:src="@drawable/ic_baseline_edit_24"
-                    app:tint="@color/lightPrimary" />
+                    app:tint="@android:color/holo_green_dark"/>
 
                 <TextView
                     android:id="@+id/buttonTitle"
@@ -439,7 +440,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="Add a habit"
-                    android:textColor="@color/lightPrimary"
+                    android:textColor="@android:color/holo_green_dark"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -452,6 +453,7 @@
                 android:padding="10dp"
                 android:text="@string/unlock_additional_habits"
                 android:textSize="10sp"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/add_a_new_habit_button" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

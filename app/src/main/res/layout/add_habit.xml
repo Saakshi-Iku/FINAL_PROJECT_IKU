@@ -18,7 +18,7 @@
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/url_preview_background"
-            android:backgroundTint="@color/leftChatBG"
+            android:backgroundTint="@android:color/holo_green_dark"
             android:gravity="center"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -29,7 +29,7 @@
                 android:gravity="center"
                 android:paddingEnd="5dp"
                 android:src="@drawable/ic_baseline_edit_24"
-                app:tint="@color/lightPrimary" />
+                app:tint="@android:color/white" />
 
             <TextView
                 android:id="@+id/buttonTitle"
@@ -37,7 +37,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="Add custom habit"
-                android:textColor="@color/lightPrimary"
+                android:textColor="@android:color/white"
                 android:textSize="14sp" />
 
         </LinearLayout>

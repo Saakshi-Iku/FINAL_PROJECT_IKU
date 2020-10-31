@@ -116,7 +116,7 @@
         android:layout_marginEnd="8dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingVertical="5dp" />
+        android:paddingTop="5dp" />
 
     <!--Flairs scroll view-->
     <LinearLayout
@@ -265,7 +265,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="7dp"
         android:padding="2dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageButton
             android:id="@+id/jumpToBottom"
@@ -273,6 +273,7 @@
             android:layout_height="match_parent"
             android:layout_margin="4dp"
             android:background="@drawable/hearts_button_background"
+            android:backgroundTint="@color/leftChatBG"
             android:elevation="2dp"
             android:rotation="90"
             android:src="@drawable/ic_next_36" />
