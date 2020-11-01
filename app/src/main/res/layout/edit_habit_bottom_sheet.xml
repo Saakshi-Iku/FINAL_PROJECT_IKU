@@ -3,22 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/bottom_sheet">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/habitCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:padding="5dp"
-        android:background="@color/scrollViewBG">
+        android:layout_marginTop="8dp"
+        android:layout_marginHorizontal="8dp"
+        android:background="@drawable/bottom_sheet"
+        android:backgroundTint="@color/scrollViewBG">
 
         <!--Edit habit-->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/editHabit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
             android:visibility="visible"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -28,9 +30,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="What sustainable habit would you like to track?"
-                android:maxLines="2"
+                android:maxLines="3"
                 android:minLines="2"
-                android:paddingVertical="15dp"
+                android:paddingBottom="15dp"
+                android:layout_marginHorizontal="5dp"
                 android:textAlignment="viewStart"
                 android:textSize="14dp"
                 android:visibility="visible"
@@ -41,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingEnd="10dp"
-                android:paddingBottom="15dp"
+                android:paddingBottom="10dp"
                 android:text="140"
                 android:textSize="10dp"
                 android:visibility="visible"
@@ -54,7 +57,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="5dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/editHabitName">
 
                 <TextView
@@ -84,6 +87,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
+                        android:paddingEnd="5dp"
                         app:layout_constraintStart_toEndOf="@id/frequencyTitle"
                         app:layout_constraintTop_toTopOf="parent"
                         app:singleLine="true"
@@ -125,7 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="5dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/frequency">
 
                 <TextView
@@ -155,6 +159,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
+                        android:paddingEnd="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
@@ -198,7 +203,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="5dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/weekSelection">
 
                 <TextView
@@ -228,6 +233,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:overScrollMode="never"
+                        android:paddingEnd="5dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@id/daySelectionTitle"
@@ -289,7 +295,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="5dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/daySelection">
 
                 <TextView
@@ -309,6 +315,7 @@
                     android:layout_height="wrap_content"
                     android:overScrollMode="never"
                     android:scrollbars="none"
+                    android:paddingEnd="5dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/timeSlotTitle"
@@ -326,25 +333,43 @@
                         <com.google.android.material.chip.Chip
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Morning"
+                            android:text="6 AM - 8 AM"
                             android:textSize="12sp" />
 
                         <com.google.android.material.chip.Chip
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Afternoon"
+                            android:text="8 AM - 10 AM"
                             android:textSize="12sp" />
 
                         <com.google.android.material.chip.Chip
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Evening"
+                            android:text="10 AM - 12 PM"
                             android:textSize="12sp" />
 
                         <com.google.android.material.chip.Chip
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Night"
+                            android:text="12 PM - 2 PM"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2 PM - 4 PM"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="4 PM - 6 PM"
+                            android:textSize="12sp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="6 PM - 8 PM"
                             android:textSize="12sp" />
 
                     </com.google.android.material.chip.ChipGroup>
@@ -361,12 +386,14 @@
             android:id="@+id/CTA"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_margin="10dp"
             android:hapticFeedbackEnabled="true"
-            android:text="Start"
+            android:text="Next"
             android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editHabit" />
+            app:layout_constraintTop_toBottomOf="@id/editHabit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:backgroundTint="@android:color/holo_green_dark" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
