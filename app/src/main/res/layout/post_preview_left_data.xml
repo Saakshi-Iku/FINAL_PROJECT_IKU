@@ -48,6 +48,7 @@
             android:id="@+id/imagePreview"
             android:layout_width="80dp"
             android:layout_height="80dp"
+            android:layout_margin="5dp"
             android:background="@drawable/url_preview_background"
             android:backgroundTint="#25000000"
             android:scaleType="centerCrop"
