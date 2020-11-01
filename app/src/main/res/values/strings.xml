@@ -57,14 +57,17 @@
     <string name="forgot_password_question">Forgot Password?</string>
     <string name="swipe_to_select"><![CDATA[<<< Swipe to select >>>]]></string>
 
-    <!--Page descriptions-->
+    <!--Descriptions-->
     <string name="hall_of_fame_description">Top the leaderboard of the month to enter hall of fame.\nRecent top iku-logists of the community:</string>
+    <string name="join_community_content_description">Choose from following nearest communities to you:</string>
+
 
     <!--Placeholder texts-->
     <string name="hof_placeholder">Hall of fame winners are announced at the ned of every month.\n(Eligibility: Minimum 10 players required in the community.)</string>
 
     <!--Additional texts-->
     <string name="unlock_additional_habits">Complete 21 entries of any habit without breaking \nit\'s streak to unlock additional habits.</string>
+    <string name="community_profile_admin_description">Pins are visible to only to you and other community chiefs. Members who join using the invite link are pinned and stay with the dynamic community (unless they choose to leave).</string>
 
     <!--Habit category-->
     <string name="energyCategory">Energy</string>

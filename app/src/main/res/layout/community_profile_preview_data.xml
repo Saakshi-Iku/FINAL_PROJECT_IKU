@@ -3,10 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="6dp"
-    android:layout_marginTop="2dp"
-    android:layout_marginEnd="6dp"
-    android:layout_marginBottom="2dp"
+    android:layout_marginHorizontal="6dp"
+    android:layout_marginVertical="2dp"
     app:cardBackgroundColor="#50F0F0F0"
     app:cardCornerRadius="4dp"
     app:cardElevation="0dp">
@@ -15,16 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingVertical="2dp">
+        android:padding="8dp">
 
+        <!--Not used-->
         <ImageView
-            android:id="@+id/pin"
+            android:id="@+id/league"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:padding="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/ic_pin"
             android:visibility="gone"/>
 
         <LinearLayout
@@ -32,58 +30,57 @@
             android:layout_height="0dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:layout_marginStart="36dp"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/userPoints"
+            app:layout_constraintEnd_toStartOf="@id/distance"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <!--community name-->
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/userName"
+                android:id="@+id/communityName"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="1"
-                android:textColor="@color/colorPrimary"
+                android:textColor="@android:color/black"
                 android:textSize="16dp" />
 
-            <!--admin badge-->
+            <!--member count-->
             <TextView
-                android:id="@+id/role"
+                android:id="@+id/memberCount"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginHorizontal="5dp"
-                android:background="@drawable/hearts_button_background_viewpost_activity"
                 android:gravity="center"
-                android:text="C"
+                android:text="(47 members)"
                 android:textSize="12sp"
                 android:visibility="gone" />
 
         </LinearLayout>
 
+        <!--distance-->
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/userPoints"
+            android:id="@+id/distance"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:textAlignment="textEnd"
-            android:textColor="@color/colorPrimary"
             android:textSize="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/viewProfile"
+            app:layout_constraintEnd_toStartOf="@id/joinCommunity"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/viewProfile"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:padding="8dp"
-            android:src="@drawable/ic_next_36"
-            android:visibility="invisible"
+        <!--join-->
+        <Button
+            android:id="@+id/joinCommunity"
+            android:layout_width="70dp"
+            android:layout_height="45dp"
+            android:backgroundTint="@android:color/holo_blue_dark"
+            android:text="Join"
+            android:textAllCaps="false"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="#30000000" />
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

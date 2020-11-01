@@ -58,7 +58,7 @@
                 android:layout_width="100dp"
                 android:layout_height="1dp"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                android:background="@android:color/holo_green_dark" />
 
             <TextView
                 android:layout_width="50dp"
@@ -72,11 +72,10 @@
                 android:layout_width="100dp"
                 android:layout_height="1dp"
                 android:layout_weight="1"
-                android:background="@color/colorPrimary" />
+                android:background="@android:color/holo_green_dark" />
 
         </LinearLayout>
 
-        <!--List of predefined habits-->
         <TextView
             android:id="@+id/text2"
             android:layout_width="match_parent"
@@ -89,6 +88,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!--List of predefined habits-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listHabitsPredefined"
         android:layout_width="match_parent"
